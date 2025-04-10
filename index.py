@@ -175,7 +175,7 @@ def calendar_link():
         return redirect(url_for('index'))
 
 @app.errorhandler(404)
-def page_not_found(e):
+def page_not_found(error):
     return render_template('404.html'), 404
 
 @app.errorhandler(500)

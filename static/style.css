@@ -1,0 +1,181 @@
+body {
+  background-color: #fdfcfc;
+  font-family: "Open Sans", sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.hero {
+  background: #f6f3f4;
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.hero h1 {
+  font-family: "Great Vibes", cursive;
+  font-size: 4rem;
+  color: #c1838f;
+}
+
+.hero p {
+  font-size: 1.5rem;
+  color: #999;
+}
+
+.countdown-section {
+  background-color: #c1838f;
+  color: white;
+  text-align: center;
+  padding: 40px 0;
+}
+
+.countdown-section h2 {
+  font-family: "Great Vibes", cursive;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.countdown {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.time-box {
+  background-color: white;
+  color: #c1838f;
+  padding: 10px 20px;
+  border-radius: 10px;
+  min-width: 80px;
+  text-align: center;
+}
+
+.time-box .number {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.time-box .label {
+  font-size: 0.9rem;
+}
+
+.info-section {
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.info-section h2 {
+  font-family: "Open Sans", sans-serif;
+  font-weight: 600;
+  font-size: 2rem;
+  color: #c1838f;
+  margin-bottom: 20px;
+}
+
+.info-section p {
+  font-size: 1.1rem;
+  color: #555;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.btn-pink {
+  background-color: #c1838f;
+  color: white;
+  border: none;
+}
+
+.btn-pink:hover {
+  background-color: #a86574;
+  color: white;
+}
+
+.badge-custom {
+  background-color: #ffc0cb;
+  color: #6b2c3e;
+}
+
+.card {
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.map-responsive {
+  overflow: hidden;
+  padding-bottom: 56.25%;
+  position: relative;
+  height: 0;
+}
+
+.map-responsive iframe {
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+
+/* Melhorias para tablets e smartphones */
+@media (max-width: 992px) {
+  .hero h1 {
+    font-size: 3rem;
+  }
+
+  .hero p {
+    font-size: 1.2rem;
+  }
+
+  .info-section {
+    padding: 40px 10px;
+  }
+
+  .info-section h2 {
+    font-size: 1.8rem;
+  }
+
+  .info-section p {
+    font-size: 1rem;
+  }
+
+  .time-box {
+    min-width: 60px;
+    padding: 8px 12px;
+  }
+
+  .time-box .number {
+    font-size: 1.6rem;
+  }
+
+  .time-box .label {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .hero h1 {
+    font-size: 2.5rem;
+  }
+
+  .hero p {
+    font-size: 1rem;
+  }
+
+  .countdown {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .info-section {
+    padding: 30px 10px;
+  }
+
+  .btn-pink {
+    font-size: 1rem;
+    padding: 10px;
+  }
+
+  .card {
+    padding: 15px;
+  }
+}

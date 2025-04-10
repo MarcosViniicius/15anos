@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Convite - 15 Anos da Princesa</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Open+Sans:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="../static/style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="container py-5">
+      <div class="text-center mb-5 animate__animated animate__fadeInDown">
+        <section class="hero">
+          <p>SAVE THE DATE</p>
+          <h1>ANA + 15</h1>
+          <p>03 . 06 . 2025</p>
+        </section>
+        <p class="fs-5">📍 Rua Exemplo, 123 - Natal/RN</p>
+        <a href="{{ url_for('calendar_link') }}" class="btn btn-outline-danger"
+          >Adicionar ao Google Calendar</a
+        >
+      </div>
+
+      <section class="countdown-section">
+        <h2>Contagem Regressiva</h2>
+        <div class="countdown" id="countdown">
+          <div class="time-box">
+            <div class="number" id="days">--</div>
+            <div class="label">DIAS</div>
+          </div>
+          <div class="time-box">
+            <div class="number" id="hours">--</div>
+            <div class="label">HORAS</div>
+          </div>
+          <div class="time-box">
+            <div class="number" id="minutes">--</div>
+            <div class="label">MINUTOS</div>
+          </div>
+          <div class="time-box">
+            <div class="number" id="seconds">--</div>
+            <div class="label">SEGUNDOS</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="info-section">
+        <h2>Confirmação de Presença e Escolha de Presente</h2>
+        <p>
+          Esse é o site oficial do aniversário de 15 anos da Ana! Aqui você pode
+          confirmar sua presença no evento e também escolher um presente da
+          lista exclusiva. Cada presente pode ser selecionado por apenas uma
+          pessoa. Sua confirmação é muito importante para que tudo seja
+          perfeito. Contamos com você!
+        </p>
+      </section>
+
+      <div class="mb-5 animate__animated animate__fadeIn">
+        <div class="card p-4 text-center">
+          <h4 class="mb-3">🎉 Bem-vindo!</h4>
+          <p class="mb-0">
+            Este site é exclusivo para confirmação de presença e escolha de
+            presente para a festa de 15 anos da nossa princesa. Sua confirmação
+            é essencial para nos organizarmos melhor. Escolha um presente,
+            confirme sua presença (ou ausência), e nos ajude a tornar esse dia
+            ainda mais especial!
+          </p>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-lg-6 animate__animated animate__fadeInLeft">
+          <div class="card p-4">
+            <h4 class="mb-3 text-center">
+              Confirme sua Presença e Escolha um Presente
+            </h4>
+            <form method="POST" action="/confirmar">
+              <div class="mb-3">
+                <input
+                  type="text"
+                  name="nome"
+                  class="form-control"
+                  placeholder="Seu nome"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Você vai comparecer?</label>
+                <select
+                  class="form-select"
+                  name="confirmado"
+                  id="confirmado"
+                  required
+                >
+                  <option value="" selected disabled>Escolha uma opção</option>
+                  <option value="sim">Sim, estarei presente</option>
+                  <option value="nao">Não poderei ir</option>
+                </select>
+              </div>
+              <div class="mb-3" id="presente-div">
+                <select name="presente" class="form-select">
+                  <option value="" selected disabled>
+                    Escolha um presente (opcional)
+                  </option>
+                  {% for item in disponiveis %}
+                  <option value="{{ item }}">{{ item }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <button type="submit" class="btn btn-pink w-100">
+                Confirmar
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <div class="col-lg-6 animate__animated animate__fadeInRight">
+          <div class="card p-4">
+            <h4 class="mb-3 text-center">Participantes Confirmados</h4>
+            <ul class="list-group">
+              {% for p in participantes %}
+              <li
+                class="list-group-item d-flex justify-content-between align-items-center"
+              >
+                {{ p[1] }} {% if p[2] == True %}<span class="badge bg-success"
+                  >Confirmado</span
+                >
+                {% elif p[2] == False %}<span class="badge bg-secondary"
+                  >Não irá</span
+                >
+                {% endif %} {% if p[4] %}
+                <span class="badge badge-custom">🎁 {{ p[4] }}</span>
+                {% endif %}
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-5 animate__animated animate__fadeInUp">
+        <div class="card p-4">
+          <h4 class="text-center mb-3">📍 Localização do Evento</h4>
+          <div class="map-responsive">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3971.011989781245!2d-35.2009269847084!3d-5.794480296127619!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x7b255d32c16c9c7%3A0xd3b7aab17337a0e2!2sRua%20Exemplo%2C%20123%20-%20Natal%2C%20RN!5e0!3m2!1spt-BR!2sbr!4v1610000000000!5m2!1spt-BR!2sbr"
+              width="600"
+              height="450"
+              style="border: 0"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center mt-4 animate__animated animate__fadeIn">
+        <p class="text-muted">Com amor, esperamos por você 💖</p>
+      </div>
+    </div>
+
+    <script src="../static/countdown.js"></script>
+
+    <script>
+      // Função para esconder ou mostrar o campo de presente com base na escolha de presença
+      const confirmadoSelect = document.getElementById("confirmado");
+      const presenteDiv = document.getElementById("presente-div");
+
+      // Função para verificar o estado inicial e ocultar o campo se necessário
+      function verificarPresenca() {
+        if (confirmadoSelect.value === "nao") {
+          presenteDiv.style.display = "none";
+        } else {
+          presenteDiv.style.display = "block";
+        }
+      }
+
+      // Adicionar evento para verificar a presença quando mudar a seleção
+      confirmadoSelect.addEventListener("change", verificarPresenca);
+
+      // Verificar no carregamento da página
+      verificarPresenca();
+    </script>
+  </body>
+</html>

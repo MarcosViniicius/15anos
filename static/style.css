@@ -99,6 +99,8 @@ body {
 .card {
   border-radius: 12px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
+  max-width: 600px;
 }
 
 .map-responsive {
@@ -114,6 +116,64 @@ body {
   height: 100%;
   width: 100%;
   position: absolute;
+}
+
+/* Centralização da aba de confirmação e escolha de presente */
+.row.g-4 {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Não vai centralizar no eixo vertical */
+}
+
+.card p,
+.card h4 {
+  color: #333;
+}
+
+.card .btn-pink {
+  background-color: #f28f8f;
+  color: white;
+  border: none;
+}
+
+.card .btn-pink:hover {
+  background-color: #e63e3e;
+}
+
+/* Melhorias para dispositivos maiores (PC) */
+@media (min-width: 992px) {
+  .hero h1 {
+    font-size: 4rem;
+  }
+
+  .hero p {
+    font-size: 1.5rem;
+  }
+
+  .info-section {
+    padding: 60px 20px;
+  }
+
+  .info-section h2 {
+    font-size: 2rem;
+  }
+
+  .info-section p {
+    font-size: 1.1rem;
+  }
+
+  .time-box {
+    min-width: 80px;
+    padding: 10px 20px;
+  }
+
+  .time-box .number {
+    font-size: 2rem;
+  }
+
+  .time-box .label {
+    font-size: 0.9rem;
+  }
 }
 
 /* Melhorias para tablets e smartphones */

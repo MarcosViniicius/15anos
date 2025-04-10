@@ -28,7 +28,10 @@
           <p>03 . 06 . 2025</p>
         </section>
         <p class="fs-5">📍 Rua Exemplo, 123 - Natal/RN</p>
-        <a href="{{ url_for('calendar_link') }}" class="btn btn-outline-danger"
+        <a
+          href="{{ url_for('calendar_link') }} "
+          class="btn btn-outline-danger"
+          target="_blank"
           >Adicionar ao Google Calendar</a
         >
       </div>
@@ -58,26 +61,13 @@
       <section class="info-section">
         <h2>Confirmação de Presença e Escolha de Presente</h2>
         <p>
-          Esse é o site oficial do aniversário de 15 anos da Ana! Aqui você pode
+          Este é o site oficial do aniversário de 15 anos da Ana! Aqui você pode
           confirmar sua presença no evento e também escolher um presente da
           lista exclusiva. Cada presente pode ser selecionado por apenas uma
           pessoa. Sua confirmação é muito importante para que tudo seja
           perfeito. Contamos com você!
         </p>
       </section>
-
-      <div class="mb-5 animate__animated animate__fadeIn">
-        <div class="card p-4 text-center">
-          <h4 class="mb-3">🎉 Bem-vindo!</h4>
-          <p class="mb-0">
-            Este site é exclusivo para confirmação de presença e escolha de
-            presente para a festa de 15 anos da nossa princesa. Sua confirmação
-            é essencial para nos organizarmos melhor. Escolha um presente,
-            confirme sua presença (ou ausência), e nos ajude a tornar esse dia
-            ainda mais especial!
-          </p>
-        </div>
-      </div>
 
       <div class="row g-4">
         <div class="col-lg-6 animate__animated animate__fadeInLeft">
@@ -93,6 +83,7 @@
                   class="form-control"
                   placeholder="Seu nome"
                   required
+                  aria-label="Seu nome"
                 />
               </div>
               <div class="mb-3">
@@ -102,6 +93,7 @@
                   name="confirmado"
                   id="confirmado"
                   required
+                  aria-label="Escolha sua presença"
                 >
                   <option value="" selected disabled>Escolha uma opção</option>
                   <option value="sim">Sim, estarei presente</option>
@@ -109,7 +101,11 @@
                 </select>
               </div>
               <div class="mb-3" id="presente-div">
-                <select name="presente" class="form-select">
+                <select
+                  name="presente"
+                  class="form-select"
+                  aria-label="Escolha um presente (opcional)"
+                >
                   <option value="" selected disabled>
                     Escolha um presente (opcional)
                   </option>
@@ -122,29 +118,6 @@
                 Confirmar
               </button>
             </form>
-          </div>
-        </div>
-
-        <div class="col-lg-6 animate__animated animate__fadeInRight">
-          <div class="card p-4">
-            <h4 class="mb-3 text-center">Participantes Confirmados</h4>
-            <ul class="list-group">
-              {% for p in participantes %}
-              <li
-                class="list-group-item d-flex justify-content-between align-items-center"
-              >
-                {{ p[1] }} {% if p[2] == True %}<span class="badge bg-success"
-                  >Confirmado</span
-                >
-                {% elif p[2] == False %}<span class="badge bg-secondary"
-                  >Não irá</span
-                >
-                {% endif %} {% if p[4] %}
-                <span class="badge badge-custom">🎁 {{ p[4] }}</span>
-                {% endif %}
-              </li>
-              {% endfor %}
-            </ul>
           </div>
         </div>
       </div>
@@ -169,29 +142,12 @@
       <div class="text-center mt-4 animate__animated animate__fadeIn">
         <p class="text-muted">Com amor, esperamos por você 💖</p>
       </div>
+
+      <footer class="text-center mt-5">
+        <p>&copy; 2025 Marcos. Todos os direitos reservados.</p>
+      </footer>
     </div>
 
     <script src="../static/countdown.js"></script>
-
-    <script>
-      // Função para esconder ou mostrar o campo de presente com base na escolha de presença
-      const confirmadoSelect = document.getElementById("confirmado");
-      const presenteDiv = document.getElementById("presente-div");
-
-      // Função para verificar o estado inicial e ocultar o campo se necessário
-      function verificarPresenca() {
-        if (confirmadoSelect.value === "nao") {
-          presenteDiv.style.display = "none";
-        } else {
-          presenteDiv.style.display = "block";
-        }
-      }
-
-      // Adicionar evento para verificar a presença quando mudar a seleção
-      confirmadoSelect.addEventListener("change", verificarPresenca);
-
-      // Verificar no carregamento da página
-      verificarPresenca();
-    </script>
   </body>
 </html>

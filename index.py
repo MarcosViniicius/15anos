@@ -97,5 +97,8 @@ def calendar_link():
     link = f"https://www.google.com/calendar/render?action=TEMPLATE&text={event_title}&dates={start}/{end}&details={details}&location={location}&sf=true&output=xml"
     return redirect(link)
 
+# Renomear para 'application' como esperado pelo Vercel
+application = app
+
 if __name__ == '__main__':
     app.run(debug=True)

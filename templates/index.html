@@ -7,6 +7,8 @@
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
     />
     <link
       href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Open+Sans:wght@400;600&display=swap"
@@ -16,19 +18,22 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
       rel="stylesheet"
     />
-    <link href="../static/style.css" rel="stylesheet" />
+    <link
+      href="{{ url_for('static', filename='style.css') }}"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <div class="container py-5">
-      <div class="text-center mb-5 animate__animated animate__fadeInDown">
+      <header class="text-center mb-5 animate__animated animate__fadeInDown">
         <section class="hero">
-          <p>SAVE THE DATE</p>
-          <h1>ANA + 15</h1>
-          <p>14 . 06 . 2025</p>
-          <p>Às 20:00</p>
+          <p class="hero__save-the-date"><strong>SAVE THE DATE</strong></p>
+          <h1 class="hero__title"><strong>ANA - 15</strong></h1>
+          <p class="hero__date">14 . 06 . 2025</p>
+          <p class="hero__time">Às 20:00</p>
         </section>
-        <p class="fs-5 mt-4 mb-3">
-          📍Av. Comandante Petit, 263 Parnamirim/RN <br />
+        <p class="fs-5 mt-4 mb-3 hero__location">
+          📍Av. Comandante Petit, 263 - Centro, Parnamirim - RN <br />
           <strong>Bouganville Hall</strong>
         </p>
         <a
@@ -37,248 +42,335 @@
           target="_blank"
           >Adicionar ao Google Calendar</a
         >
-      </div>
+      </header>
 
-      <section class="countdown-section section-padding mb-5">
-        <h2>Contagem Regressiva</h2>
-        <div class="countdown" id="countdown">
-          <div class="time-box">
-            <div class="number" id="days">--</div>
-            <div class="label">DIAS</div>
-          </div>
-          <div class="time-box">
-            <div class="number" id="hours">--</div>
-            <div class="label">HORAS</div>
-          </div>
-          <div class="time-box">
-            <div class="number" id="minutes">--</div>
-            <div class="label">MINUTOS</div>
-          </div>
-          <div class="time-box">
-            <div class="number" id="seconds">--</div>
-            <div class="label">SEGUNDOS</div>
-          </div>
-        </div>
-      </section>
-      <div
-        class="d-block d-md-none text-center mb-5 animate__animated animate__fadeInUp"
-      >
-        <a href="#formConfirmacao" class="btn-mobile-presence">
-          CONFIRMAR PRESENÇA
-        </a>
-      </div>
-      <section class="info-section section-padding mb-5">
-        <h2>Boas Vindas!</h2>
-        <p>
-          Este é o site oficial do aniversário de 15 anos da Ana! Fique à
-          vontade para explorar. Aqui você encontra detalhes sobre o evento,
-          pode confirmar sua presença e, se desejar, pode nos ajudar
-          <strong style="color: var(--rosa-principal)"
-            >indicando qual presente da nossa lista você pretende levar</strong
-          >. Isso nos ajuda a organizar e evitar itens repetidos,
-          <strong style="color: var(--rosa-principal)"
-            >a compra do presente fica por sua conta</strong
-          >. Sua participação tornará este dia ainda mais especial. Contamos com
-          você!
-        </p>
-      </section>
-
-      <div class="row g-4 mb-5 section-padding">
-        <div class="col-12 text-center mb-5">
-          <h3 class="section-title">Informações Importantes</h3>
-        </div>
-        <div class="col-lg-4 col-md-6 mb-4 animate__animated animate__fadeInUp">
-          <div class="card h-100 custom-card">
-            <img
-              src="https://cdn.dooca.store/259/products/caixa-presente-vermelha-225x21x75cm-packaging-works.jpg?v=1699541294"
-              class="card-img-top"
-              alt="Lista de Presentes"
-            />
-            <div class="card-body d-flex flex-column">
-              <h5 class="card-title text-center">Lista de Presentes</h5>
-              <p class="card-text flex-grow-1">
-                Preparamos uma lista de presentes virtual para facilitar. Sua
-                contribuição é um gesto de carinho!
-              </p>
-              <a
-                href="#formConfirmacao"
-                class="btn btn-custom-secondary w-100 mt-auto"
-                >Indicar Presente</a
-              >
+      <main>
+        <section class="countdown-section section-padding mb-5">
+          <h2 class="section-title countdown-section__title">
+            Contagem Regressiva
+          </h2>
+          <div class="countdown" id="countdown">
+            <div class="time-box">
+              <div class="number" id="days">--</div>
+              <div class="label">DIAS</div>
+            </div>
+            <div class="time-box">
+              <div class="number" id="hours">--</div>
+              <div class="label">HORAS</div>
+            </div>
+            <div class="time-box">
+              <div class="number" id="minutes">--</div>
+              <div class="label">MINUTOS</div>
+            </div>
+            <div class="time-box">
+              <div class="number" id="seconds">--</div>
+              <div class="label">SEGUNDOS</div>
             </div>
           </div>
-        </div>
+        </section>
+
         <div
-          class="col-lg-4 col-md-6 mb-4 animate__animated animate__fadeInUp"
-          style="animation-delay: 0.2s"
+          class="d-block d-md-none text-center mb-5 animate__animated animate__fadeInUp"
         >
-          <div class="card h-100 custom-card">
-            <img
-              src="https://images.wedy.com/eyJidWNrZXQiOiJ3ZWR5LW5leHQiLCJrZXkiOiJ3ZWR5LXYyLU1qQXlOUzB3TWkweE9GUXhOem95TURvd01pNDRNelJhTHpFd01USXZNVFF5TkM4alpUbGxPV1U1TDBsTlIxOHdNRFE0TG1wd1pXYz0uanBlZyIsImVkaXRzIjp7InJvdGF0ZSI6bnVsbCwicmVzaXplIjp7IndpZHRoIjo4MDAsImhlaWdodCI6MTEyNiwiZml0IjoiY292ZXIifX19"
-              class="card-img-top"
-              alt="Dress Code"
-            />
-            <div class="card-body d-flex flex-column">
-              <h5 class="card-title text-center">Dress Code</h5>
-              <p class="card-text flex-grow-1">
-                Sugerimos traje Dress Code. O importante é celebrar conosco se
-                sentindo confortável e elegante!
-              </p>
-              <button
-                type="button"
-                class="btn btn-custom-secondary w-100 mt-auto"
-                data-bs-toggle="modal"
-                data-bs-target="#dressCodeModal"
-              >
-                Mais Detalhes
-              </button>
-            </div>
-          </div>
+          <a href="#formConfirmacao" class="btn-mobile-presence">
+            CONFIRMAR PRESENÇA
+          </a>
         </div>
-        <div
-          class="col-lg-4 col-md-6 mb-4 animate__animated animate__fadeInUp"
-          style="animation-delay: 0.4s"
+
+        <section class="info-section section-padding mb-5">
+          <h2 class="section-title info-section__title">Boas Vindas!</h2>
+          <p class="info-section__text">
+            Este é o site oficial do aniversário de 15 anos da Ana! Fique à
+            vontade para explorar. Aqui você encontra detalhes sobre o evento,
+            pode confirmar sua presença e, se desejar, pode nos ajudar
+            <strong style="color: var(--rosa-principal)"
+              >indicando qual presente da nossa lista você pretende
+              levar</strong
+            >. Isso nos ajuda a organizar e evitar itens repetidos,
+            <strong style="color: var(--rosa-principal)"
+              >a compra do presente fica por sua conta</strong
+            >. Sua participação tornará este dia ainda mais especial. Contamos
+            com você!
+          </p>
+        </section>
+
+        <section
+          class="important-info-section section-padding mb-5"
+          id="informacoesimportantes"
         >
-          <div class="card h-100 custom-card">
-            <!-- <img
-              src="https://via.placeholder.com/600x400/6b2c3e/FFFFFF?text=Confirme+Aqui"
-              class="card-img-top"
-              alt="Confirmação de Presença"
-            /> -->
-            <div class="card-body d-flex flex-column">
-              <h5 class="card-title text-center">Confirme sua Presença</h5>
-              <p class="card-text flex-grow-1">
-                Sua presença é o maior presente! Por favor, confirme se você
-                poderá comparecer até <strong>01/06/25.</strong>
-              </p>
-              <a
-                href="#formConfirmacao"
-                class="btn btn-custom-primary w-100 mt-auto"
-                >Confirmar Presença</a
-              >
+          <div class="row g-4">
+            <div class="col-12 text-center mb-4">
+              <h3 class="section-title important-info-section__title">
+                Informações Importantes
+              </h3>
+            </div>
+            <div
+              class="col-lg-4 col-md-6 mb-4 animate__animated animate__fadeInUp"
+            >
+              <article class="card h-100 custom-card">
+                <img
+                  src="https://cdn.dooca.store/259/products/caixa-presente-vermelha-225x21x75cm-packaging-works.jpg?v=1699541294"
+                  class="card-img-top custom-card-img"
+                  alt="Caixa de presente vermelha"
+                />
+                <div class="card-body d-flex flex-column">
+                  <h5 class="card-title text-center">Lista de Presentes</h5>
+                  <p class="card-text flex-grow-1">
+                    Preparamos uma lista de sugestões. Sua contribuição é um
+                    gesto de carinho!
+                  </p>
+                  <div class="mt-auto">
+                    <button
+                      type="button"
+                      class="btn btn-custom-secondary w-100 mb-2"
+                      data-bs-toggle="modal"
+                      data-bs-target="#listapresentesModal"
+                    >
+                      Ver Sugestões
+                    </button>
+                    <!-- <a
+                      href="#formConfirmacao"
+                      class="btn btn-custom-secondary w-100"
+                      >Escolher Presente</a
+                    > -->
+                  </div>
+                </div>
+              </article>
+            </div>
+            <div
+              class="col-lg-4 col-md-6 mb-4 animate__animated animate__fadeInUp"
+              style="animation-delay: 0.2s"
+            >
+              <article class="card h-100 custom-card">
+                <img
+                  src="https://images.wedy.com/eyJidWNrZXQiOiJ3ZWR5LW5leHQiLCJrZXkiOiJ3ZWR5LXYyLU1qQXlOUzB3TWkweE9GUXhOem95TURvd01pNDRNelJhTHpFd01USXZNVFF5TkM4alpUbGxPV1U1TDBsTlIxOHdNRFE0TG1wd1pXYz0uanBlZyIsImVkaXRzIjp7InJvdGF0ZSI6bnVsbCwicmVzaXplIjp7IndpZHRoIjo4MDAsImhlaWdodCI6MTEyNiwiZml0IjoiY292ZXIifX19"
+                  class="card-img-top custom-card-img"
+                  alt="Roupas elegantes em um cabide"
+                />
+                <div class="card-body d-flex flex-column">
+                  <h5 class="card-title text-center">Dress Code</h5>
+                  <p class="card-text flex-grow-1">
+                    Traje sugerido: Dress Code. Sinta-se confortável e elegante
+                    para celebrar conosco!
+                  </p>
+                  <button
+                    type="button"
+                    class="btn btn-custom-secondary w-100 mt-auto"
+                    data-bs-toggle="modal"
+                    data-bs-target="#dressCodeModal"
+                  >
+                    Mais Detalhes
+                  </button>
+                </div>
+              </article>
+            </div>
+            <div
+              class="col-lg-4 col-md-6 mb-4 animate__animated animate__fadeInUp"
+              style="animation-delay: 0.4s"
+            >
+              <article class="card h-100 custom-card">
+                <img
+                  src="https://images.unsplash.com/photo-1519741497674-611481863552?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+                  class="card-img-top custom-card-img"
+                  alt="Mesa de festa decorada"
+                />
+                <div class="card-body d-flex flex-column">
+                  <h5 class="card-title text-center">Confirme sua Presença</h5>
+                  <p class="card-text flex-grow-1">
+                    Sua presença é o maior presente! Por favor, confirme se você
+                    poderá comparecer até <strong>01/06/2025.</strong>
+                  </p>
+                  <a
+                    href="#formConfirmacao"
+                    class="btn btn-custom-secondary w-100 mt-auto"
+                    >Confirmar Presença</a
+                  >
+                </div>
+              </article>
             </div>
           </div>
-        </div>
-      </div>
-      <div
-        class="row justify-content-center g-4 mb-5 section-padding"
-        id="formConfirmacao"
-      >
-        <div class="col-12 text-center mb-5">
-          <h3 class="section-title">Confirmação</h3>
-        </div>
-        <div class="col-lg-7 animate__animated animate__fadeInLeft">
-          <div class="card p-4 form-card">
-            <form method="POST" action="/confirmar">
-              <div class="mb-3">
-                <label for="nome" class="form-label">Seu nome completo:</label>
-                <input
-                  type="text"
-                  name="nome"
-                  id="nome"
-                  class="form-control"
-                  placeholder="Digite seu nome aqui"
-                  required
-                  aria-label="Seu nome completo"
-                />
-              </div>
+        </section>
 
-              <div class="mb-3">
-                <label for="confirmado" class="form-label d-block mb-2"
-                  >Você vai comparecer?</label
-                >
-                <select
-                  class="form-select"
-                  name="confirmado"
-                  id="confirmado"
-                  required
-                  aria-label="Escolha sua presença"
-                >
-                  <option value="" selected disabled>
-                    Selecione uma opção...
-                  </option>
-                  <option value="sim">Sim, estarei presente!</option>
-                  <option value="nao">Não poderei comparecer.</option>
-                </select>
-              </div>
-
-              <div
-                class="mb-3"
-                id="quantidade-pessoas-div"
-                style="display: none"
-              >
-                <label for="quantidade_pessoas" class="form-label"
-                  >Quantas pessoas irão com você (incluindo você)?</label
-                >
-                <input
-                  type="number"
-                  name="quantidade_pessoas"
-                  id="quantidade_pessoas"
-                  class="form-control"
-                  min="1"
-                  value="1"
-                  required
-                  aria-label="Quantidade de pessoas"
-                />
-              </div>
-
-              <div class="mb-3" id="presente-div" style="display: none">
-                <label for="presente" class="form-label d-block mb-2"
-                  >Se desejar, indique o presente que pretende levar
-                  (Opcional):</label
-                >
-                <select
-                  name="presente"
-                  id="presente"
-                  class="form-select"
-                  aria-label="Indique um presente (opcional)"
-                >
-                  <option value="" selected>
-                    Não indicar / Escolher depois
-                  </option>
-                  {% for item in disponiveis %}
-                  <option value="{{ item }}">{{ item }}</option>
-                  {% endfor %}
-                </select>
-                <small class="form-text text-muted mt-1 d-block">
-                  Isso nos ajuda a organizar e evitar presentes repetidos. A
-                  compra é por sua conta.
-                </small>
-              </div>
-
-              <button type="submit" class="btn btn-custom-primary w-100 mt-3">
-                Enviar Confirmação
-              </button>
-            </form>
+        <section
+          class="row justify-content-center g-4 mb-5 section-padding"
+          id="formConfirmacao"
+        >
+          <div class="col-12 text-center mb-4">
+            <h3
+              class="section-title confirmation-section__title"
+              data-bs-target="#confirmation-title"
+            >
+              Confirmação
+            </h3>
           </div>
-        </div>
-      </div>
-      <div class="row justify-content-center mb-5 section-padding">
-        <div class="col-12 text-center mb-5">
-          <h3 class="section-title">Localização do Evento</h3>
-        </div>
-        <div class="col-lg-10 animate__animated animate__fadeInUp">
-          <div class="card p-3 map-card">
-            <div class="map-responsive">
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3968.5135725863097!2d-35.26521152501201!3d-5.923695294060544!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x7b2570b138ea223%3A0x8ae01848a4829674!2sBouganville%20Recep%C3%A7%C3%B5es%20%2F%20Bouganville%20Hall!5e0!3m2!1spt-BR!2sbr!4v1744324283719!5m2!1spt-BR!2sbr"
-                width="600"
-                height="450"
-                style="border: 0"
-                allowfullscreen=""
-                loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade"
-              ></iframe>
+          <div class="col-lg-7 animate__animated animate__fadeInLeft">
+            <div class="card p-4 form-card shadow-sm">
+              <form method="POST" action="{{ url_for('confirmar') }}">
+                <div class="mb-3">
+                  <label for="nome" class="form-label"
+                    >Seu nome completo:</label
+                  >
+                  <input
+                    type="text"
+                    name="nome"
+                    id="nome"
+                    class="form-control"
+                    placeholder="Digite seu nome conforme o convite"
+                    required
+                    aria-label="Seu nome completo"
+                  />
+                </div>
+
+                <div class="mb-3">
+                  <label for="confirmado" class="form-label d-block mb-2"
+                    >Você vai comparecer?</label
+                  >
+                  <select
+                    class="form-select"
+                    name="confirmado"
+                    id="confirmado"
+                    required
+                    aria-label="Escolha sua presença"
+                  >
+                    <option value="" selected disabled>
+                      Selecione uma opção...
+                    </option>
+                    <option value="sim">Sim, estarei presente!</option>
+                    <option value="nao">Não poderei comparecer.</option>
+                  </select>
+                </div>
+
+                <p class="form-text">
+                  Para escolher o presente, confirme sua presença primeiro
+                  ("Sim, estarei presente!"). Em seguida, a lista de sugestões
+                  será exibida abaixo.
+                </p>
+                <div
+                  class="mb-3"
+                  id="quantidade-pessoas-div"
+                  style="display: none"
+                >
+                  <label for="quantidade_pessoas" class="form-label"
+                    >Quantas pessoas irão com você (incluindo você)?</label
+                  >
+                  <input
+                    type="number"
+                    name="quantidade_pessoas"
+                    id="quantidade_pessoas"
+                    class="form-control"
+                    min="1"
+                    value="1"
+                    required
+                    aria-label="Quantidade de pessoas"
+                  />
+                </div>
+                <div class="mb-3" id="presente-div" style="display: none">
+                  <label for="presente" class="form-label d-block mb-2"
+                    >Se desejar, indique o presente que pretende levar
+                    (Opcional):</label
+                  >
+                  <select
+                    name="presente"
+                    id="presente"
+                    class="form-select"
+                    aria-label="Indique um presente (opcional)"
+                    required
+                  >
+                    <option value="" selected disabled>
+                      Clique aqui para escolher
+                    </option>
+                    {% for item in disponiveis %}
+                    <option value="{{ item }}">{{ item }}</option>
+                    {% else %}
+                    <option value="" disabled>
+                      Nenhuma sugestão disponível no momento.
+                    </option>
+                    {% endfor %}
+                  </select>
+                  <small class="form-text text-muted mt-1 d-block">
+                    Isso nos ajuda a organizar e evitar presentes repetidos. A
+                    compra é por sua conta.
+                  </small>
+                </div>
+
+                <button type="submit" class="btn btn-custom-primary w-100 mt-3">
+                  Enviar Confirmação
+                </button>
+              </form>
+
+              {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+              <div class="mt-4">
+                {% for category, message in messages %} {# Mapeia categorias
+                flash para classes de alerta Bootstrap #} {% set alert_class =
+                'alert-secondary' %} {# Padrão #} {% if category == 'success' %}
+                {% set alert_class = 'alert-success' %} {% elif category ==
+                'error' or category == 'danger' %} {% set alert_class =
+                'alert-danger' %} {% elif category == 'warning' %} {% set
+                alert_class = 'alert-warning' %} {% elif category == 'info' %}
+                {% set alert_class = 'alert-info' %} {% endif %}
+                <div
+                  class="alert {{ alert_class }} alert-dismissible fade show"
+                  role="alert"
+                >
+                  {{ message }}
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                {% endfor %}
+              </div>
+              {% endif %} {% endwith %}
             </div>
           </div>
-        </div>
-      </div>
+        </section>
+        <section class="location-section section-padding mb-5">
+          <div class="row justify-content-center">
+            <div class="col-12 text-center mb-4">
+              <h3 class="section-title location-section__title">
+                Localização do Evento
+              </h3>
+            </div>
+            <div class="col-lg-10 animate__animated animate__fadeInUp">
+              <div class="card p-3 map-card shadow-sm">
+                <div class="map-responsive">
+                  <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3968.906838826635!2d-35.2589368857187!3d-5.936346460009789!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x7b25448c5a6f44f%3A0x9679d987f59ab643!2sBouganville%20Hall!5e0!3m2!1spt-BR!2sbr!4v1678886400000!5m2!1spt-BR!2sbr"
+                    width="100%"
+                    height="450"
+                    style="border: 0"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"
+                  >
+                  </iframe>
+                </div>
+                <p class="text-center mt-2">
+                  <a
+                    href="https://maps.google.com/?q=Av.+Comandante+Petit,+263+-+Centro,+Parnamirim+-+RN"
+                    target="_blank"
+                    class="btn btn-sm btn-custom-outline"
+                  >
+                    Abrir no Google Maps
+                  </a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
       <div class="text-center mt-4 mb-5 animate__animated animate__fadeIn">
         <p class="final-message">Com amor, esperamos por você 💖</p>
       </div>
 
-      <footer class="text-center mt-5">
-        <p>© 2025 Marcos. Todos os direitos reservados.</p>
+      <footer class="text-center mt-5 border-top pt-3">
+        <p class="text-muted small">
+          © 2025 Marcos. Todos os direitos reservados.
+        </p>
       </footer>
     </div>
     <div
@@ -301,23 +393,78 @@
               aria-label="Close"
             ></button>
           </div>
-          <div class="modal-body">
+          <div class="modal-body scrollable-div">
             <p class="mb-3">
               Para celebrar em grande estilo, o traje sugerido é
-              <strong>Esporte Fino</strong>.
+              <strong>Dress Code</strong>.
             </p>
             <p>
               Caros convidados, gostaríamos de compartilhar uma pequena
-              orientação sobre o dress code. O estilo
-              <strong>Esporte Fino</strong> permite que todos se sintam
-              elegantes e confortáveis ao mesmo tempo.
+              orientação sobre o Dress Code. O estilo
+              <strong>Dress Code</strong> permite que todos se sintam elegantes
+              e confortáveis ao mesmo tempo.
             </p>
+            <!-- Botão para mostrar exemplo -->
+            <div class="text-center my-4">
+              <button
+                type="button"
+                class="btn btn-custom-outline"
+                id="btnMostrarExemplo"
+              >
+                Clique para mostrar exemplo
+              </button>
+            </div>
+
+            <!-- Modal com a imagem de exemplo -->
+            <div
+              class="modal fade"
+              id="exemploDressCodeModal"
+              tabindex="-1"
+              aria-labelledby="exemploDressCodeModalLabel"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exemploDressCodeModalLabel">
+                      Exemplo de Traje Dress Code
+                    </h5>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div class="modal-body">
+                    <img
+                      src="https://images.wedy.com/eyJidWNrZXQiOiJ3ZWR5LW5leHQiLCJrZXkiOiJ3ZWR5LXYyLU1qQXlOUzB3TWkweE9GUXhOem95TURvd01pNDRNelJhTHpFd01USXZNVFF5TkM4alpUbGxPV1U1TDBsTlIxOHdNRFE0TG1wd1pXYz0uanBlZyIsImVkaXRzIjp7InJvdGF0ZSI6bnVsbCwicmVzaXplIjp7IndpZHRoIjo4MDAsImhlaWdodCI6MTEyNiwiZml0IjoiY292ZXIifX19"
+                      class="img-fluid"
+                      alt="Exemplo de traje Dress Code"
+                      style="width: 100%"
+                    />
+                    <p class="text-center mt-3">
+                      Exemplo de traje Dress Code sugerido para o evento.
+                    </p>
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-custom-secondary"
+                      data-bs-dismiss="modal"
+                    >
+                      Fechar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
             <p class="fw-bold" style="color: var(--rosa-principal)">
               Observação Importante:
             </p>
             <p>
-              Pedimos, por gentileza, que as nossas queridas convidadas
-              <strong>EVITEM o uso das cores AZUL e LILÁS</strong>, para que a
+              Pedimos, por gentileza, que nossos queridos convidados
+              <strong>EVITEM o uso das cores ROSA e LILÁS</strong>, para que a
               paleta de cores da celebração esteja em perfeita harmonia.
               Agradecemos muito a compreensão e colaboração!
             </p>
@@ -339,31 +486,136 @@
         </div>
       </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../static/countdown.js"></script>
+
+    <div
+      class="modal fade"
+      id="listapresentesModal"
+      tabindex="-1"
+      aria-labelledby="listapresentesModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="listapresentesModalLabel">
+              Sugestões de Presentes
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div>
+              <p>
+                Aqui estão algumas sugestões de presentes que a Ana gostaria de
+                ganhar. Lembre-se de indicar sua escolha no formulário de
+                confirmação para evitarmos itens repetidos!
+              </p>
+
+              <hr />
+              <h5>Sugestões Disponíveis:</h5>
+              {% if disponiveis %}
+              <ul class="list-group list-group-flush">
+                {% for item in disponiveis %}
+                <li class="list-group-item">{{ item }}</li>
+                {% endfor %}
+              </ul>
+              {% else %}
+              <p class="text-muted">
+                Nenhuma sugestão disponível ou todas já foram escolhidas.
+                Sinta-se à vontade para escolher outro mimo!
+              </p>
+              {% endif %}
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-custom-secondary"
+              onclick="fecharEMover()"
+            >
+              Escolher Presente
+            </button>
+            <button
+              type="button"
+              class="btn btn-custom-secondary"
+              data-bs-dismiss="modal"
+            >
+              Fechar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+    <script src="{{ url_for('static', filename='countdown.js') }}"></script>
     <script>
-      // Script para campos opcionais
-      const confirmadoSelect = document.getElementById("confirmado");
-      const presenteDiv = document.getElementById("presente-div");
-      const quantidadePessoasDiv = document.getElementById(
-        "quantidade-pessoas-div"
-      );
-      const quantidadePessoasInput =
-        document.getElementById("quantidade_pessoas");
-      function toggleCamposOpcionais() {
-        if (confirmadoSelect.value === "sim") {
-          presenteDiv.style.display = "block";
-          quantidadePessoasDiv.style.display = "block";
-          quantidadePessoasInput.required = true;
-        } else {
-          presenteDiv.style.display = "none";
-          quantidadePessoasDiv.style.display = "none";
-          quantidadePessoasInput.required = false;
-          quantidadePessoasInput.value = "1";
+      document.addEventListener("DOMContentLoaded", (event) => {
+        const confirmadoSelect = document.getElementById("confirmado");
+        const presenteDiv = document.getElementById("presente-div");
+        const quantidadePessoasDiv = document.getElementById(
+          "quantidade-pessoas-div"
+        );
+
+        // Removido referência a quantidadePessoasDiv/Input pois está comentado no HTML
+
+        function toggleCamposOpcionais() {
+          if (confirmadoSelect && presenteDiv) {
+            // Verifica se os elementos existem
+            if (confirmadoSelect.value === "sim") {
+              presenteDiv.style.display = "block";
+              quantidadePessoasDiv.style.display = "block";
+            } else {
+              presenteDiv.style.display = "none";
+              quantidadePessoasDiv.style.display = "none";
+              // Opcional: resetar o valor do select de presente se mudar para "não"
+              // document.getElementById("presente").value = "";
+            }
+          }
         }
+
+        if (confirmadoSelect) {
+          confirmadoSelect.addEventListener("change", toggleCamposOpcionais);
+        }
+
+        // Executa ao carregar para garantir o estado inicial correto
+        toggleCamposOpcionais();
+      });
+
+      document.addEventListener("DOMContentLoaded", function () {
+        // Código para garantir que o modal seja acionado pelo botão
+        const btnMostrarExemplo = document.getElementById("btnMostrarExemplo");
+        const exemploDressCodeModal = new bootstrap.Modal(
+          document.getElementById("exemploDressCodeModal")
+        );
+
+        if (btnMostrarExemplo) {
+          btnMostrarExemplo.addEventListener("click", function () {
+            exemploDressCodeModal.show();
+          });
+        }
+      });
+
+      function fecharEMover() {
+        const modal = bootstrap.Modal.getInstance(
+          document.getElementById("listapresentesModal")
+        );
+        modal.hide();
+
+        setTimeout(() => {
+          document
+            .getElementById("formConfirmacao")
+            .scrollIntoView({ behavior: "smooth" });
+        }, 300); // tempo suficiente para a modal sumir antes de rolar
       }
-      confirmadoSelect.addEventListener("change", toggleCamposOpcionais);
-      toggleCamposOpcionais(); // Executa ao carregar a página
     </script>
   </body>
 </html>

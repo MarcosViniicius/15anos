@@ -6,16 +6,16 @@
 /* ------------------------- */
 :root {
   /* Sua Paleta Original */
-  --rosa-principal: #c1838f;
-  --rosa-secundario: #f28f8f;
-  --rosa-escuro-badge: #6b2c3e; /* Usado no outline button */
+  --rosa-principal: #ff69b4; /* Rosa Pink */
+  --rosa-secundario: #dda0dd; /* Lilás */
+  --rosa-escuro-badge: #8b008b; /* Roxo escuro para badge (similar ao lilás escuro) */
 
   /* Cores Base Modernizadas */
-  --fundo-pagina: #ffffff;
-  --fundo-pagina-fim-gradiente: #fefbfb; /* Gradiente quase imperceptível */
+  --fundo-pagina: #f0dcf3;
+  --fundo-pagina-fim-gradiente: #fdfbfe; /* Gradiente quase imperceptível */
   --fundo-card: #ffffff;
-  --fundo-countdown: var(--rosa-principal);
-  /* --fundo-countdown-gradiente: linear-gradient(135deg, #c1838f 0%, #d19aa6 100%); /* Opção Gradiente Contagem */
+  --fundo-countdown: var(--rosa-secundario);
+  /* --fundo-countdown-gradiente: linear-gradient(135deg, #ff69b4 0%, #dda0dd 100%); /* Opção Gradiente Contagem */
   --fundo-timebox-glass: rgba(255, 255, 255, 0.6); /* Fundo vidro */
 
   --texto-escuro: #343a40; /* Tom de cinza escuro padrão Bootstrap */
@@ -27,7 +27,7 @@
   /* Configurações Visuais Modernas */
   --borda-suave: #f1f3f5; /* Borda bem clara */
   --borda-input: #ced4da; /* Borda padrão input */
-  --sombra-moderna: 0 10px 30px rgba(193, 131, 143, 0.09),
+  --sombra-moderna: 0 10px 30px rgba(255, 105, 180, 0.09),
     0 4px 15px rgba(0, 0, 0, 0.05);
   --border-radius-moderno: 8px; /* Raio de borda padrão */
   --transicao-padrao: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1); /* Transição suave */
@@ -293,7 +293,7 @@ a:hover {
 .form-control:focus,
 .form-select:focus {
   border-color: var(--rosa-principal);
-  box-shadow: 0 0 0 0.25rem rgba(193, 131, 143, 0.15);
+  box-shadow: 0 0 0 0.25rem rgba(255, 105, 180, 0.15);
   background-color: #fff;
 }
 .map-responsive {
@@ -355,13 +355,21 @@ footer {
 
 /* Botão Principal (Rosa Escuro) */
 .btn-custom-primary {
-  background: linear-gradient(145deg, var(--rosa-principal), #ab7682);
+  background: linear-gradient(
+    145deg,
+    var(--rosa-principal),
+    #e65cb9
+  ); /* Ajuste tom do gradiente */
   border-color: var(--rosa-principal);
   color: var(--texto-claro);
 }
 /* Botão Secundário (Rosa Claro) */
 .btn-custom-secondary {
-  background: linear-gradient(145deg, var(--rosa-secundario), #d97c7c);
+  background: linear-gradient(
+    145deg,
+    var(--rosa-secundario),
+    #c690c6
+  ); /* Ajuste tom do gradiente */
   border-color: var(--rosa-secundario);
   color: var(--texto-claro);
 }
@@ -409,7 +417,7 @@ footer {
   color: var(--texto-claro);
   border-color: var(--rosa-principal);
   transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 8px 20px rgba(193, 131, 143, 0.15);
+  box-shadow: 0 8px 20px rgba(255, 105, 180, 0.15);
 }
 .btn-mobile-presence:active {
   transform: translateY(0) scale(1);
@@ -448,6 +456,12 @@ footer {
   border-top: 1px solid var(--borda-suave);
   padding: 1rem 1.5rem;
   background-color: var(--fundo-pagina-fim-gradiente);
+}
+
+.scrollable-div {
+  height: 300px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
 }
 
 /* ------------------------- */

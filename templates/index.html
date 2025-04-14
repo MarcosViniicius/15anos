@@ -261,7 +261,7 @@
                 </div>
 
                 <!-- Botões para escolher tipo de presente -->
-                <div class="mb-3" id="escolha-Div" style="display: none">
+                <div class="mb-3" id="escolhaDiv" style="display: none">
                   <label class="form-label d-block mb-2"
                     >Como deseja presentear?</label
                   >
@@ -287,6 +287,15 @@
                       Fazer um Pix
                     </button>
                   </div>
+                </div>
+
+                <!-- Aviso do pix -->
+                <div class="mb-3" id="pix-div" style="display: none">
+                  <label for="pix" class="form-label d-block mb-2">
+                    Para realizar o pagamento via Pix, confirme sua presença e
+                    você será automaticamente redirecionado para a página de
+                    pagamento.
+                  </label>
                 </div>
 
                 <!-- Escolha de presente -->
@@ -372,7 +381,7 @@
               <div class="card p-3 map-card shadow-sm">
                 <div class="map-responsive">
                   <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3968.906838826635!2d-35.2589368857187!3d-5.936346460009789!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x7b25448c5a6f44f%3A0x9679d987f59ab643!2sBouganville%20Hall!5e0!3m2!1spt-BR!2sbr!4v1678886400000!5m2!1spt-BR!2sbr"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d248.03212053032416!2d-35.26266749026784!3d-5.923645771643059!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x7b2570b13f0d109%3A0xaac2f9ec31281e11!2sAv.%20Comandante%20Petit%2C%20263%20-%20Centro%2C%20Parnamirim%20-%20RN%2C%2059140-190!5e0!3m2!1spt-BR!2sbr!4v1744634833635!5m2!1spt-BR!2sbr"
                     width="100%"
                     height="450"
                     style="border: 0"
@@ -594,37 +603,37 @@
     ></script>
     <script src="{{ url_for('static', filename='countdown.js') }}"></script>
     <script>
-      document.addEventListener("DOMContentLoaded", (event) => {
+      function toggleCamposOpcionais() {
         const confirmadoSelect = document.getElementById("confirmado");
         const presenteDiv = document.getElementById("presente-div");
-        const pixDiv = document.getElementById("pix-div");
-        const escolhaDiv = document.getElementById("escolha-Div");
 
+        const escolhaDiv = document.getElementById("escolhaDiv");
         const quantidadePessoasDiv = document.getElementById(
           "quantidade-pessoas-div"
         );
 
-        // Removido referência a quantidadePessoasDiv/Input pois está comentado no HTML
-
-        function toggleCamposOpcionais() {
-          if (confirmadoSelect && presenteDiv) {
-            // Verifica se os elementos existem
-            if (confirmadoSelect.value === "sim") {
-              // presenteDiv.style.display = "block";
-              // pixDiv.style.display = "block";
-              escolhaDiv.style.display = "block";
-              quantidadePessoasDiv.style.display = "block";
-            } else {
-              presenteDiv.style.display = "none";
-              pixDiv.style.display = "none";
-              quantidadePessoasDiv.style.display = "none";
-              escolhaDiv.style.display = "none";
-              // Opcional: resetar o valor do select de presente se mudar para "não"
-              // document.getElementById("presente").value = "";
-            }
+        if (confirmadoSelect) {
+          if (confirmadoSelect.value === "sim") {
+            // Mostrar campos relacionados à presença
+            escolhaDiv.style.display = "block";
+            quantidadePessoasDiv.style.display = "block";
+            presenteDiv.style.display = "none"; // Inicialmente ocultar o presente
+          } else if (confirmadoSelect.value === "nao") {
+            // Ocultar campos relacionados à presença
+            escolhaDiv.style.display = "none";
+            quantidadePessoasDiv.style.display = "none";
+            presenteDiv.style.display = "none";
+          } else {
+            // Ocultar tudo se nenhuma opção for selecionada
+            escolhaDiv.style.display = "none";
+            quantidadePessoasDiv.style.display = "none";
+            presenteDiv.style.display = "none";
           }
         }
+      }
 
+      document.addEventListener("DOMContentLoaded", () => {
+        const confirmadoSelect = document.getElementById("confirmado");
         if (confirmadoSelect) {
           confirmadoSelect.addEventListener("change", toggleCamposOpcionais);
         }
@@ -664,6 +673,7 @@
         const btnPresente = document.getElementById("btn-presente");
         const btnPix = document.getElementById("btn-pix");
         const presenteDiv = document.getElementById("presente-div");
+        const pixDiv = document.getElementById("pix-div");
         const formaPresenteInput = document.getElementById("forma_presente");
 
         // Resetar estilos
@@ -673,10 +683,12 @@
         // Mostrar ou ocultar campos conforme a opção selecionada
         if (opcao === "presente") {
           presenteDiv.style.display = "block";
+          pixDiv.style.display = "none";
           btnPresente.classList.add("active");
           formaPresenteInput.value = "presente";
         } else if (opcao === "pix") {
           presenteDiv.style.display = "none";
+          pixDiv.style.display = "block";
           btnPix.classList.add("active");
           formaPresenteInput.value = "pix";
         }

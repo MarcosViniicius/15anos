@@ -124,15 +124,15 @@ def confirmar():
     # Validações básicas
     if not nome_submetido:
         flash("Por favor, informe seu nome completo.", "error")
-        return redirect(request.referrer or url_for('index'))
+        return redirect(request.referrer or url_for('index') + "#formConfirmacao")
     if not confirmado_status:
         flash("Por favor, selecione se você vai comparecer.", "error")
-        return redirect(request.referrer or url_for('index'))
+        return redirect(request.referrer or url_for('index') + "#formConfirmacao")
 
     conn, cursor = get_db_connection()
     if not conn or not cursor:
         flash("Erro ao conectar ao banco de dados. Tente novamente.", "error")
-        return redirect(url_for('index'))
+        return redirect(url_for('index') + "#formConfirmacao")
 
     try:
         agora = datetime.now()
@@ -153,7 +153,7 @@ def confirmar():
 
             # Redirecionar para a página do Pix se a forma de presente for "pix"
             if is_pix:
-                flash("Presença confirmada! Você será redirecionado para a página do Pix.", "success")
+                flash("Presença confirmada! Não se esqueça de enviar o comprovante do Pix para que possamos registrar seu pagamento.", "success")
                 return redirect(url_for('pix'))
             else:
                 flash("Sua presença foi confirmada com sucesso!", "success")
@@ -174,7 +174,8 @@ def confirmar():
     finally:
         release_db_connection(conn)
 
-    return redirect(url_for('index'))
+    # Redirecionar para a seção #formConfirmacao
+    return redirect(url_for('index') + "#formConfirmacao")
 
 @app.route('/confirmados')
 def confirmados():

@@ -113,88 +113,67 @@ def flash_with_logging(message, category="message"):
 def confirmar():
     # Obter dados do formulário
     nome_submetido = request.form.get('nome')
-    confirmado_status = request.form.get('confirmado') # Valor será 'sim' ou 'nao'
-    presente_selecionado = request.form.get('presente') # Pode ser string vazia ""
-    quantidade_pessoas = request.form.get('quantidade_pessoas', '1') # Campo já existente para quantidade total
-    
-    # Converter para inteiro com valor padrão 1 se não for fornecido ou for inválido
-    try:
-        quantidade_pessoas = int(quantidade_pessoas)
-        # Garantir um valor mínimo de 1
-        if quantidade_pessoas < 1:
-            quantidade_pessoas = 1
-    except (ValueError, TypeError):
-        quantidade_pessoas = 1
-    
-    # Calcular acompanhantes (total - 1)
-    acompanhantes = quantidade_pessoas - 1
+    confirmado_status = request.form.get('confirmado')  # Valor será 'sim' ou 'nao'
+    presente_selecionado = request.form.get('presente')  # Pode ser string vazia ""
+    forma_presente = request.form.get('forma_presente')  # 'presente' ou 'pix'
 
     # Log detalhado dos dados recebidos
-    logger.info(f"Recebido - Nome: '{nome_submetido}', Status Confirmação: '{confirmado_status}', " +
-                f"Presente: '{presente_selecionado}', Total Pessoas: {quantidade_pessoas}")
+    logger.info(f"Recebido - Nome: '{nome_submetido}', Status Confirmação: '{confirmado_status}', "
+                f"Presente: '{presente_selecionado}', Forma Presente: '{forma_presente}'")
 
     # Validações básicas
     if not nome_submetido:
-        flash_with_logging("Por favor, informe seu nome completo.", "error")
-        # Redireciona de volta para a página anterior (o formulário)
+        flash("Por favor, informe seu nome completo.", "error")
         return redirect(request.referrer or url_for('index'))
     if not confirmado_status:
-        flash_with_logging("Por favor, selecione se você vai comparecer.", "error")
+        flash("Por favor, selecione se você vai comparecer.", "error")
         return redirect(request.referrer or url_for('index'))
 
     conn, cursor = get_db_connection()
     if not conn or not cursor:
-        flash_with_logging("Erro ao conectar ao banco de dados. Tente novamente.", "error")
-        return redirect(url_for('index')) # Ou uma página de erro
+        flash("Erro ao conectar ao banco de dados. Tente novamente.", "error")
+        return redirect(url_for('index'))
 
     try:
-        # Processar a confirmação com base no status
         agora = datetime.now()
-        presente_db = presente_selecionado if presente_selecionado else None # Salva NULL se vazio
+
+        # Determinar se o participante escolheu Pix
+        is_pix = True if forma_presente == "pix" else False
+
+        # Se a forma de presente for "pix", insira NULL na coluna "presente"
+        presente_db = None if is_pix else presente_selecionado
 
         if confirmado_status == 'sim':
             # Inserir novo registro de participante confirmado
             cursor.execute("""
-                INSERT INTO participante (nome, confirmado, presente, data_confirmacao, quantidade_pessoas)
+                INSERT INTO participante (nome, confirmado, presente, data_confirmacao, pix)
                 VALUES (%s, TRUE, %s, %s, %s);
-            """, (nome_submetido, presente_db, agora, quantidade_pessoas))
+            """, (nome_submetido, presente_db, agora, is_pix))
             conn.commit()
-            
-            # Mensagem conforme número de pessoas
-            if quantidade_pessoas == 1:
-                flash_with_logging("Sua presença foi confirmada com sucesso!", "success")
+
+            # Redirecionar para a página do Pix se a forma de presente for "pix"
+            if is_pix:
+                flash("Presença confirmada! Você será redirecionado para a página do Pix.", "success")
+                return redirect(url_for('pix'))
             else:
-                flash_with_logging(f"Presença confirmada com sucesso para {quantidade_pessoas} pessoas!", "success")
-                
-            logger.info(f"Participante {nome_submetido} CONFIRMADO com total de {quantidade_pessoas} pessoas. Presente: {presente_db}")
+                flash("Sua presença foi confirmada com sucesso!", "success")
 
         elif confirmado_status == 'nao':
             # Inserir novo registro de participante que não vai comparecer
             cursor.execute("""
-                INSERT INTO participante (nome, confirmado, presente, data_confirmacao, quantidade_pessoas)
-                VALUES (%s, FALSE, NULL, %s, 0);
+                INSERT INTO participante (nome, confirmado, presente, data_confirmacao, pix)
+                VALUES (%s, FALSE, NULL, %s, FALSE);
             """, (nome_submetido, agora))
             conn.commit()
-            flash_with_logging("Resposta registrada. Que pena que não poderá comparecer!", "info")
-            logger.info(f"Participante {nome_submetido} respondeu NÃO comparecerá.")
+            flash("Resposta registrada. Que pena que não poderá comparecer!", "info")
 
-        else:
-            # Status inválido (não deveria acontecer com o select)
-            flash_with_logging("Opção de confirmação inválida.", "error")
-            logger.warning(f"Status de confirmação inválido recebido: '{confirmado_status}' para {nome_submetido}")
-
-    except psycopg2.Error as db_err:
-        conn.rollback() # Desfaz a transação em caso de erro no DB
-        logger.error(f"Erro de banco de dados ao processar confirmação para Nome {nome_submetido}: {db_err}")
-        flash_with_logging("Ocorreu um erro no banco de dados ao processar sua confirmação.", "error")
     except Exception as e:
-        conn.rollback() # Garante rollback para outros erros também
-        logger.error(f"Erro inesperado ao processar confirmação para Nome {nome_submetido}: {e}")
-        flash_with_logging("Ocorreu um erro inesperado ao processar sua confirmação.", "error")
+        conn.rollback()
+        logger.error(f"Erro ao processar confirmação: {e}")
+        flash("Ocorreu um erro ao processar sua confirmação.", "error")
     finally:
         release_db_connection(conn)
 
-    # Redirecionar para a página inicial (ou uma página de agradecimento)
     return redirect(url_for('index'))
 
 @app.route('/confirmados')
@@ -241,6 +220,13 @@ def calendar_link():
         return redirect(url_for('index'))
 
 
+@app.route('/pix')
+def pix():
+    chave_pix = "chavepix"  # Substitua pela chave Pix real
+    numero_whatsapp = "+55 99999-9999"  # Substitua pelo número real
+    return render_template('pix.html', chave_pix=chave_pix, numero_whatsapp=numero_whatsapp)
+
+
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template('404.html'), 404
@@ -268,4 +254,4 @@ def reconnect_pool():
 application = app
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=4800)

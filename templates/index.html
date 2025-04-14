@@ -1,23 +1,32 @@
 <!DOCTYPE html>
 <html lang="pt-br">
   <head>
+    <!-- Metadados básicos -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Convite - 15 Anos da Princesa Ana</title>
+
+    <!-- Bootstrap CSS -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
       integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
       crossorigin="anonymous"
     />
+
+    <!-- Fontes personalizadas -->
     <link
       href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Open+Sans:wght@400;600&display=swap"
       rel="stylesheet"
     />
+
+    <!-- Biblioteca de animações -->
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
       rel="stylesheet"
     />
+
+    <!-- Estilos personalizados -->
     <link
       href="{{ url_for('static', filename='style.css') }}"
       rel="stylesheet"
@@ -25,8 +34,10 @@
   </head>
   <body>
     <div class="container py-5">
+      <!-- Cabeçalho -->
       <header class="text-center mb-5 animate__animated animate__fadeInDown">
         <section class="hero">
+          <!-- Informações principais do evento -->
           <p class="hero__save-the-date"><strong>SAVE THE DATE</strong></p>
           <h1 class="hero__title"><strong>ANA - 15</strong></h1>
           <p class="hero__date">14 . 06 . 2025</p>
@@ -36,6 +47,7 @@
           📍Av. Comandante Petit, 263 - Centro, Parnamirim - RN <br />
           <strong>Bouganville Hall</strong>
         </p>
+        <!-- Botão para adicionar ao Google Calendar -->
         <a
           href="{{ url_for('calendar_link') }}"
           class="btn btn-custom-outline"
@@ -45,11 +57,13 @@
       </header>
 
       <main>
+        <!-- Seção de contagem regressiva -->
         <section class="countdown-section section-padding mb-5">
           <h2 class="section-title countdown-section__title">
             Contagem Regressiva
           </h2>
           <div class="countdown" id="countdown">
+            <!-- Blocos de tempo -->
             <div class="time-box">
               <div class="number" id="days">--</div>
               <div class="label">DIAS</div>
@@ -69,6 +83,7 @@
           </div>
         </section>
 
+        <!-- Botão para confirmar presença (visível apenas em dispositivos móveis) -->
         <div
           class="d-block d-md-none text-center mb-5 animate__animated animate__fadeInUp"
         >
@@ -77,6 +92,7 @@
           </a>
         </div>
 
+        <!-- Seção de boas-vindas -->
         <section class="info-section section-padding mb-5">
           <h2 class="section-title info-section__title">Boas Vindas!</h2>
           <p class="info-section__text">
@@ -94,6 +110,7 @@
           </p>
         </section>
 
+        <!-- Seção de informações importantes -->
         <section
           class="important-info-section section-padding mb-5"
           id="informacoesimportantes"
@@ -104,6 +121,7 @@
                 Informações Importantes
               </h3>
             </div>
+            <!-- Cartões com informações -->
             <div
               class="col-lg-4 col-md-6 mb-4 animate__animated animate__fadeInUp"
             >
@@ -206,6 +224,7 @@
           <div class="col-lg-7 animate__animated animate__fadeInLeft">
             <div class="card p-4 form-card shadow-sm">
               <form method="POST" action="{{ url_for('confirmar') }}">
+                <!-- Campo para nome -->
                 <div class="mb-3">
                   <label for="nome" class="form-label"
                     >Seu nome completo:</label
@@ -221,6 +240,7 @@
                   />
                 </div>
 
+                <!-- Campo para confirmação de presença -->
                 <div class="mb-3">
                   <label for="confirmado" class="form-label d-block mb-2"
                     >Você vai comparecer?</label
@@ -240,41 +260,46 @@
                   </select>
                 </div>
 
-                <p class="form-text">
-                  Para escolher o presente, confirme sua presença primeiro
-                  ("Sim, estarei presente!"). Em seguida, a lista de sugestões
-                  será exibida abaixo.
-                </p>
-                <div
-                  class="mb-3"
-                  id="quantidade-pessoas-div"
-                  style="display: none"
-                >
-                  <label for="quantidade_pessoas" class="form-label"
-                    >Quantas pessoas irão com você (incluindo você)?</label
+                <!-- Botões para escolher tipo de presente -->
+                <div class="mb-3" id="escolha-Div" style="display: none">
+                  <label class="form-label d-block mb-2"
+                    >Como deseja presentear?</label
                   >
-                  <input
-                    type="number"
-                    name="quantidade_pessoas"
-                    id="quantidade_pessoas"
-                    class="form-control"
-                    min="1"
-                    value="1"
-                    required
-                    aria-label="Quantidade de pessoas"
-                  />
+                  <div
+                    class="btn-group"
+                    role="group"
+                    aria-label="Escolha de presente"
+                  >
+                    <button
+                      type="button"
+                      class="btn btn-outline-primary"
+                      id="btn-presente"
+                      onclick="alternarFormaPresente('presente')"
+                    >
+                      Escolher um presente
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-outline-success"
+                      id="btn-pix"
+                      onclick="alternarFormaPresente('pix')"
+                    >
+                      Fazer um Pix
+                    </button>
+                  </div>
                 </div>
+
+                <!-- Escolha de presente -->
                 <div class="mb-3" id="presente-div" style="display: none">
-                  <label for="presente" class="form-label d-block mb-2"
-                    >Se desejar, indique o presente que pretende levar
-                    (Opcional):</label
-                  >
+                  <label for="presente" class="form-label d-block mb-2">
+                    Se desejar, indique o presente que pretende levar
+                    (Opcional):
+                  </label>
                   <select
                     name="presente"
                     id="presente"
                     class="form-select"
                     aria-label="Indique um presente (opcional)"
-                    required
                   >
                     <option value="" selected disabled>
                       Clique aqui para escolher
@@ -293,6 +318,15 @@
                   </small>
                 </div>
 
+                <!-- Campo oculto para identificar a forma de presente -->
+                <input
+                  type="hidden"
+                  name="forma_presente"
+                  id="forma_presente"
+                  value="presente"
+                />
+
+                <!-- Botão de envio -->
                 <button type="submit" class="btn btn-custom-primary w-100 mt-3">
                   Enviar Confirmação
                 </button>
@@ -367,6 +401,7 @@
         <p class="final-message">Com amor, esperamos por você 💖</p>
       </div>
 
+      <!-- Rodapé -->
       <footer class="text-center mt-5 border-top pt-3">
         <p class="text-muted small">
           © 2025 Marcos. Todos os direitos reservados.
@@ -551,6 +586,7 @@
       </div>
     </div>
 
+    <!-- Scripts -->
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
@@ -561,6 +597,9 @@
       document.addEventListener("DOMContentLoaded", (event) => {
         const confirmadoSelect = document.getElementById("confirmado");
         const presenteDiv = document.getElementById("presente-div");
+        const pixDiv = document.getElementById("pix-div");
+        const escolhaDiv = document.getElementById("escolha-Div");
+
         const quantidadePessoasDiv = document.getElementById(
           "quantidade-pessoas-div"
         );
@@ -571,11 +610,15 @@
           if (confirmadoSelect && presenteDiv) {
             // Verifica se os elementos existem
             if (confirmadoSelect.value === "sim") {
-              presenteDiv.style.display = "block";
+              // presenteDiv.style.display = "block";
+              // pixDiv.style.display = "block";
+              escolhaDiv.style.display = "block";
               quantidadePessoasDiv.style.display = "block";
             } else {
               presenteDiv.style.display = "none";
+              pixDiv.style.display = "none";
               quantidadePessoasDiv.style.display = "none";
+              escolhaDiv.style.display = "none";
               // Opcional: resetar o valor do select de presente se mudar para "não"
               // document.getElementById("presente").value = "";
             }
@@ -615,6 +658,28 @@
             .getElementById("formConfirmacao")
             .scrollIntoView({ behavior: "smooth" });
         }, 300); // tempo suficiente para a modal sumir antes de rolar
+      }
+
+      function alternarFormaPresente(opcao) {
+        const btnPresente = document.getElementById("btn-presente");
+        const btnPix = document.getElementById("btn-pix");
+        const presenteDiv = document.getElementById("presente-div");
+        const formaPresenteInput = document.getElementById("forma_presente");
+
+        // Resetar estilos
+        btnPresente.classList.remove("active");
+        btnPix.classList.remove("active");
+
+        // Mostrar ou ocultar campos conforme a opção selecionada
+        if (opcao === "presente") {
+          presenteDiv.style.display = "block";
+          btnPresente.classList.add("active");
+          formaPresenteInput.value = "presente";
+        } else if (opcao === "pix") {
+          presenteDiv.style.display = "none";
+          btnPix.classList.add("active");
+          formaPresenteInput.value = "pix";
+        }
       }
     </script>
   </body>

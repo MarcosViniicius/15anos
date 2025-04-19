@@ -1,1 +1,26 @@
+
+---
+
+### .gitignore
+
+```plaintext
+# Arquivos de ambiente
 .env
+
+# Cache do Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Cache do pytest
+.pytest_cache/
+
+# Configurações do VSCode
+.vscode/
+
+# Logs
+*.log
+
+# Arquivos do sistema operacional
+.DS_Store
+Thumbs.db

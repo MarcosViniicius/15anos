@@ -114,12 +114,14 @@ def confirmar():
     # Obter dados do formulário
     nome_submetido = request.form.get('nome')
     confirmado_status = request.form.get('confirmado')  # Valor será 'sim' ou 'nao'
+    quantidade_pessoas = request.form.get('quantidade_pessoas')  # Capturar o valor
     presente_selecionado = request.form.get('presente')  # Pode ser string vazia ""
     forma_presente = request.form.get('forma_presente')  # 'presente' ou 'pix'
 
     # Log detalhado dos dados recebidos
     logger.info(f"Recebido - Nome: '{nome_submetido}', Status Confirmação: '{confirmado_status}', "
-                f"Presente: '{presente_selecionado}', Forma Presente: '{forma_presente}'")
+                f"Quantidade de Pessoas: '{quantidade_pessoas}', Presente: '{presente_selecionado}', "
+                f"Forma Presente: '{forma_presente}'")
 
     # Validações básicas
     if not nome_submetido:
@@ -127,6 +129,13 @@ def confirmar():
         return redirect(request.referrer or url_for('index') + "#formConfirmacao")
     if not confirmado_status:
         flash("Por favor, selecione se você vai comparecer.", "error")
+        return redirect(request.referrer or url_for('index') + "#formConfirmacao")
+
+    # Tratar quantidade de pessoas: converter para inteiro ou usar None
+    try:
+        quantidade_pessoas = int(quantidade_pessoas) if quantidade_pessoas else None
+    except ValueError:
+        flash("Quantidade de pessoas inválida. Por favor, insira um número válido.", "error")
         return redirect(request.referrer or url_for('index') + "#formConfirmacao")
 
     conn, cursor = get_db_connection()
@@ -138,7 +147,7 @@ def confirmar():
         agora = datetime.now()
 
         # Determinar se o participante escolheu Pix
-        is_pix = True if forma_presente == "pix" else False
+        is_pix = forma_presente == "pix"
 
         # Se a forma de presente for "pix", insira NULL na coluna "presente"
         presente_db = None if is_pix else presente_selecionado
@@ -146,9 +155,9 @@ def confirmar():
         if confirmado_status == 'sim':
             # Inserir novo registro de participante confirmado
             cursor.execute("""
-                INSERT INTO participante (nome, confirmado, presente, data_confirmacao, pix)
-                VALUES (%s, TRUE, %s, %s, %s);
-            """, (nome_submetido, presente_db, agora, is_pix))
+                INSERT INTO participante (nome, confirmado, quantidade_pessoas, presente, data_confirmacao, pix)
+                VALUES (%s, TRUE, %s, %s, %s, %s);
+            """, (nome_submetido, quantidade_pessoas, presente_db, agora, is_pix))
             conn.commit()
 
             # Redirecionar para a página do Pix se a forma de presente for "pix"
@@ -161,8 +170,8 @@ def confirmar():
         elif confirmado_status == 'nao':
             # Inserir novo registro de participante que não vai comparecer
             cursor.execute("""
-                INSERT INTO participante (nome, confirmado, presente, data_confirmacao, pix)
-                VALUES (%s, FALSE, NULL, %s, FALSE);
+                INSERT INTO participante (nome, confirmado, quantidade_pessoas, presente, data_confirmacao, pix)
+                VALUES (%s, FALSE, NULL, NULL, %s, FALSE);
             """, (nome_submetido, agora))
             conn.commit()
             flash("Resposta registrada. Que pena que não poderá comparecer!", "info")
@@ -208,12 +217,14 @@ def confirmados():
 @app.route('/calendar-link')
 def calendar_link():
     try:
-        event_title = urllib.parse.quote("Aniversário da Ana")
-        location = urllib.parse.quote("Rua Exemplo, 123, Natal - RN")
+        event_title = urllib.parse.quote("15 anos de Ana Beatriz🥳🎉")
+        location = urllib.parse.quote("Av. Comandante Petit, 263 - Centro, Parnamirim - RN")
         details = urllib.parse.quote("Venha comemorar comigo!")
-        start = '20250603T190000Z'
-        end = '20250603T230000Z'
+        start = '20250614T230000Z'
+        end = '20250615T025900Z'
         link = f"https://www.google.com/calendar/render?action=TEMPLATE&text={event_title}&dates={start}/{end}&details={details}&location={location}&sf=true&output=xml"
+
+        # Adicionar o endereço automaticamente ao evento
         return redirect(link)
     except Exception as e:
         logger.error(f"Erro ao gerar link do calendário: {e}")

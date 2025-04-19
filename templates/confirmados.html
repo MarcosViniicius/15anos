@@ -36,63 +36,62 @@
       <!-- Cabeçalho -->
       <header class="text-center mb-5 animate__animated animate__fadeInDown">
         <h1 class="hero__title"><strong>Participantes Confirmados</strong></h1>
+        <p class="text-muted">Veja quem já confirmou presença.</p>
       </header>
 
-      <!-- Exibição dos participantes -->
-      <div class="row">
-        {% for p in participantes %}
-        <div class="col-md-6 col-lg-4">
-          <div class="card">
-            <h5 class="card-title">{{ p[1] }}</h5>
-            <p class="card-text">
-              <strong>Status de Presença:</strong>
-              {% if p[2] %}
-              <span class="badge bg-success">Confirmado</span>
-              {% else %}
-              <span class="badge bg-danger">Não Confirmado</span>
-              {% endif %}
-            </p>
+      <!-- Campo de pesquisa -->
+      <div class="mb-4 text-center">
+        <input
+          type="text"
+          id="searchInput"
+          class="form-control form-control-lg w-50 mx-auto"
+          placeholder="Digite seu nome para buscar ou 'todosadm' para exibir tudo"
+          onkeyup="filterParticipants()"
+        />
+      </div>
 
-            {% if p[3] %}
-            <p class="card-text">
-              <strong>Presente Escolhido:</strong>
-              <span class="badge badge-custom">🎁 {{ p[3] }}</span>
-            </p>
-            {% endif %}
+      <!-- Exibição dos participantes -->
+      <h2 class="mb-4 text-center">Lista de Participantes</h2>
+      <div class="row g-4" id="participantsList">
+        {% for p in participantes %}
+        <div
+          class="col-md-6 col-lg-4 participant-card"
+          data-name="{{ p[1] | lower }}"
+          style="display: none"
+        >
+          <div class="card shadow-sm border-0">
+            <div class="card-body">
+              <h5 class="card-title text-primary">{{ p[1] }}</h5>
+              <p class="card-text status-info" style="display: none">
+                <strong>Status de Presença:</strong>
+                {% if p[2] %}
+                <span class="badge bg-success">Confirmado</span>
+                {% else %}
+                <span class="badge bg-danger">Não Confirmado</span>
+                {% endif %}
+              </p>
+              {% if p[3] %}
+              <p class="card-text presente-info" style="display: none">
+                <strong>Presente Escolhido:</strong>
+                <span class="badge bg-info text-dark">🎁 {{ p[3] }}</span>
+              </p>
+              {% endif %} {% if p[4] == "pix" %}
+              <p class="card-text pix-info" style="display: none">
+                <strong>Forma de Presente:</strong>
+                <span class="badge bg-warning text-dark">💳 Pix</span>
+              </p>
+              {% endif %}
+            </div>
           </div>
         </div>
         {% endfor %}
       </div>
 
-      <!-- Ver Presentes Disponíveis -->
-      <div class="mt-4">
-        <button
-          class="btn btn-outline-info"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#presentesDisponiveis"
-          aria-expanded="false"
-          aria-controls="presentesDisponiveis"
-        >
-          Ver Presentes Disponíveis
-        </button>
-        <div class="collapse mt-3" id="presentesDisponiveis">
-          <div class="card card-body">
-            <h5>Presentes Disponíveis:</h5>
-            <ul class="list-group">
-              {% for item in disponiveis %}
-              <li class="list-group-item">{{ item }}</li>
-              {% endfor %}
-            </ul>
-          </div>
-        </div>
-      </div>
-
       <!-- Botão Voltar -->
-      <div class="mt-4 text-center">
-        <a href="{{ url_for('index') }}" class="btn btn-custom-primary"
-          >Voltar para o início</a
-        >
+      <div class="mt-5 text-center">
+        <a href="{{ url_for('index') }}" class="btn btn-custom-primary btn-lg">
+          Voltar para o início
+        </a>
       </div>
     </div>
 
@@ -109,5 +108,39 @@
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
     ></script>
+
+    <!-- Script para filtrar participantes -->
+    <script>
+      function filterParticipants() {
+        const input = document
+          .getElementById("searchInput")
+          .value.toLowerCase();
+        const cards = document.querySelectorAll(".participant-card");
+
+        cards.forEach((card) => {
+          const name = card.dataset.name;
+          const statusInfo = card.querySelector(".status-info");
+          const presenteInfo = card.querySelector(".presente-info");
+          const pixInfo = card.querySelector(".pix-info");
+
+          if (input === "todosadm") {
+            // Exibe todos os participantes com status e presentes
+            card.style.display = "block";
+            if (statusInfo) statusInfo.style.display = "block";
+            if (presenteInfo) presenteInfo.style.display = "block";
+            if (pixInfo) pixInfo.style.display = "block";
+          } else if (name.includes(input)) {
+            // Exibe apenas os participantes que correspondem à pesquisa
+            card.style.display = "block";
+            if (statusInfo) statusInfo.style.display = "none";
+            if (presenteInfo) presenteInfo.style.display = "none";
+            if (pixInfo) pixInfo.style.display = "none";
+          } else {
+            // Oculta os participantes que não correspondem à pesquisa
+            card.style.display = "none";
+          }
+        });
+      }
+    </script>
   </body>
 </html>

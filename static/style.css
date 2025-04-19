@@ -347,6 +347,7 @@ footer {
   transform: translateY(-3px) scale(1.02); /* Efeito de escala sutil */
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   filter: brightness(1.05);
+  animation: pulse 0.5s ease-in-out;
 }
 .btn:active {
   transform: translateY(-1px) scale(0.99);
@@ -362,6 +363,9 @@ footer {
   ); /* Ajuste tom do gradiente */
   border-color: var(--rosa-principal);
   color: var(--texto-claro);
+}
+.btn-custom-primary:hover {
+  animation: vibrate-mobile 0.3s linear;
 }
 /* Botão Secundário (Rosa Claro) */
 .btn-custom-secondary {
@@ -411,17 +415,30 @@ footer {
   transition: var(--transicao-padrao);
   cursor: pointer;
   margin-top: 1rem; /* Espaço acima */
+  animation: pulse-mobile 1.5s infinite;
 }
 .btn-mobile-presence:hover {
   background-color: var(--rosa-principal);
   color: var(--texto-claro);
   border-color: var(--rosa-principal);
-  transform: translateY(-3px) scale(1.02);
+  transform: scale(1.1);
   box-shadow: 0 8px 20px rgba(255, 105, 180, 0.15);
 }
 .btn-mobile-presence:active {
   transform: translateY(0) scale(1);
   box-shadow: var(--sombra-moderna);
+}
+
+@keyframes pulse-mobile {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 /* ------------------------- */
@@ -568,4 +585,37 @@ footer {
     letter-spacing: 1.5px;
     padding: 0.8rem 1rem;
   } /* Ajuste botão mobile */
+}
+
+/* ------------------------- */
+/* Animação de Botão */
+/* ------------------------- */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes vibrate-mobile {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-2px);
+  }
+  50% {
+    transform: translateX(2px);
+  }
+  75% {
+    transform: translateX(-2px);
+  }
+  100% {
+    transform: translateX(0);
+  }
 }

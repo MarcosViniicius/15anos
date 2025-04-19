@@ -37,9 +37,10 @@
       <!-- Cabeçalho -->
       <header class="text-center mb-5 animate__animated animate__fadeInDown">
         <section class="hero">
-          <!-- Informações principais do evento -->
-          <p class="hero__save-the-date"><strong>SAVE THE DATE</strong></p>
-          <h1 class="hero__title"><strong>ANA - 15</strong></h1>
+          <p class="hero__save-the-date">
+            <strong>Reserve esta data especial!</strong>
+          </p>
+          <h1 class="hero__title"><strong>ANA - 15 ANOS</strong></h1>
           <p class="hero__date">14 . 06 . 2025</p>
           <p class="hero__time">Às 20:00</p>
         </section>
@@ -47,66 +48,93 @@
           📍Av. Comandante Petit, 263 - Centro, Parnamirim - RN <br />
           <strong>Bouganville Hall</strong>
         </p>
-        <!-- Botão para adicionar ao Google Calendar -->
-        <a
-          href="{{ url_for('calendar_link') }}"
-          class="btn btn-custom-outline"
-          target="_blank"
-          >Adicionar ao Google Calendar</a
-        >
+        <div class="mt-3">
+          <a
+            href="{{ url_for('calendar_link') }}"
+            class="btn btn-custom-primary"
+            target="_blank"
+          >
+            Adicionar ao calendário
+          </a>
+        </div>
       </header>
 
       <main>
         <!-- Seção de contagem regressiva -->
         <section class="countdown-section section-padding mb-5">
           <h2 class="section-title countdown-section__title">
-            Contagem Regressiva
+            Faltam apenas...
           </h2>
           <div class="countdown" id="countdown">
-            <!-- Blocos de tempo -->
             <div class="time-box">
-              <div class="number" id="days">--</div>
+              <div class="number animate__animated animate__bounceIn" id="days">
+                --
+              </div>
               <div class="label">DIAS</div>
             </div>
             <div class="time-box">
-              <div class="number" id="hours">--</div>
+              <div
+                class="number animate__animated animate__bounceIn"
+                id="hours"
+              >
+                --
+              </div>
               <div class="label">HORAS</div>
             </div>
             <div class="time-box">
-              <div class="number" id="minutes">--</div>
+              <div
+                class="number animate__animated animate__bounceIn"
+                id="minutes"
+              >
+                --
+              </div>
               <div class="label">MINUTOS</div>
             </div>
             <div class="time-box">
-              <div class="number" id="seconds">--</div>
+              <div
+                class="number animate__animated animate__bounceIn"
+                id="seconds"
+              >
+                --
+              </div>
               <div class="label">SEGUNDOS</div>
             </div>
           </div>
         </section>
 
         <!-- Botão para confirmar presença (visível apenas em dispositivos móveis) -->
-        <div
-          class="d-block d-md-none text-center mb-5 animate__animated animate__fadeInUp"
-        >
-          <a href="#formConfirmacao" class="btn-mobile-presence">
-            CONFIRMAR PRESENÇA
+        <div class="text-center mb-5 animate__animated animate__fadeInUp">
+          <a href="#formConfirmacao" class="btn btn-custom-primary btn-lg">
+            Clique aqui para confirmar sua presença!
+          </a>
+        </div>
+
+        <!-- Botão para acessar a página de confirmados -->
+        <div class="text-center mt-4">
+          <a
+            href="{{ url_for('confirmados') }}"
+            class="btn btn-outline-primary"
+          >
+            Ver Participantes Confirmados
           </a>
         </div>
 
         <!-- Seção de boas-vindas -->
         <section class="info-section section-padding mb-5">
-          <h2 class="section-title info-section__title">Boas Vindas!</h2>
+          <h2 class="section-title info-section__title">
+            Bem-vindo ao nosso site!
+          </h2>
           <p class="info-section__text">
-            Este é o site oficial do aniversário de 15 anos da Ana! Fique à
-            vontade para explorar. Aqui você encontra detalhes sobre o evento,
-            pode confirmar sua presença e, se desejar, pode nos ajudar
-            <strong style="color: var(--rosa-principal)"
-              >indicando qual presente da nossa lista você pretende
-              levar</strong
-            >. Isso nos ajuda a organizar e evitar itens repetidos,
-            <strong style="color: var(--rosa-principal)"
-              >a compra do presente fica por sua conta</strong
-            >. Sua participação tornará este dia ainda mais especial. Contamos
-            com você!
+            Este é o site oficial do aniversário de 15 anos da Ana! Aqui você
+            encontra todos os detalhes sobre o evento, pode confirmar sua
+            presença e nos ajudar
+            <strong style="color: var(--rosa-principal)">
+              indicando qual presente da nossa lista você pretende levar </strong
+            >. Isso nos ajuda a organizar e evitar itens repetidos. <br /><br />
+            <strong style="color: var(--rosa-principal)">
+              A compra do presente fica por sua conta </strong
+            >. Sua presença tornará este dia ainda mais especial. Contamos com
+            você!
           </p>
         </section>
 
@@ -134,8 +162,8 @@
                 <div class="card-body d-flex flex-column">
                   <h5 class="card-title text-center">Lista de Presentes</h5>
                   <p class="card-text flex-grow-1">
-                    Preparamos uma lista de sugestões. Sua contribuição é um
-                    gesto de carinho!
+                    Preparamos uma lista de sugestões para facilitar sua
+                    escolha. Sua contribuição é um gesto de carinho!
                   </p>
                   <div class="mt-auto">
                     <button
@@ -144,13 +172,8 @@
                       data-bs-toggle="modal"
                       data-bs-target="#listapresentesModal"
                     >
-                      Ver Sugestões
+                      Veja nossa lista de presentes
                     </button>
-                    <!-- <a
-                      href="#formConfirmacao"
-                      class="btn btn-custom-secondary w-100"
-                      >Escolher Presente</a
-                    > -->
                   </div>
                 </div>
               </article>
@@ -221,7 +244,18 @@
               Confirmação
             </h3>
           </div>
-          <div class="col-lg-7 animate__animated animate__fadeInLeft">
+          <!-- Aviso adicionado -->
+          <div class="col-lg-7 mb-4">
+            <div class="alert alert-info" role="alert">
+              Ao confirmar sua presença, escolha entre levar um presente ou
+              contribuir via Pix. Para dúvidas, entre em contato com o
+              organizador:
+              <strong>WhatsApp: (XX) XXXXX-XXXX</strong>. Se preferir pagar em
+              dinheiro, selecione a opção <strong>Pix</strong> e, após confirmar
+              a presença, clique em <strong>FAZER UM PIX</strong> para seguir as
+              instruções.
+            </div>
+            <div class="col-lg-7 animate__animated animate__fadeInLeft"></div>
             <div class="card p-4 form-card shadow-sm">
               <form method="POST" action="{{ url_for('confirmar') }}">
                 <!-- Campo para nome -->
@@ -260,6 +294,26 @@
                   </select>
                 </div>
 
+                <!-- Campo para quantidade de pessoas -->
+                <div
+                  class="mb-3"
+                  id="quantidade-pessoas-div"
+                  style="display: none"
+                >
+                  <label for="quantidade_pessoas" class="form-label"
+                    >Quantidade de pessoas:</label
+                  >
+                  <input
+                    type="number"
+                    name="quantidade_pessoas"
+                    id="quantidade_pessoas"
+                    class="form-control"
+                    placeholder="Digite a quantidade de pessoas"
+                    min="1"
+                    aria-label="Quantidade de pessoas"
+                  />
+                </div>
+
                 <!-- Botões para escolher tipo de presente -->
                 <div class="mb-3" id="escolhaDiv" style="display: none">
                   <label class="form-label d-block mb-2"
@@ -289,26 +343,25 @@
                   </div>
                 </div>
 
-                <!-- Aviso do pix -->
+                <!-- Aviso escolha de pix -->
                 <div class="mb-3" id="pix-div" style="display: none">
                   <label for="pix" class="form-label d-block mb-2">
-                    Para realizar o pagamento via Pix, confirme sua presença e
-                    você será automaticamente redirecionado para a página de
-                    pagamento.
+                    Para prosseguir com o pagamento, confirme sua presença. Em
+                    seguida, você será redirecionado para a página com as
+                    instruções de pagamento.
                   </label>
                 </div>
-
                 <!-- Escolha de presente -->
                 <div class="mb-3" id="presente-div" style="display: none">
                   <label for="presente" class="form-label d-block mb-2">
-                    Se desejar, indique o presente que pretende levar
-                    (Opcional):
+                    Selecione o presente com cautela. Após a escolha neste
+                    formulário, não será possível alterá-la.
                   </label>
                   <select
                     name="presente"
                     id="presente"
                     class="form-select"
-                    aria-label="Indique um presente (opcional)"
+                    aria-label="Clique para selecionar um presente"
                   >
                     <option value="" selected disabled>
                       Clique aqui para escolher
@@ -415,6 +468,10 @@
         <p class="text-muted small">
           © 2025 Marcos. Todos os direitos reservados.
         </p>
+        <p>
+          <a href="https://www.instagram.com" target="_blank">Instagram</a> |
+          <a href="https://www.facebook.com" target="_blank">Facebook</a>
+        </p>
       </footer>
     </div>
     <div
@@ -424,7 +481,9 @@
       aria-labelledby="dressCodeModalLabel"
       aria-hidden="true"
     >
-      <div class="modal-dialog modal-dialog-centered">
+      <div
+        class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg"
+      >
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="dressCodeModalLabel">
@@ -437,7 +496,7 @@
               aria-label="Close"
             ></button>
           </div>
-          <div class="modal-body scrollable-div">
+          <div class="modal-body">
             <p class="mb-3">
               Para celebrar em grande estilo, o traje sugerido é
               <strong>Dress Code</strong>.
@@ -467,7 +526,9 @@
               aria-labelledby="exemploDressCodeModalLabel"
               aria-hidden="true"
             >
-              <div class="modal-dialog modal-dialog-centered">
+              <div
+                class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg"
+              >
                 <div class="modal-content">
                   <div class="modal-header">
                     <h5 class="modal-title" id="exemploDressCodeModalLabel">
@@ -538,7 +599,9 @@
       aria-labelledby="listapresentesModalLabel"
       aria-hidden="true"
     >
-      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div
+        class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg"
+      >
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="listapresentesModalLabel">
@@ -673,26 +736,36 @@
         const btnPresente = document.getElementById("btn-presente");
         const btnPix = document.getElementById("btn-pix");
         const presenteDiv = document.getElementById("presente-div");
-        const pixDiv = document.getElementById("pix-div");
         const formaPresenteInput = document.getElementById("forma_presente");
+        const presenteSelect = document.getElementById("presente");
+        const pixSelect = document.getElementById("pix-div");
+        const submitButton = document.querySelector("button[type='submit']");
 
-        // Resetar estilos
-        btnPresente.classList.remove("active");
-        btnPix.classList.remove("active");
+        // Resetar estilos dos botões
+        btnPresente.classList.remove("active", "btn-primary");
+        btnPix.classList.remove("active", "btn-success");
 
         // Mostrar ou ocultar campos conforme a opção selecionada
         if (opcao === "presente") {
           presenteDiv.style.display = "block";
-          pixDiv.style.display = "none";
-          btnPresente.classList.add("active");
+          pixSelect.style.display = "none";
+          btnPresente.classList.add("active", "btn-primary");
+          btnPix.classList.add("btn-outline-success");
           formaPresenteInput.value = "presente";
+          presenteSelect.setAttribute("required", "required"); // Torna obrigatório
+          submitButton.textContent = "Confirmar Presença e Presente"; // Atualiza texto do botão
         } else if (opcao === "pix") {
           presenteDiv.style.display = "none";
-          pixDiv.style.display = "block";
-          btnPix.classList.add("active");
+          pixSelect.style.display = "block";
+          btnPix.classList.add("active", "btn-success");
+          btnPresente.classList.add("btn-outline-primary");
           formaPresenteInput.value = "pix";
+          presenteSelect.removeAttribute("required"); // Remove obrigatoriedade
+          submitButton.textContent =
+            "Confirmar Presença e Prosseguir para Pagamento"; // Atualiza texto do botão
         }
       }
     </script>
   </body>
 </html>
+```

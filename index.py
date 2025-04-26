@@ -6,6 +6,7 @@ from psycopg2 import pool
 from datetime import datetime
 import logging
 import urllib.parse
+from flask_mail import Mail, Message
 
 # Configuração de logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -17,6 +18,15 @@ load_dotenv()
 # Configuração do Flask
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", "chave_secreta_padrao")  # Necessário para flash messages
+
+# Configuração do Flask-Mail
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'  # Servidor SMTP (exemplo: Gmail)
+app.config['MAIL_PORT'] = 587  # Porta do servidor SMTP
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = os.getenv("MAIL_USERNAME")  # E-mail do remetente
+app.config['MAIL_PASSWORD'] = os.getenv("MAIL_PASSWORD")  # Senha do e-mail do remetente
+
+mail = Mail(app)
 
 # Obter variáveis de ambiente
 USER = os.getenv("user")
@@ -109,33 +119,89 @@ def flash_with_logging(message, category="message"):
     logger.info(f"Flash message - Categoria: {category}, Mensagem: {message}")
     flash(message, category)
 
+def enviar_email_confirmacao(email, nome, confirmado, quantidade_pessoas, presente, forma_presente):
+    try:
+        assunto = "Confirmação de Presença - 15 Anos da Ana"
+        corpo_texto = f"""
+        Olá, {nome}!
+        
+        Obrigado por confirmar sua presença no aniversário de 15 anos da Ana.
+
+        Detalhes da sua confirmação:
+        - Presença: {'Sim' if confirmado == 'sim' else 'Não'}
+        - Quantidade de pessoas: {quantidade_pessoas or 'N/A'}
+        - Presente: {presente or 'N/A'}
+        - Forma de presente: {forma_presente.capitalize()}
+
+        Informações da festa:
+        - Data: 14 de junho de 2025
+        - Horário: 20:00
+        - Local: Bouganville Hall, Av. Comandante Petit, 263 - Centro, Parnamirim - RN
+        - Link para o local no Google Maps: https://maps.google.com/?q=Av.+Comandante+Petit,+263+-+Centro,+Parnamirim+-+RN
+
+        Estamos ansiosos para celebrar com você!
+
+        Atenciosamente,
+        Organização do Evento
+        """
+
+        corpo_html = f"""
+        <html>
+        <body>
+            <h2>Olá, {nome}!</h2>
+            <p>Obrigado por confirmar sua presença no aniversário de 15 anos da Ana.</p>
+            <p><strong>Detalhes da sua confirmação:</strong></p>
+            <ul>
+                <li><strong>Presença:</strong> {'Sim' if confirmado == 'sim' else 'Não'}</li>
+                <li><strong>Quantidade de pessoas:</strong> {quantidade_pessoas or 'N/A'}</li>
+                <li><strong>Presente:</strong> {presente or 'N/A'}</li>
+                <li><strong>Forma de presente:</strong> {forma_presente.capitalize()}</li>
+            </ul>
+            {"<div style='margin-top: 20px;'><p>Você escolheu pagar via Pix. Clique no botão abaixo para acessar as informações de pagamento:</p><a href='https://15anos.vercel.app/pix' style='display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px;'>Ir para a página de Pix</a></div>" if forma_presente == "pix" else ""}
+            <p><strong>Informações da festa:</strong></p>
+            <ul>
+                <li><strong>Data:</strong> 14 de junho de 2025</li>
+                <li><strong>Horário:</strong> 20:00</li>
+                <li><strong>Local:</strong> Bouganville Hall, Av. Comandante Petit, 263 - Centro, Parnamirim - RN</li>
+                <li><strong>Link para o local no Google Maps:</strong> <a href="https://maps.google.com/?q=Av.+Comandante+Petit,+263+-+Centro,+Parnamirim+-+RN" target="_blank">Clique aqui</a></li>
+            </ul>
+            <p>Estamos ansiosos para celebrar com você!</p>
+            <p>Atenciosamente,<br>Organização do Evento</p>
+        </body>
+        </html>
+        """
+
+        msg = Message(
+            assunto,
+            sender=app.config['MAIL_USERNAME'],
+            recipients=[email],
+            reply_to=app.config['MAIL_USERNAME']
+        )
+        msg.body = corpo_texto
+        msg.html = corpo_html  # Adiciona a versão HTML
+        msg.headers = {'X-Mailer': 'Convite15Anos'}
+        mail.send(msg)
+        logger.info(f"E-mail enviado com sucesso para {email}")
+    except Exception as e:
+        logger.error(f"Erro ao enviar e-mail para {email}: {e}")
+
 @app.route('/confirmar', methods=['POST'])
 def confirmar():
     # Obter dados do formulário
     nome_submetido = request.form.get('nome')
-    confirmado_status = request.form.get('confirmado')  # Valor será 'sim' ou 'nao'
-    quantidade_pessoas = request.form.get('quantidade_pessoas')  # Capturar o valor
-    presente_selecionado = request.form.get('presente')  # Pode ser string vazia ""
-    forma_presente = request.form.get('forma_presente')  # 'presente' ou 'pix'
+    email = request.form.get('email')  # Capturar o e-mail
+    confirmado_status = request.form.get('confirmado')
+    quantidade_pessoas = request.form.get('quantidade_pessoas')
+    presente_selecionado = request.form.get('presente')
+    forma_presente = request.form.get('forma_presente')
 
-    # Log detalhado dos dados recebidos
-    logger.info(f"Recebido - Nome: '{nome_submetido}', Status Confirmação: '{confirmado_status}', "
+    logger.info(f"Recebido - Nome: '{nome_submetido}', E-mail: '{email}', Status Confirmação: '{confirmado_status}', "
                 f"Quantidade de Pessoas: '{quantidade_pessoas}', Presente: '{presente_selecionado}', "
                 f"Forma Presente: '{forma_presente}'")
 
     # Validações básicas
-    if not nome_submetido:
-        flash("Por favor, informe seu nome completo.", "error")
-        return redirect(request.referrer or url_for('index') + "#formConfirmacao")
-    if not confirmado_status:
-        flash("Por favor, selecione se você vai comparecer.", "error")
-        return redirect(request.referrer or url_for('index') + "#formConfirmacao")
-
-    # Tratar quantidade de pessoas: converter para inteiro ou usar None
-    try:
-        quantidade_pessoas = int(quantidade_pessoas) if quantidade_pessoas else None
-    except ValueError:
-        flash("Quantidade de pessoas inválida. Por favor, insira um número válido.", "error")
+    if not nome_submetido or not email:
+        flash("Por favor, informe seu nome completo e e-mail.", "error")
         return redirect(request.referrer or url_for('index') + "#formConfirmacao")
 
     conn, cursor = get_db_connection()
@@ -145,22 +211,20 @@ def confirmar():
 
     try:
         agora = datetime.now()
-
-        # Determinar se o participante escolheu Pix
         is_pix = forma_presente == "pix"
-
-        # Se a forma de presente for "pix", insira NULL na coluna "presente"
         presente_db = None if is_pix else presente_selecionado
 
         if confirmado_status == 'sim':
-            # Inserir novo registro de participante confirmado
+            # Inserir no banco de dados
             cursor.execute("""
-                INSERT INTO participante (nome, confirmado, quantidade_pessoas, presente, data_confirmacao, pix)
-                VALUES (%s, TRUE, %s, %s, %s, %s);
-            """, (nome_submetido, quantidade_pessoas, presente_db, agora, is_pix))
+                INSERT INTO participante (nome, email, confirmado, quantidade_pessoas, presente, data_confirmacao, pix)
+                VALUES (%s, %s, TRUE, %s, %s, %s, %s);
+            """, (nome_submetido, email, quantidade_pessoas, presente_db, agora, is_pix))
             conn.commit()
 
-            # Redirecionar para a página do Pix se a forma de presente for "pix"
+            # Enviar e-mail de confirmação
+            enviar_email_confirmacao(email, nome_submetido, confirmado_status, quantidade_pessoas, presente_selecionado, forma_presente)
+
             if is_pix:
                 flash("Presença confirmada! Não se esqueça de enviar o comprovante do Pix para que possamos registrar seu pagamento.", "success")
                 return redirect(url_for('pix'))
@@ -168,11 +232,10 @@ def confirmar():
                 flash("Sua presença foi confirmada com sucesso!", "success")
 
         elif confirmado_status == 'nao':
-            # Inserir novo registro de participante que não vai comparecer
             cursor.execute("""
-                INSERT INTO participante (nome, confirmado, quantidade_pessoas, presente, data_confirmacao, pix)
-                VALUES (%s, FALSE, NULL, NULL, %s, FALSE);
-            """, (nome_submetido, agora))
+                INSERT INTO participante (nome, email, confirmado, quantidade_pessoas, presente, data_confirmacao, pix)
+                VALUES (%s, %s, FALSE, NULL, NULL, %s, FALSE);
+            """, (nome_submetido, email, agora))
             conn.commit()
             flash("Resposta registrada. Que pena que não poderá comparecer!", "info")
 
@@ -183,7 +246,6 @@ def confirmar():
     finally:
         release_db_connection(conn)
 
-    # Redirecionar para a seção #formConfirmacao
     return redirect(url_for('index') + "#formConfirmacao")
 
 @app.route('/confirmados')
@@ -234,8 +296,8 @@ def calendar_link():
 
 @app.route('/pix')
 def pix():
-    chave_pix = "chavepix"  # Substitua pela chave Pix real
-    numero_whatsapp = "+55 99999-9999"  # Substitua pelo número real
+    chave_pix = "84 98621-8388"  # Substitua pela chave Pix real
+    numero_whatsapp = "(84) 98621-8388"  # Substitua pelo número real
     return render_template('pix.html', chave_pix=chave_pix, numero_whatsapp=numero_whatsapp)
 
 

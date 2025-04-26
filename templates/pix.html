@@ -91,17 +91,117 @@
     </style>
   </head>
   <body>
+    <!-- Menu suspenso superior -->
+    <nav
+      class="navbar navbar-expand-lg navbar-dark custom-navbar py-2"
+      role="navigation"
+      aria-label="Menu principal"
+    >
+      <div class="container-fluid px-4">
+        <a
+          class="navbar-brand fw-bold"
+          href="{{ url_for('index') }}"
+          style="font-family: 'Libre Caslon Text', serif; font-size: 2rem"
+        >
+          ANA—15
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#menuSuperior"
+          aria-controls="menuSuperior"
+          aria-expanded="false"
+          aria-label="Abrir menu"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div
+          class="collapse navbar-collapse justify-content-end"
+          id="menuSuperior"
+        >
+          <ul class="navbar-nav mb-2 mb-lg-0 align-items-center">
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('index') }}#formConfirmacao"
+                >Confirmar Presença</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="#"
+                data-bs-toggle="modal"
+                data-bs-target="#listapresentesModal"
+                >Lista de Presentes</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="{{ url_for('index') }}#informacoesimportantes"
+                >15 Anos</a
+              >
+            </li>
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="maisMenu"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Mais
+              </a>
+              <ul
+                class="dropdown-menu dropdown-menu-end"
+                aria-labelledby="maisMenu"
+              >
+                <li>
+                  <a
+                    class="dropdown-item"
+                    href="{{ url_for('index') }}#informacoesimportantes"
+                    >Informações</a
+                  >
+                </li>
+                <li>
+                  <a
+                    class="dropdown-item"
+                    href="{{ url_for('index') }}#location"
+                    >Localização</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="{{ url_for('confirmados') }}"
+                    >Participantes Confirmados</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="{{ url_for('pix') }}"
+                    >Pagamento via Pix</a
+                  >
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
     <div class="container py-5">
       <!-- Cabeçalho -->
       <header class="text-center mb-5 animate__animated animate__fadeInDown">
-        <section class="hero">
-          <h1 class="hero__title" id="animatedTitle">
-            <span>P</span><span>a</span><span>g</span><span>a</span
-            ><span>m</span><span>e</span><span>n</span><span>t</span
-            ><span>o</span> <span>v</span><span>i</span><span>a</span>
-            <span>P</span><span>i</span><span>x</span>
-          </h1>
-        </section>
+        <h1
+          class="hero__title"
+          id="animatedTitle"
+          style="
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.5rem;
+            color: #007bff;
+          "
+        >
+          Pagamento via Pix
+        </h1>
         <p class="fs-5 mt-4 mb-3">
           Sua presença foi confirmada! Para concluir, faça o pagamento via Pix
           utilizando a chave abaixo:
@@ -109,21 +209,29 @@
       </header>
 
       <!-- Avisos -->
-      <div class="alert alert-warning text-center" role="alert">
-        <strong>Atenção:</strong> Copie a chave Pix e guarde-a, pois após sair
-        desta página, o acesso a ela não será mais possível, a menos que você
-        solicite o link novamente.
+      <div
+        class="alert alert-warning text-center"
+        role="alert"
+        aria-live="polite"
+      >
+        <strong>Atenção:</strong> Copie a chave Pix e guarde-a. Após sair desta
+        página, só será possível acessar novamente solicitando o link.
       </div>
-      <div class="alert alert-info text-center" role="alert">
-        <strong>Recomendação:</strong> O indicado é realizar o pagamento após a
-        confirmação de presença.
+      <div class="alert alert-info text-center" role="alert" aria-live="polite">
+        <strong>Dica:</strong> Realize o pagamento após confirmar sua presença.
       </div>
 
       <!-- Conteúdo principal -->
       <main>
-        <div class="card mx-auto p-4" style="max-width: 500px">
+        <div class="card mx-auto p-4 shadow-sm" style="max-width: 500px">
           <div class="text-center">
-            <h3 class="text-primary fw-bold" id="chavePix">{{ chave_pix }}</h3>
+            <h3
+              class="text-primary fw-bold"
+              id="chavePix"
+              style="word-break: break-all"
+            >
+              {{ chave_pix }}
+            </h3>
             <button
               class="btn btn-outline-primary mt-3"
               onclick="copiarChavePix()"
@@ -131,23 +239,22 @@
             >
               Copiar Chave Pix
             </button>
-            <p class="mt-4">
-              Após o pagamento, envie o comprovante para o número:
-            </p>
-            <h4 class="text-success">
+            <p class="mt-4 mb-1">Após o pagamento, envie o comprovante para:</p>
+            <h4 class="text-success mb-1">
               <a
                 href="https://wa.me/{{ numero_whatsapp | replace('+', '') }}?text=Olá!%20Envio%20o%20comprovante%20do%20pagamento%20via%20Pix."
                 target="_blank"
                 class="fw-bold"
                 aria-label="Enviar comprovante via WhatsApp"
-                onclick="confirmarRedirecionamento()"
+                onclick="return confirmarRedirecionamento(event)"
+                rel="noopener"
               >
                 {{ numero_whatsapp }}
               </a>
             </h4>
-            <p class="text-muted small mt-2">
+            <p class="text-muted small mt-2 mb-0">
               <em
-                >Clique no número acima para abrir o WhatsApp e enviar o
+                >Clique no número para abrir o WhatsApp e enviar o
                 comprovante.</em
               >
             </p>
@@ -158,6 +265,7 @@
             href="{{ url_for('index') + '#formConfirmacao' }}"
             class="btn btn-custom-primary"
             aria-label="Voltar ao início"
+            tabindex="0"
             >Voltar ao Início</a
           >
         </div>
@@ -165,7 +273,7 @@
 
       <!-- Rodapé -->
       <footer class="text-center mt-5 border-top pt-3">
-        <p class="text-muted small">
+        <p class="text-muted small mb-0">
           © 2025 Marcos. Todos os direitos reservados.
         </p>
       </footer>
@@ -176,15 +284,14 @@
       // Função para animar as letras do título
       function animateTitle() {
         const title = document.getElementById("animatedTitle");
+        if (!title) return;
         const letters = title.querySelectorAll("span");
         letters.forEach((letter, index) => {
           setTimeout(() => {
             letter.classList.add("active");
-          }, index * 100); // Atraso reduzido para 100ms entre cada letra
+          }, index * 100);
         });
       }
-
-      // Chamar a animação ao carregar a página
       window.onload = animateTitle;
 
       function copiarChavePix() {
@@ -194,13 +301,15 @@
         });
       }
 
-      function confirmarRedirecionamento() {
+      function confirmarRedirecionamento(event) {
         const confirmacao = confirm(
           "Você será redirecionado para o WhatsApp para enviar o comprovante. Deseja continuar?"
         );
         if (!confirmacao) {
           event.preventDefault();
+          return false;
         }
+        return true;
       }
     </script>
     <script
@@ -210,3 +319,4 @@
     ></script>
   </body>
 </html>
+```

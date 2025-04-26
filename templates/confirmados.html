@@ -32,6 +32,105 @@
     />
   </head>
   <body>
+    <!-- AUDITORIA E AJUSTES DE MELHORIA -->
+
+    <!-- 1. Adicione o menu suspenso superior para navegação consistente -->
+    <nav
+      class="navbar navbar-expand-lg navbar-dark custom-navbar py-2"
+      role="navigation"
+      aria-label="Menu principal"
+    >
+      <div class="container-fluid px-4">
+        <a
+          class="navbar-brand fw-bold"
+          href="{{ url_for('index') }}"
+          style="font-family: 'Libre Caslon Text', serif; font-size: 2rem"
+        >
+          ANA—15
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#menuSuperior"
+          aria-controls="menuSuperior"
+          aria-expanded="false"
+          aria-label="Abrir menu"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div
+          class="collapse navbar-collapse justify-content-end"
+          id="menuSuperior"
+        >
+          <ul class="navbar-nav mb-2 mb-lg-0 align-items-center">
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('index') }}#formConfirmacao"
+                >Confirmar Presença</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="#"
+                data-bs-toggle="modal"
+                data-bs-target="#listapresentesModal"
+                >Lista de Presentes</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="{{ url_for('index') }}#informacoesimportantes"
+                >15 Anos</a
+              >
+            </li>
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="maisMenu"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Mais
+              </a>
+              <ul
+                class="dropdown-menu dropdown-menu-end"
+                aria-labelledby="maisMenu"
+              >
+                <li>
+                  <a
+                    class="dropdown-item"
+                    href="{{ url_for('index') }}#informacoesimportantes"
+                    >Informações</a
+                  >
+                </li>
+                <li>
+                  <a
+                    class="dropdown-item"
+                    href="{{ url_for('index') }}#location"
+                    >Localização</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="{{ url_for('confirmados') }}"
+                    >Participantes Confirmados</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="{{ url_for('pix') }}"
+                    >Pagamento via Pix</a
+                  >
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
     <div class="container py-5">
       <!-- Cabeçalho -->
       <header class="text-center mb-5 animate__animated animate__fadeInDown">
@@ -44,9 +143,10 @@
         <input
           type="text"
           id="searchInput"
-          class="form-control form-control-lg w-50 mx-auto"
+          class="form-control form-control-lg w-100 w-md-50 mx-auto"
           placeholder="Digite seu nome para buscar ou 'todosadm' para exibir tudo"
           onkeyup="filterParticipants()"
+          aria-label="Buscar participante"
         />
       </div>
 
@@ -97,7 +197,7 @@
 
     <!-- Rodapé -->
     <footer class="text-center mt-5 border-top pt-3">
-      <p class="text-muted small">
+      <p class="text-muted small mb-0">
         © 2025 Marcos. Todos os direitos reservados.
       </p>
     </footer>

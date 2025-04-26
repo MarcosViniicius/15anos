@@ -32,83 +32,126 @@
       rel="stylesheet"
     />
   </head>
+
   <body>
+    <nav
+      class="navbar navbar-expand-lg navbar-dark custom-navbar py-2"
+      role="navigation"
+      aria-label="Menu principal"
+    >
+      <div class="container-fluid px-4">
+        <a
+          class="navbar-brand fw-bold"
+          href="#"
+          style="font-family: 'Libre Caslon Text', serif; font-size: 2rem"
+        >
+          ANA—15
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#menuSuperior"
+          aria-controls="menuSuperior"
+          aria-expanded="false"
+          aria-label="Abrir menu"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div
+          class="collapse navbar-collapse justify-content-end"
+          id="menuSuperior"
+        >
+          <ul class="navbar-nav mb-2 mb-lg-0 align-items-center">
+            <li class="nav-item">
+              <a class="nav-link" href="#formConfirmacao">Confirmar Presença</a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="#"
+                data-bs-toggle="modal"
+                data-bs-target="#listapresentesModal"
+                >Lista de Presentes</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#informacoesimportantes">15 Anos</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="maisMenu"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Mais
+              </a>
+              <ul
+                class="dropdown-menu dropdown-menu-end"
+                aria-labelledby="maisMenu"
+              >
+                <li>
+                  <a class="dropdown-item" href="#informacoesimportantes"
+                    >Informações</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#location">Localização</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="{{ url_for('confirmados') }}"
+                    >Participantes Confirmados</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="{{ url_for('pix') }}"
+                    >Pagamento via Pix</a
+                  >
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero fora do container -->
+    <section class="hero">
+      <p class="hero__save-the-date">
+        <strong>Reserve esta data especial!</strong>
+      </p>
+      <h1 class="hero__title"><strong>ANA - 15 ANOS</strong></h1>
+      <p class="hero__date">
+        14 . 06 . 2025 - <span id="dias-restantes"></span>
+      </p>
+      <p class="hero__time">Às 20:00</p>
+      <p class="fs-5 mt-4 mb-3 hero__location">
+        📍Av. Comandante Petit, 263 - Centro, Parnamirim - RN <br />
+        <strong>Bouganville Hall</strong>
+      </p>
+    </section>
+
     <div class="container py-5">
       <!-- Cabeçalho -->
       <header class="text-center mb-5 animate__animated animate__fadeInDown">
-        <section class="hero">
-          <p class="hero__save-the-date">
-            <strong>Reserve esta data especial!</strong>
-          </p>
-          <h1 class="hero__title"><strong>ANA - 15 ANOS</strong></h1>
-          <p class="hero__date">14 . 06 . 2025</p>
-          <p class="hero__time">Às 20:00</p>
-        </section>
-        <p class="fs-5 mt-4 mb-3 hero__location">
-          📍Av. Comandante Petit, 263 - Centro, Parnamirim - RN <br />
-          <strong>Bouganville Hall</strong>
-        </p>
-        <div class="mt-3">
-          <a
-            href="{{ url_for('calendar_link') }}"
-            class="btn btn-custom-primary"
-            target="_blank"
-          >
-            Adicionar ao calendário
-          </a>
-        </div>
+        <script>
+          // Calcula os dias restantes até a data do evento
+          const dataEvento = new Date("2025-06-14");
+          const hoje = new Date();
+          const diffTime = dataEvento - hoje;
+          const diasRestantes = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+          // Atualiza o texto no elemento
+          document.getElementById(
+            "dias-restantes"
+          ).textContent = `faltam ${diasRestantes} dias`;
+        </script>
       </header>
 
       <main>
-        <!-- Seção de contagem regressiva -->
-        <section class="countdown-section section-padding mb-5">
-          <h2 class="section-title countdown-section__title">
-            Faltam apenas...
-          </h2>
-          <div class="countdown" id="countdown">
-            <div class="time-box">
-              <div class="number animate__animated animate__bounceIn" id="days">
-                --
-              </div>
-              <div class="label">DIAS</div>
-            </div>
-            <div class="time-box">
-              <div
-                class="number animate__animated animate__bounceIn"
-                id="hours"
-              >
-                --
-              </div>
-              <div class="label">HORAS</div>
-            </div>
-            <div class="time-box">
-              <div
-                class="number animate__animated animate__bounceIn"
-                id="minutes"
-              >
-                --
-              </div>
-              <div class="label">MINUTOS</div>
-            </div>
-            <div class="time-box">
-              <div
-                class="number animate__animated animate__bounceIn"
-                id="seconds"
-              >
-                --
-              </div>
-              <div class="label">SEGUNDOS</div>
-            </div>
-          </div>
-        </section>
-
-        <!-- Botão para confirmar presença (visível apenas em dispositivos móveis) -->
-        <div class="text-center mb-5 animate__animated animate__fadeInUp">
-          <a href="#formConfirmacao" class="btn btn-custom-primary btn-lg">
-            Clique aqui para confirmar sua presença!
-          </a>
-        </div>
-
         <!-- Botão para acessar a página de confirmados -->
         <div class="text-center mt-4">
           <a
@@ -121,22 +164,29 @@
 
         <!-- Seção de boas-vindas -->
         <section class="info-section section-padding mb-5">
-          <h2 class="section-title info-section__title">
-            Bem-vindo ao nosso site!
-          </h2>
+          <h2 class="section-title info-section__title">Bem-vindo!</h2>
           <p class="info-section__text">
-            Este é o site oficial do aniversário de 15 anos da Ana! Aqui você
-            encontra todos os detalhes sobre o evento, pode confirmar sua
-            presença e nos ajudar
+            Este é o convite oficial dos 15 anos da Ana. Aqui você encontra
+            todas as informações do evento e pode confirmar sua presença.
+            <br /><br />
             <strong style="color: var(--rosa-principal)">
-              indicando qual presente da nossa lista você pretende levar </strong
-            >. Isso nos ajuda a organizar e evitar itens repetidos. <br /><br />
+              Se for levar um presente, escolha na nossa lista e informe qual
+              será.
+            </strong>
+            Assim evitamos itens repetidos.
+            <br /><br />
             <strong style="color: var(--rosa-principal)">
-              A compra do presente fica por sua conta </strong
-            >. Sua presença tornará este dia ainda mais especial. Contamos com
-            você!
+              A compra do presente é por sua conta.
+            </strong>
+            Sua presença é o que mais importa!
           </p>
         </section>
+
+        <div class="text-center my-4 d-none d-md-block">
+          <a href="#formConfirmacao" class="btn btn-custom-primary btn-lg">
+            Confirmar presença
+          </a>
+        </div>
 
         <!-- Seção de informações importantes -->
         <section
@@ -162,8 +212,8 @@
                 <div class="card-body d-flex flex-column">
                   <h5 class="card-title text-center">Lista de Presentes</h5>
                   <p class="card-text flex-grow-1">
-                    Preparamos uma lista de sugestões para facilitar sua
-                    escolha. Sua contribuição é um gesto de carinho!
+                    Veja nossas sugestões de presentes e escolha o que preferir.
+                    Avise qual vai levar para evitar repetições.
                   </p>
                   <div class="mt-auto">
                     <button
@@ -172,7 +222,7 @@
                       data-bs-toggle="modal"
                       data-bs-target="#listapresentesModal"
                     >
-                      Veja nossa lista de presentes
+                      Ver lista de presentes
                     </button>
                   </div>
                 </div>
@@ -189,10 +239,10 @@
                   alt="Roupas elegantes em um cabide"
                 />
                 <div class="card-body d-flex flex-column">
-                  <h5 class="card-title text-center">Dress Code</h5>
+                  <h5 class="card-title text-center">Esporte Fino</h5>
                   <p class="card-text flex-grow-1">
-                    Traje sugerido: Dress Code. Sinta-se confortável e elegante
-                    para celebrar conosco!
+                    Traje sugerido: <strong>Esporte Fino</strong>. Vista-se
+                    elegante e confortável para aproveitar a festa!
                   </p>
                   <button
                     type="button"
@@ -200,7 +250,7 @@
                     data-bs-toggle="modal"
                     data-bs-target="#dressCodeModal"
                   >
-                    Mais Detalhes
+                    Mais detalhes
                   </button>
                 </div>
               </article>
@@ -218,14 +268,38 @@
                 <div class="card-body d-flex flex-column">
                   <h5 class="card-title text-center">Confirme sua Presença</h5>
                   <p class="card-text flex-grow-1">
-                    Sua presença é o maior presente! Por favor, confirme se você
-                    poderá comparecer até <strong>01/06/2025.</strong>
+                    Confirme até <strong>01/06/2025</strong> se você vai ao
+                    evento. Sua presença é muito importante!
                   </p>
                   <a
                     href="#formConfirmacao"
                     class="btn btn-custom-secondary w-100 mt-auto"
                     >Confirmar Presença</a
                   >
+                </div>
+              </article>
+            </div>
+            <div
+              class="col-lg-4 col-md-6 mb-4 animate__animated animate__fadeInUp"
+            >
+              <article class="card h-100 custom-card">
+                <img
+                  src="https://via.placeholder.com/300x200"
+                  class="card-img-top custom-card-img"
+                  alt="Pagamento via Pix"
+                />
+                <div class="card-body d-flex flex-column">
+                  <h5 class="card-title text-center">Pagamento via Pix</h5>
+                  <p class="card-text flex-grow-1">
+                    Prefere contribuir com Pix? Clique abaixo para ver os dados
+                    de pagamento.
+                  </p>
+                  <a
+                    href="{{ url_for('pix') }}"
+                    class="btn btn-custom-primary w-100 mt-auto"
+                  >
+                    Fazer um Pix
+                  </a>
                 </div>
               </article>
             </div>
@@ -247,13 +321,10 @@
           <!-- Aviso adicionado -->
           <div class="col-lg-7 mb-4">
             <div class="alert alert-info" role="alert">
-              Ao confirmar sua presença, escolha entre levar um presente ou
-              contribuir via Pix. Para dúvidas, entre em contato com o
-              organizador:
-              <strong>WhatsApp: (XX) XXXXX-XXXX</strong>. Se preferir pagar em
-              dinheiro, selecione a opção <strong>Pix</strong> e, após confirmar
-              a presença, clique em <strong>FAZER UM PIX</strong> para seguir as
-              instruções.
+              Ao confirmar presença, escolha entre levar um presente ou
+              contribuir via Pix. Dúvidas? Fale com o organizador pelo WhatsApp:
+              <strong>(XX) XXXXX-XXXX</strong>. Se preferir pagar em dinheiro,
+              selecione Pix e siga as instruções após confirmar.
             </div>
             <div class="col-lg-7 animate__animated animate__fadeInLeft"></div>
             <div class="card p-4 form-card shadow-sm">
@@ -273,6 +344,34 @@
                     aria-label="Seu nome completo"
                   />
                 </div>
+
+                <!-- Campo para e-mail -->
+                <div class="mb-3">
+                  <label for="email" class="form-label">Seu e-mail:</label>
+                  <input
+                    type="email"
+                    name="email"
+                    id="email"
+                    class="form-control"
+                    placeholder="Digite seu e-mail (ex.: exemplo@email.com)"
+                    required
+                    aria-label="Seu e-mail"
+                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                    title="Por favor, insira um endereço de e-mail válido (ex.: exemplo@email.com)."
+                  />
+                  <small class="form-text text-muted">
+                    Informe um e-mail válido para receber os detalhes da festa.
+                    Caso não encontre o e-mail na caixa de entrada, verifique a
+                    pasta de spam.
+                  </small>
+                </div>
+
+                <label for="pix" class="form-label d-block mb-2">
+                  Informe seu e-mail para receber o convite com todos os
+                  detalhes da festa e garantir sua confirmação. Caso não
+                  encontre o e-mail na caixa de entrada, verifique a pasta de
+                  spam.
+                </label>
 
                 <!-- Campo para confirmação de presença -->
                 <div class="mb-3">
@@ -304,7 +403,7 @@
                     >Quantidade de pessoas:</label
                   >
                   <input
-                  required
+                    required
                     type="number"
                     name="quantidade_pessoas"
                     id="quantidade_pessoas"
@@ -424,7 +523,7 @@
             </div>
           </div>
         </section>
-        <section class="location-section section-padding mb-5">
+        <section class="location-section section-padding mb-5" id="location">
           <div class="row justify-content-center">
             <div class="col-12 text-center mb-4">
               <h3 class="section-title location-section__title">
@@ -445,13 +544,22 @@
                   >
                   </iframe>
                 </div>
-                <p class="text-center mt-2">
+                <p
+                  class="text-center mt-2 d-flex flex-column flex-md-row justify-content-center gap-2"
+                >
                   <a
                     href="https://maps.google.com/?q=Av.+Comandante+Petit,+263+-+Centro,+Parnamirim+-+RN"
                     target="_blank"
                     class="btn btn-sm btn-custom-outline"
                   >
                     Abrir no Google Maps
+                  </a>
+                  <a
+                    href="{{ url_for('calendar_link') }}"
+                    class="btn btn-sm btn-custom-secondary"
+                    target="_blank"
+                  >
+                    Adicionar ao calendário
                   </a>
                 </p>
               </div>
@@ -464,14 +572,31 @@
         <p class="final-message">Com amor, esperamos por você 💖</p>
       </div>
 
+      <!-- Botão flutuante para confirmar presença -->
+      <a
+        href="#formConfirmacao"
+        class="btn btn-custom-primary btn-lg btn-float-confirmar"
+      >
+        Confirmar presença
+      </a>
+
       <!-- Rodapé -->
       <footer class="text-center mt-5 border-top pt-3">
         <p class="text-muted small">
           © 2025 Marcos. Todos os direitos reservados.
         </p>
         <p>
-          <a href="https://www.instagram.com" target="_blank">Instagram</a> |
-          <a href="https://www.facebook.com" target="_blank">Facebook</a>
+          <a href="https://www.instagram.com" target="_blank" rel="noopener"
+            >Instagram</a
+          >
+          |
+          <a href="https://www.facebook.com" target="_blank" rel="noopener"
+            >Facebook</a
+          >
+          |
+          <a href="{{ url_for('confirmados') }}" class="ms-2"
+            >Ver Participantes Confirmados</a
+          >
         </p>
       </footer>
     </div>
@@ -488,7 +613,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="dressCodeModalLabel">
-              Orientações de Traje (Dress Code)
+              Orientações de Traje (Esporte Fino)
             </h5>
             <button
               type="button"
@@ -499,14 +624,11 @@
           </div>
           <div class="modal-body">
             <p class="mb-3">
-              Para celebrar em grande estilo, o traje sugerido é
-              <strong>Dress Code</strong>.
+              O traje sugerido é <strong>Esporte Fino</strong>.
             </p>
             <p>
-              Caros convidados, gostaríamos de compartilhar uma pequena
-              orientação sobre o Dress Code. O estilo
-              <strong>Dress Code</strong> permite que todos se sintam elegantes
-              e confortáveis ao mesmo tempo.
+              Esporte fino é um estilo elegante e confortável, ideal para
+              festas. Evite roupas muito casuais.
             </p>
             <!-- Botão para mostrar exemplo -->
             <div class="text-center my-4">
@@ -515,7 +637,7 @@
                 class="btn btn-custom-outline"
                 id="btnMostrarExemplo"
               >
-                Clique para mostrar exemplo
+                Ver exemplo
               </button>
             </div>
 
@@ -533,7 +655,7 @@
                 <div class="modal-content">
                   <div class="modal-header">
                     <h5 class="modal-title" id="exemploDressCodeModalLabel">
-                      Exemplo de Traje Dress Code
+                      Exemplo de Traje Esporte Fino
                     </h5>
                     <button
                       type="button"
@@ -544,13 +666,14 @@
                   </div>
                   <div class="modal-body">
                     <img
-                      src="https://images.wedy.com/eyJidWNrZXQiOiJ3ZWR5LW5leHQiLCJrZXkiOiJ3ZWR5LXYyLU1qQXlOUzB3TWkweE9GUXhOem95TURvd01pNDRNelJhTHpFd01USXZNVFF5TkM4alpUbGxPV1U1TDBsTlIxOHdNRFE0TG1wd1pXYz0uanBlZyIsImVkaXRzIjp7InJvdGF0ZSI6bnVsbCwicmVzaXplIjp7IndpZHRoIjo4MDAsImhlaWdodCI6MTEyNiwiZml0IjoiY292ZXIifX19"
+                      src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=800&q=80"
                       class="img-fluid"
-                      alt="Exemplo de traje Dress Code"
+                      alt="Exemplo de traje esporte fino"
                       style="width: 100%"
                     />
                     <p class="text-center mt-3">
-                      Exemplo de traje Dress Code sugerido para o evento.
+                      Exemplo de traje <strong>Esporte Fino</strong> sugerido
+                      para o evento.
                     </p>
                   </div>
                   <div class="modal-footer">
@@ -566,18 +689,15 @@
               </div>
             </div>
             <p class="fw-bold" style="color: var(--rosa-principal)">
-              Observação Importante:
+              Importante:
             </p>
             <p>
-              Pedimos, por gentileza, que nossos queridos convidados
-              <strong>EVITEM o uso das cores ROSA e LILÁS</strong>, para que a
-              paleta de cores da celebração esteja em perfeita harmonia.
-              Agradecemos muito a compreensão e colaboração!
+              Pedimos que evite roupas nas cores <strong>rosa</strong> e
+              <strong>lilás</strong> para manter a harmonia da festa. Obrigado!
             </p>
             <hr />
             <p class="mt-3">
-              O mais importante é que você se sinta bem para aproveitar a festa
-              conosco!
+              O mais importante é que você se sinta bem para curtir a festa!
             </p>
           </div>
           <div class="modal-footer">
@@ -618,9 +738,8 @@
           <div class="modal-body">
             <div>
               <p>
-                Aqui estão algumas sugestões de presentes que a Ana gostaria de
-                ganhar. Lembre-se de indicar sua escolha no formulário de
-                confirmação para evitarmos itens repetidos!
+                Veja abaixo as sugestões de presentes. Escolha um e informe no
+                formulário de confirmação.
               </p>
 
               <hr />
@@ -633,8 +752,8 @@
               </ul>
               {% else %}
               <p class="text-muted">
-                Nenhuma sugestão disponível ou todas já foram escolhidas.
-                Sinta-se à vontade para escolher outro mimo!
+                No momento, não há sugestões disponíveis. Fique à vontade para
+                escolher outro presente.
               </p>
               {% endif %}
             </div>
@@ -667,8 +786,5 @@
     ></script>
     <script src="{{ url_for('static', filename='js/countdown.js') }}"></script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-    
-      
-    </script>
   </body>
 </html>

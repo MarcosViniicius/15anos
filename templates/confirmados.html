@@ -324,6 +324,79 @@
           .addEventListener("input", filterParticipants);
       });
     </script>
+
+    <script>
+      function excluirSelecionados() {
+        if (
+          !confirm(
+            "Tem certeza que deseja excluir os convidados selecionados? Esta ação não pode ser desfeita."
+          )
+        )
+          return;
+        const ids = Array.from(
+          document.querySelectorAll(".admin-checkbox input:checked")
+        ).map((cb) => cb.value);
+        if (ids.length === 0) {
+          alert("Selecione pelo menos um convidado para excluir.");
+          return;
+        }
+        fetch("/admin/excluir_participantes", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ids }),
+        })
+          .then((resp) => resp.json())
+          .then((data) => {
+            if (data.sucesso) {
+              alert("Convidado(s) excluído(s) com sucesso!");
+              location.reload();
+            } else {
+              alert("Erro ao excluir convidados.");
+            }
+          })
+          .catch(() => {
+            alert("Erro ao comunicar com o servidor.");
+          });
+      }
+
+      function reestabelecerIndice() {
+        if (!confirm("Tem certeza que deseja reestabelecer o índice de ID?"))
+          return;
+        fetch("/admin/reestabelecer_indice", { method: "POST" })
+          .then((resp) => resp.json())
+          .then((data) => {
+            if (data.sucesso) {
+              alert("Índice de ID reestabelecido!");
+              location.reload();
+            } else {
+              alert("Erro ao reestabelecer índice.");
+            }
+          })
+          .catch(() => {
+            alert("Erro ao comunicar com o servidor.");
+          });
+      }
+
+      function atualizarReservas() {
+        if (
+          !confirm("Tem certeza que deseja atualizar as reservas de presentes?")
+        )
+          return;
+        fetch("/admin/atualizar_reservas", { method: "POST" })
+          .then((resp) => resp.json())
+          .then((data) => {
+            if (data.sucesso) {
+              alert("Reservas de presentes atualizadas!");
+              location.reload();
+            } else {
+              alert("Erro ao atualizar reservas.");
+            }
+          })
+          .catch(() => {
+            alert("Erro ao comunicar com o servidor.");
+          });
+      }
+    </script>
   </body>
 </html>
 ```

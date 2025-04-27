@@ -19,23 +19,34 @@ function toggleCamposOpcionais() {
   const quantidadePessoasDiv = document.getElementById(
     "quantidade-pessoas-div"
   );
+  const pixDiv = document.getElementById("pix-div");
 
   if (confirmadoSelect) {
     if (confirmadoSelect.value === "sim") {
       // Mostrar campos relacionados à presença
       escolhaDiv.style.display = "block";
       quantidadePessoasDiv.style.display = "block";
-      presenteDiv.style.display = "none"; // Inicialmente ocultar o presente
+      // Decide qual campo mostrar conforme a escolha de presente/pix
+      const formaPresenteInput = document.getElementById("forma_presente");
+      if (formaPresenteInput && formaPresenteInput.value === "pix") {
+        pixDiv.style.display = "block";
+        presenteDiv.style.display = "none";
+      } else {
+        pixDiv.style.display = "none";
+        presenteDiv.style.display = "block";
+      }
     } else if (confirmadoSelect.value === "nao") {
-      // Ocultar campos relacionados à presença
+      // Ocultar todos os campos opcionais
       escolhaDiv.style.display = "none";
       quantidadePessoasDiv.style.display = "none";
       presenteDiv.style.display = "none";
+      if (pixDiv) pixDiv.style.display = "none";
     } else {
       // Ocultar tudo se nenhuma opção for selecionada
       escolhaDiv.style.display = "none";
       quantidadePessoasDiv.style.display = "none";
       presenteDiv.style.display = "none";
+      if (pixDiv) pixDiv.style.display = "none";
     }
   }
 }
@@ -48,6 +59,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Executa ao carregar para garantir o estado inicial correto
   toggleCamposOpcionais();
+
+  // Também atualiza ao trocar a forma de presente
+  const btnPresente = document.getElementById("btn-presente");
+  const btnPix = document.getElementById("btn-pix");
+  if (btnPresente)
+    btnPresente.addEventListener("click", () => {
+      alternarFormaPresente("presente");
+      toggleCamposOpcionais();
+    });
+  if (btnPix)
+    btnPix.addEventListener("click", () => {
+      alternarFormaPresente("pix");
+      toggleCamposOpcionais();
+    });
 });
 
 document.addEventListener("DOMContentLoaded", function () {

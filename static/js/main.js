@@ -95,3 +95,40 @@ function alternarFormaPresente(opcao) {
     submitButton.textContent = "Confirmar Presença e Prosseguir para Pagamento"; // Atualiza texto do botão
   }
 }
+
+window.addEventListener("scroll", function () {
+  const navbar = document.querySelector(".custom-navbar");
+  const hero = document.querySelector(".hero");
+  if (!navbar || !hero) return;
+
+  // Ativa navbar-fixa quando o scroll passa do final da hero
+  if (window.scrollY >= hero.offsetTop + hero.offsetHeight) {
+    navbar.classList.add("navbar-fixa");
+  } else {
+    navbar.classList.remove("navbar-fixa");
+  }
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+  const navbar = document.querySelector(".custom-navbar");
+  const trigger = document.getElementById("nav-trigger");
+  if (!navbar || !trigger) return;
+
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      if (!entry.isIntersecting) {
+        navbar.classList.add("navbar-fixa");
+      } else {
+        navbar.classList.remove("navbar-fixa");
+      }
+    },
+    { threshold: 0 }
+  );
+
+  observer.observe(trigger);
+});
+
+window.addEventListener("DOMContentLoaded", function () {
+  const navbar = document.querySelector(".custom-navbar");
+  if (navbar) navbar.classList.remove("navbar-fixa");
+});

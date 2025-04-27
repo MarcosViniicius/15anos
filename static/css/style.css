@@ -1,5 +1,7 @@
 /* Importações de Fontes */
 @import url("https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:wght@700&family=Open+Sans:wght@400;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Corinthia:wght@700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap");
 
 /* ------------------------- */
 /* Variáveis de Cor Simplificadas */
@@ -25,8 +27,25 @@
   box-sizing: border-box;
 }
 
+/* Scroll ainda mais suave e responsivo */
 html {
-  scroll-behavior: smooth; /* Rolagem suave para links de âncora */
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: var(--rosa-principal) #e9e3f0;
+  overscroll-behavior-y: contain;
+}
+
+/* Melhora a experiência de rolagem em dispositivos touch */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  min-height: 100%;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 body {
@@ -39,6 +58,28 @@ body {
   padding: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  height: 100%;
+  min-height: 100%;
+}
+
+/* Scrollbar ainda mais elegante para Webkit */
+body::-webkit-scrollbar {
+  width: 8px;
+  background: #e9e3f0;
+}
+body::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--rosa-principal) 60%, #b84e8a 100%);
+  border-radius: 10px;
+  min-height: 40px;
+  transition: background 0.3s;
+}
+body::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #b84e8a 60%, var(--rosa-principal) 100%);
+}
+
+/* Suaviza rolagem de áreas internas (ex: modais, listas) */
+* {
+  scroll-behavior: smooth;
 }
 
 h1,
@@ -93,25 +134,26 @@ a:hover {
 
 /* Hero Section */
 .hero {
-  text-align: center;
-  min-height: 100vh; /* Ocupa a tela inteira */
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   position: relative;
+  min-height: 100vh;
+  height: 100vh;
   background-image: url("https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  border-radius: 0 0 32px 32px; /* Borda arredondada só embaixo, opcional */
-  margin-bottom: 0;
+  border-radius: 0;
+  margin: 0;
   overflow: hidden;
-  padding: 0 15px;
+  padding: 0;
   width: 100%;
-  max-width: 100vw;
+  max-width: 100%;
   margin-left: 0;
   margin-right: 0;
+  top: 0;
 }
 
 .hero::before {
@@ -122,27 +164,104 @@ a:hover {
   z-index: 1;
 }
 
-.hero > * {
+.hero > *:not(.hero__location) {
   position: relative;
   z-index: 2;
+  margin-bottom: 0.5rem;
 }
 
+/* Espaço maior no topo para o conteúdo da hero */
+.hero__infos {
+  margin-top: 10rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@media (max-width: 600px) {
+  .hero__infos {
+    margin-top: 10rem;
+  }
+}
+
+/* Hero título e textos */
 .hero h1 {
   font-size: 2.5rem;
   color: #fff;
   margin: 0.5rem 0;
 }
-.hero p,
-.hero__location {
+.hero p {
   font-size: 1.2rem;
   color: #fff;
 }
 
+/* Localização sempre no rodapé da hero */
+.hero__location {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 2.5rem;
+  margin: 0 auto;
+  font-size: 1.2rem;
+  color: #fff;
+  width: 100%;
+  text-align: center;
+  z-index: 2;
+  background: none;
+  padding: 0 10px;
+}
+
 @media (max-width: 600px) {
-  .hero {
-    min-height: 60vh;
-    padding: 2rem 0;
-    border-radius: 0 0 18px 18px;
+  .hero__location {
+    bottom: 1.2rem;
+    font-size: 1rem;
+  }
+}
+
+/* Estilo do título responsivo do hero */
+.hero-title-responsive {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.hero-nome {
+  font-family: "Great Vibes", cursive;
+  font-size: 2.8rem;
+  letter-spacing: 2px;
+  font-weight: 700;
+}
+
+.hero-traco {
+  font-family: "Libre Caslon Text", serif;
+  font-size: 2.2rem;
+  font-weight: 400;
+  margin: 0 0.3em;
+}
+
+.hero-idade {
+  font-family: "Libre Caslon Text", serif;
+  font-size: 2.8rem;
+  font-weight: 700;
+}
+
+/* Mobile: coloca um embaixo do outro */
+@media (max-width: 600px) {
+  .hero-title-responsive {
+    flex-direction: column;
+    gap: 0.1rem;
+    font-size: 2.1rem;
+  }
+  .hero-nome,
+  .hero-idade {
+    font-size: 2.2rem;
+  }
+  .hero-traco {
+    font-size: 1.5rem;
   }
 }
 
@@ -260,11 +379,66 @@ a:hover {
 
 /* Menu superior discreto e estilizado */
 .custom-navbar {
-  background: rgba(30, 20, 40, 0.92); /* tom escuro arroxeado, mais elegante */
-  backdrop-filter: blur(2px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow: 0 2px 8px 0 rgba(30, 20, 40, 0.07);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  /* NÃO defina width aqui */
+  background: transparent !important;
+  box-shadow: none !important;
+  border-bottom: none !important;
+  z-index: 10;
+  transition: background 0.3s;
 }
+
+/* Navbar fixa e colorida ao rolar para fora da hero */
+.custom-navbar.navbar-fixa {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  /* NÃO defina width aqui */
+  background: rgba(30, 20, 40, 0.92) !important;
+  box-shadow: 0 2px 8px 0 rgba(30, 20, 40, 0.07) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+  z-index: 1050;
+}
+
+/* Transições suaves para navegação e menu */
+.custom-navbar,
+.custom-navbar .nav-link,
+.custom-navbar .navbar-brand,
+.custom-navbar .dropdown-menu,
+.custom-navbar .dropdown-item {
+  transition: background 0.3s, color 0.3s, box-shadow 0.3s, border 0.3s;
+}
+
+/* Destaque suave ao passar o mouse */
+.custom-navbar .nav-link:hover,
+.custom-navbar .dropdown-item:hover {
+  color: var(--rosa-principal) !important;
+  background: rgba(255, 255, 255, 0.04);
+  text-shadow: 0 2px 8px rgba(209, 107, 165, 0.08);
+}
+
+/* Suaviza o menu hamburguer ao abrir/fechar */
+@media (max-width: 991px) {
+  .custom-navbar .navbar-collapse {
+    transition: top 0.3s, background 0.3s, box-shadow 0.3s;
+    width: 100%;
+    left: 0;
+    right: 0;
+  }
+}
+
+/* Remove outline abrupto e deixa foco mais suave */
+.custom-navbar .nav-link:focus,
+.custom-navbar .dropdown-item:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--rosa-principal);
+  background: rgba(209, 107, 165, 0.08);
+}
+
 .custom-navbar .navbar-brand {
   color: #fff !important;
   letter-spacing: 2px;
@@ -298,6 +472,24 @@ a:hover {
   }
 }
 
+/* Ajuste para o menu hamburguer abrir corretamente no topo no mobile */
+@media (max-width: 991px) {
+  .custom-navbar .navbar-collapse {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: rgba(30, 20, 40, 0.97);
+    z-index: 20;
+    box-shadow: 0 4px 16px rgba(30, 20, 40, 0.13);
+    border-radius: 0 0 16px 16px;
+    padding: 1rem 1.5rem 1.5rem 1.5rem;
+  }
+  .custom-navbar .navbar-nav {
+    align-items: flex-start !important;
+  }
+}
+
 /* Rodapé */
 footer {
   margin-top: 4rem;
@@ -314,4 +506,11 @@ footer {
     padding-bottom: 2rem;
     margin-bottom: 1rem;
   }
+}
+
+/* Título com fonte Great Vibes */
+.corinthia-title {
+  font-family: "Great Vibes", cursive !important;
+  font-size: 4rem;
+  letter-spacing: 2px;
 }

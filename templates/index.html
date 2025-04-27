@@ -118,21 +118,28 @@
       </div>
     </nav>
 
-    <!-- Hero fora do container -->
     <section class="hero">
-      <p class="hero__save-the-date">
-        <strong>Reserve esta data especial!</strong>
-      </p>
-      <h1 class="hero__title"><strong>ANA - 15 ANOS</strong></h1>
-      <p class="hero__date">
-        14 . 06 . 2025 - <span id="dias-restantes"></span>
-      </p>
-      <p class="hero__time">Às 20:00</p>
+      <div class="hero__infos">
+        <p class="hero__date">
+          14 . 06 . 2025 - <span id="dias-restantes"></span>
+        </p>
+        <p class="hero__time">Às 20:00</p>
+        <h1 class="hero__title corinthia-title hero-title-responsive">
+          <span class="hero-nome">ANA</span>
+          <span class="hero-traco">—</span>
+          <span class="hero-idade">15</span>
+        </h1>
+        <p class="hero__save-the-date">
+          <strong>Reserve esta data especial!</strong>
+        </p>
+      </div>
       <p class="fs-5 mt-4 mb-3 hero__location">
         📍Av. Comandante Petit, 263 - Centro, Parnamirim - RN <br />
         <strong>Bouganville Hall</strong>
       </p>
     </section>
+
+    <div id="nav-trigger"></div>
 
     <div class="container py-5">
       <!-- Cabeçalho -->
@@ -153,14 +160,6 @@
 
       <main>
         <!-- Botão para acessar a página de confirmados -->
-        <div class="text-center mt-4">
-          <a
-            href="{{ url_for('confirmados') }}"
-            class="btn btn-outline-primary"
-          >
-            Ver Participantes Confirmados
-          </a>
-        </div>
 
         <!-- Seção de boas-vindas -->
         <section class="info-section section-padding mb-5">
@@ -279,30 +278,6 @@
                 </div>
               </article>
             </div>
-            <div
-              class="col-lg-4 col-md-6 mb-4 animate__animated animate__fadeInUp"
-            >
-              <article class="card h-100 custom-card">
-                <img
-                  src="https://via.placeholder.com/300x200"
-                  class="card-img-top custom-card-img"
-                  alt="Pagamento via Pix"
-                />
-                <div class="card-body d-flex flex-column">
-                  <h5 class="card-title text-center">Pagamento via Pix</h5>
-                  <p class="card-text flex-grow-1">
-                    Prefere contribuir com Pix? Clique abaixo para ver os dados
-                    de pagamento.
-                  </p>
-                  <a
-                    href="{{ url_for('pix') }}"
-                    class="btn btn-custom-primary w-100 mt-auto"
-                  >
-                    Fazer um Pix
-                  </a>
-                </div>
-              </article>
-            </div>
           </div>
         </section>
 
@@ -323,7 +298,7 @@
             <div class="alert alert-info" role="alert">
               Ao confirmar presença, escolha entre levar um presente ou
               contribuir via Pix. Dúvidas? Fale com o organizador pelo WhatsApp:
-              <strong>(XX) XXXXX-XXXX</strong>. Se preferir pagar em dinheiro,
+              <strong>(84) 98795-5400</strong>. Se preferir pagar em dinheiro,
               selecione Pix e siga as instruções após confirmar.
             </div>
             <div class="col-lg-7 animate__animated animate__fadeInLeft"></div>
@@ -365,13 +340,6 @@
                     pasta de spam.
                   </small>
                 </div>
-
-                <label for="pix" class="form-label d-block mb-2">
-                  Informe seu e-mail para receber o convite com todos os
-                  detalhes da festa e garantir sua confirmação. Caso não
-                  encontre o e-mail na caixa de entrada, verifique a pasta de
-                  spam.
-                </label>
 
                 <!-- Campo para confirmação de presença -->
                 <div class="mb-3">
@@ -788,3 +756,4 @@
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
   </body>
 </html>
+`

@@ -297,7 +297,7 @@ def calendar_link():
 @app.route('/pix')
 def pix():
     chave_pix = "84 98621-8388"  # Substitua pela chave Pix real
-    numero_whatsapp = "(84) 98621-8388"  # Substitua pelo número real
+    numero_whatsapp = "+5584986218388"  # Substitua pelo número real
     return render_template('pix.html', chave_pix=chave_pix, numero_whatsapp=numero_whatsapp)
 
 

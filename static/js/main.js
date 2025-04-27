@@ -1,3 +1,17 @@
+// Mapeamento de presentes para imagem e referência
+const presentesInfo = {
+  "Jansport Mini Mochila Misty Rose": {
+    imagem: "../static/img/mochila-half-pint-jansport-TDH67N8-1.png",
+    referencia: "Referência: JDJ-12345",
+  },
+  "Zara Tênis Hello Kitty TAM. 36": {
+    imagem: "../static/img/tenis_hello_kitty.png",
+    referencia: "Referência: ZTK-67890",
+  },
+  // Adicione aqui outros presentes no futuro:
+  // "Nome do Presente": { imagem: "url", referencia: "texto" }
+};
+
 function toggleCamposOpcionais() {
   const confirmadoSelect = document.getElementById("confirmado");
   const presenteDiv = document.getElementById("presente-div");
@@ -71,28 +85,33 @@ function alternarFormaPresente(opcao) {
   const presenteSelect = document.getElementById("presente");
   const pixSelect = document.getElementById("pix-div");
   const submitButton = document.querySelector("button[type='submit']");
+  const imagemDiv = document.getElementById("imagemPresente");
+  const referenciaDiv = document.getElementById("referenciaPresente");
 
   // Resetar estilos dos botões
   btnPresente.classList.remove("active", "btn-primary");
   btnPix.classList.remove("active", "btn-success");
 
-  // Mostrar ou ocultar campos conforme a opção selecionada
   if (opcao === "presente") {
     presenteDiv.style.display = "block";
     pixSelect.style.display = "none";
     btnPresente.classList.add("active", "btn-primary");
     btnPix.classList.add("btn-outline-success");
     formaPresenteInput.value = "presente";
-    presenteSelect.setAttribute("required", "required"); // Torna obrigatório
-    submitButton.textContent = "Confirmar Presença e Presente"; // Atualiza texto do botão
+    presenteSelect.setAttribute("required", "required");
+    submitButton.textContent = "Confirmar Presença e Presente";
   } else if (opcao === "pix") {
     presenteDiv.style.display = "none";
     pixSelect.style.display = "block";
     btnPix.classList.add("active", "btn-success");
     btnPresente.classList.add("btn-outline-primary");
     formaPresenteInput.value = "pix";
-    presenteSelect.removeAttribute("required"); // Remove obrigatoriedade
-    submitButton.textContent = "Confirmar Presença e Prosseguir para Pagamento"; // Atualiza texto do botão
+    presenteSelect.removeAttribute("required");
+    submitButton.textContent = "Confirmar Presença e Prosseguir para Pagamento";
+    // Limpa seleção e oculta imagem/referência
+    presenteSelect.value = "";
+    if (imagemDiv) imagemDiv.style.display = "none";
+    if (referenciaDiv) referenciaDiv.style.display = "none";
   }
 }
 
@@ -131,4 +150,46 @@ document.addEventListener("DOMContentLoaded", function () {
 window.addEventListener("DOMContentLoaded", function () {
   const navbar = document.querySelector(".custom-navbar");
   if (navbar) navbar.classList.remove("navbar-fixa");
+});
+
+// Função para atualizar a imagem do presente selecionado
+function atualizarImagemPresente(presente) {
+  const imagemDiv = document.getElementById("imagemPresente");
+  const imagem = document.getElementById("imagemPresenteSelecionado");
+
+  if (!imagem || !imagemDiv) return;
+
+  if (presentesInfo[presente]) {
+    imagem.src = presentesInfo[presente].imagem;
+    imagemDiv.style.display = "block";
+    imagem.style.maxWidth = "200px";
+    imagem.style.maxHeight = "200px";
+  } else {
+    imagem.src = "";
+    imagemDiv.style.display = "none";
+  }
+}
+
+// Função para atualizar a referência do presente selecionado
+function atualizarReferenciaPresente(presente) {
+  const referenciaDiv = document.getElementById("referenciaPresente");
+  if (presentesInfo[presente]) {
+    referenciaDiv.textContent = presentesInfo[presente].referencia;
+    referenciaDiv.style.display = "block";
+  } else {
+    referenciaDiv.textContent = "";
+    referenciaDiv.style.display = "none";
+  }
+}
+
+// Garante que ao enviar como Pix, o campo presente não será enviado
+document.addEventListener("DOMContentLoaded", function () {
+  const form = document.querySelector("form");
+  form.addEventListener("submit", function () {
+    const formaPresenteInput = document.getElementById("forma_presente");
+    const presenteSelect = document.getElementById("presente");
+    if (formaPresenteInput.value === "pix") {
+      presenteSelect.value = "";
+    }
+  });
 });

@@ -25,70 +25,11 @@
       rel="stylesheet"
     />
 
-    <!-- Estilos personalizados -->
+    <!-- Estilos personalizados principais -->
     <link
       href="{{ url_for('static', filename='css/style.css') }}"
       rel="stylesheet"
     />
-
-    <style>
-      body {
-        font-family: "Open Sans", sans-serif;
-        background-color: #f8f9fa;
-        color: #333;
-      }
-      .hero__title {
-        font-family: "Great Vibes", cursive;
-        font-size: 2.5rem;
-        color: #007bff;
-        display: inline-block;
-      }
-      .hero__title span {
-        display: inline-block;
-        opacity: 0;
-        transform: scale(0.8);
-        transition: transform 0.2s ease, opacity 0.2s ease; /* Transição mais rápida */
-      }
-      .hero__title span.active {
-        opacity: 1;
-        transform: scale(1.2);
-      }
-      .card {
-        border: none;
-        border-radius: 8px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        background-color: #fff;
-      }
-      .btn-outline-primary {
-        border-color: #007bff;
-        color: #007bff;
-        transition: all 0.3s ease;
-      }
-      .btn-outline-primary:hover {
-        background-color: #007bff;
-        color: #fff;
-      }
-      .btn-custom-primary {
-        background-color: #007bff;
-        color: #fff;
-        border: none;
-        transition: background-color 0.3s ease;
-      }
-      .btn-custom-primary:hover {
-        background-color: #0056b3;
-      }
-      .text-success a {
-        text-decoration: none;
-        transition: color 0.3s ease;
-      }
-      .text-success a:hover {
-        color: #0056b3;
-      }
-      footer {
-        background-color: #f8f9fa;
-        padding: 20px 0;
-      }
-    </style>
   </head>
   <body>
     <!-- Menu suspenso superior -->
@@ -197,7 +138,7 @@
           style="
             font-family: 'Great Vibes', cursive;
             font-size: 2.5rem;
-            color: #007bff;
+            color: var(--rosa-principal, #d63384);
           "
         >
           Pagamento via Pix
@@ -214,8 +155,9 @@
         role="alert"
         aria-live="polite"
       >
-        <strong>Atenção:</strong> Copie a chave Pix e guarde-a. Após sair desta
-        página, só será possível acessar novamente solicitando o link.
+        <strong>Atenção:</strong> recomendamos que copie e salve a chave Pix. Se
+        necessário, esta página pode ser acessada novamente a qualquer momento
+        através do menu superior do site, na opção "Mais".
       </div>
       <div class="alert alert-info text-center" role="alert" aria-live="polite">
         <strong>Dica:</strong> Realize o pagamento após confirmar sua presença.
@@ -225,6 +167,16 @@
       <main>
         <div class="card mx-auto p-4 shadow-sm" style="max-width: 500px">
           <div class="text-center">
+            <!-- Dados bancários acima da chave Pix -->
+            <div class="mb-3">
+              <div
+                class="alert alert-secondary p-2 mb-2"
+                style="font-size: 1rem"
+              >
+                <strong>Nome:</strong> Ana Beatriz Nacimento de Lucena<br />
+                <strong>Banco:</strong> Inter
+              </div>
+            </div>
             <h3
               class="text-primary fw-bold"
               id="chavePix"
@@ -281,24 +233,40 @@
 
     <!-- Scripts -->
     <script>
-      // Função para animar as letras do título
-      function animateTitle() {
-        const title = document.getElementById("animatedTitle");
-        if (!title) return;
-        const letters = title.querySelectorAll("span");
-        letters.forEach((letter, index) => {
-          setTimeout(() => {
-            letter.classList.add("active");
-          }, index * 100);
-        });
-      }
-      window.onload = animateTitle;
-
       function copiarChavePix() {
-        const chavePix = document.getElementById("chavePix").innerText;
-        navigator.clipboard.writeText(chavePix).then(() => {
+        const chavePix = document.getElementById("chavePix").textContent.trim();
+        if (navigator.clipboard && window.isSecureContext) {
+          navigator.clipboard.writeText(chavePix).then(
+            () => {
+              alert("Chave Pix copiada para a área de transferência!");
+            },
+            () => {
+              fallbackCopyTextToClipboard(chavePix);
+            }
+          );
+        } else {
+          fallbackCopyTextToClipboard(chavePix);
+        }
+      }
+
+      function fallbackCopyTextToClipboard(text) {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        // Evita rolagem na página
+        textArea.style.position = "fixed";
+        textArea.style.top = 0;
+        textArea.style.left = 0;
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+
+        try {
+          document.execCommand("copy");
           alert("Chave Pix copiada para a área de transferência!");
-        });
+        } catch (err) {
+          alert("Não foi possível copiar a chave Pix. Copie manualmente.");
+        }
+        document.body.removeChild(textArea);
       }
 
       function confirmarRedirecionamento(event) {
@@ -319,4 +287,3 @@
     ></script>
   </body>
 </html>
-```

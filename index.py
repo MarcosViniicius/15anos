@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 from dotenv import load_dotenv
 import os
 import psycopg2
@@ -7,6 +7,8 @@ from datetime import datetime
 import logging
 import urllib.parse
 from flask_mail import Mail, Message
+from email.mime.image import MIMEImage
+from io import BytesIO
 
 # Configuração de logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -74,45 +76,43 @@ def release_db_connection(conn):
 
 @app.route('/')
 def index():
-    global cache_participantes, cache_presentes_disponiveis
     conn, cursor = get_db_connection()
     participantes = []
     presentes_disponiveis = []
-    participante_id = None  # Inicialize o participante_id como None
-    
+    participante_id = None
+    presentes_info = {}
+
     try:
         if cursor:
-            # Consultar participantes
+            cursor.execute("""
+                SELECT nome, quantidade_maxima, quantidade_reservada
+                  FROM presentes
+                 WHERE disponivel = TRUE
+                   AND (quantidade_reservada < quantidade_maxima)
+            """)
+            todos_presentes = cursor.fetchall()
+            presentes_disponiveis = [row[0] for row in todos_presentes]
+            presentes_info = {row[0]: {'max': row[1], 'reservado': row[2]} for row in todos_presentes}
             cursor.execute("SELECT id, nome, confirmado, presente, data_confirmacao FROM participante;")
             participantes = cursor.fetchall()
-
-            # Obter os presentes já selecionados
-            cursor.execute("SELECT DISTINCT presente FROM participante WHERE presente IS NOT NULL")
-            presentes_selecionados = [row[0] for row in cursor.fetchall()]
-
-            # Consultar presentes disponíveis
-            cursor.execute("SELECT nome FROM presentes WHERE disponivel = TRUE;")
-            todos_presentes = [row[0] for row in cursor.fetchall()]
-
-            # Filtrar os presentes disponíveis removendo os já selecionados
-            presentes_disponiveis = [p for p in todos_presentes if p not in presentes_selecionados]
-
-            # Exemplo: Defina um participante_id fictício para testes
             if participantes:
-                participante_id = participantes[0][0]  # Pegue o ID do primeiro participante
-
-            # Armazenar em cache na memória
-            cache_participantes = participantes
-            cache_presentes_disponiveis = presentes_disponiveis
+                participante_id = participantes[0][0]
         else:
-            print("Não foi possível conectar ao banco de dados. Tente novamente mais tarde.", "error")
+            flash("Não foi possível conectar ao banco de dados. Tente novamente mais tarde.", "error")
     except Exception as e:
         logger.error(f"Erro ao consultar dados: {e}")
-        print(f"Ocorreu um erro ao carregar os dados. Por favor, tente novamente.", "error")
+        flash("Ocorreu um erro ao carregar os dados. Por favor, tente novamente.", "error")
     finally:
+        if cursor: cursor.close()
         release_db_connection(conn)
 
-    return render_template('index.html', participantes=participantes, disponiveis=presentes_disponiveis, participante_id=participante_id)
+    return render_template(
+        'index.html',
+        participantes=participantes,
+        disponiveis=presentes_disponiveis,
+        presentes_info=presentes_info,
+        participante_id=participante_id
+    )
 
 def flash_with_logging(message, category="message"):
     """Função personalizada para registrar mensagens de flash no terminal."""
@@ -121,6 +121,19 @@ def flash_with_logging(message, category="message"):
 
 def enviar_email_confirmacao(email, nome, confirmado, quantidade_pessoas, presente, forma_presente):
     try:
+        # Links das imagens de presente
+        links_imagens_presentes = {
+            "Jansport Mini Mochila Misty Rose": "https://i.imgur.com/PsDWkUA.png",
+            "Zara Tênis Hello Kitty TAM. 36": "https://i.imgur.com/YKCwtE9.png"
+        }
+
+        # Referências para presentes específicos
+        referencias_presentes = {
+            "Jansport Mini Mochila Misty Rose": "Referência: JANS-MINI-ROSE",
+            "Zara Tênis Hello Kitty TAM. 36": "Referência: ZARA-HELLOKITTY-36"
+        }
+
+        # Detalhes do e-mail
         assunto = "Confirmação de Presença - 15 Anos da Ana"
         corpo_texto = f"""
         Olá, {nome}!
@@ -132,6 +145,7 @@ def enviar_email_confirmacao(email, nome, confirmado, quantidade_pessoas, presen
         - Quantidade de pessoas: {quantidade_pessoas or 'N/A'}
         - Presente: {presente or 'N/A'}
         - Forma de presente: {forma_presente.capitalize()}
+        {"\n" + referencias_presentes.get(presente, "") if presente in referencias_presentes else ""}
 
         Informações da festa:
         - Data: 14 de junho de 2025
@@ -157,6 +171,7 @@ def enviar_email_confirmacao(email, nome, confirmado, quantidade_pessoas, presen
                 <li><strong>Presente:</strong> {presente or 'N/A'}</li>
                 <li><strong>Forma de presente:</strong> {forma_presente.capitalize()}</li>
             </ul>
+            {"<p><strong>Referência do presente:</strong> " + referencias_presentes.get(presente, "") + "</p>" if presente in referencias_presentes else ""}
             {"<div style='margin-top: 20px;'><p>Você escolheu pagar via Pix. Clique no botão abaixo para acessar as informações de pagamento:</p><a href='https://15anos.vercel.app/pix' style='display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px;'>Ir para a página de Pix</a></div>" if forma_presente == "pix" else ""}
             <p><strong>Informações da festa:</strong></p>
             <ul>
@@ -167,10 +182,12 @@ def enviar_email_confirmacao(email, nome, confirmado, quantidade_pessoas, presen
             </ul>
             <p>Estamos ansiosos para celebrar com você!</p>
             <p>Atenciosamente,<br>Organização do Evento</p>
+            {"<p><strong>Imagem do presente:</strong><br><img src='" + links_imagens_presentes.get(presente, "") + "' alt='{presente}' style='max-width:100%; height:auto;'></p>" if presente in links_imagens_presentes else ""}
         </body>
         </html>
         """
 
+        # Criar a mensagem de e-mail
         msg = Message(
             assunto,
             sender=app.config['MAIL_USERNAME'],
@@ -178,8 +195,9 @@ def enviar_email_confirmacao(email, nome, confirmado, quantidade_pessoas, presen
             reply_to=app.config['MAIL_USERNAME']
         )
         msg.body = corpo_texto
-        msg.html = corpo_html  # Adiciona a versão HTML
-        msg.headers = {'X-Mailer': 'Convite15Anos'}
+        msg.html = corpo_html
+
+        # Enviar e-mail
         mail.send(msg)
         logger.info(f"E-mail enviado com sucesso para {email}")
     except Exception as e:
@@ -222,6 +240,13 @@ def confirmar():
             """, (nome_submetido, email, quantidade_pessoas, presente_db, agora, is_pix))
             conn.commit()
 
+            if presente_db:
+                cursor.execute(
+                    "UPDATE presentes SET quantidade_reservada = quantidade_reservada + 1 WHERE nome = %s;",
+                    (presente_db,)
+                )
+                conn.commit()
+
             # Enviar e-mail de confirmação
             enviar_email_confirmacao(email, nome_submetido, confirmado_status, quantidade_pessoas, presente_selecionado, forma_presente)
 
@@ -250,28 +275,21 @@ def confirmar():
 
 @app.route('/confirmados')
 def confirmados():
-    global cache_participantes, cache_presentes_disponiveis
-    participantes_confirmados = cache_participantes
-    presentes_disponiveis = cache_presentes_disponiveis
-
-    if not participantes_confirmados or not presentes_disponiveis:
-        conn, cursor = get_db_connection()
-        try:
-            if cursor:
-                cursor.execute("SELECT id, nome, confirmado, presente, data_confirmacao FROM participante WHERE confirmado = TRUE LIMIT 50;")
-                participantes_confirmados = cursor.fetchall()
-
-                cursor.execute("SELECT nome FROM presentes WHERE disponivel = TRUE LIMIT 10;")
-                presentes_disponiveis = [row[0] for row in cursor.fetchall()]
-
-                # Armazenar os resultados em cache na memória
-                cache_participantes = participantes_confirmados
-                cache_presentes_disponiveis = presentes_disponiveis
-        except Exception as e:
-            logger.error(f"Erro ao consultar dados: {e}")
-            flash(f"Ocorreu um erro ao carregar os dados. Por favor, tente novamente.", "error")
-        finally:
-            release_db_connection(conn)
+    conn, cursor = get_db_connection()
+    participantes_confirmados = []
+    presentes_disponiveis = []
+    try:
+        if cursor:
+            cursor.execute("SELECT id, nome, confirmado, presente, data_confirmacao FROM participante WHERE confirmado = TRUE ORDER BY data_confirmacao DESC LIMIT 50;")
+            participantes_confirmados = cursor.fetchall()
+            cursor.execute("SELECT nome FROM presentes WHERE disponivel = TRUE LIMIT 10;")
+            presentes_disponiveis = [row[0] for row in cursor.fetchall()]
+    except Exception as e:
+        logger.error(f"Erro ao consultar dados: {e}")
+        flash(f"Ocorreu um erro ao carregar os dados. Por favor, tente novamente.", "error")
+    finally:
+        if cursor: cursor.close()
+        release_db_connection(conn)
 
     return render_template('confirmados.html', participantes=participantes_confirmados, disponiveis=presentes_disponiveis)
 
@@ -301,6 +319,63 @@ def pix():
     return render_template('pix.html', chave_pix=chave_pix, numero_whatsapp=numero_whatsapp)
 
 
+@app.route('/admin/excluir_participantes', methods=['POST'])
+def excluir_participantes():
+    ids = request.json.get('ids', [])
+    if not ids:
+        return jsonify(sucesso=False)
+    # Converta para inteiros (importante para o PostgreSQL)
+    ids = [int(i) for i in ids]
+    conn, cursor = get_db_connection()
+    try:
+        # Atualiza reservas de presentes antes de excluir
+        cursor.execute("SELECT presente FROM participante WHERE id = ANY(%s)", (ids,))
+        presentes = [row[0] for row in cursor.fetchall() if row[0]]
+        for presente in presentes:
+            cursor.execute("UPDATE presentes SET quantidade_reservada = GREATEST(quantidade_reservada - 1, 0) WHERE nome = %s", (presente,))
+        cursor.execute("DELETE FROM participante WHERE id = ANY(%s)", (ids,))
+        conn.commit()
+        return jsonify(sucesso=True)
+    except Exception as e:
+        conn.rollback()
+        logger.error(f"Erro ao excluir participantes: {e}")
+        return jsonify(sucesso=False)
+    finally:
+        if cursor: cursor.close()
+        release_db_connection(conn)
+
+@app.route('/admin/reestabelecer_indice', methods=['POST'])
+def reestabelecer_indice():
+    conn, cursor = get_db_connection()
+    try:
+        cursor.execute("SELECT setval('participante_id_seq', (SELECT COALESCE(MAX(id), 1) FROM participante) + 1, false);")
+        conn.commit()
+        return jsonify(sucesso=True)
+    except Exception as e:
+        conn.rollback()
+        return jsonify(sucesso=False)
+    finally:
+        if cursor: cursor.close()
+        release_db_connection(conn)
+
+@app.route('/admin/atualizar_reservas', methods=['POST'])
+def atualizar_reservas():
+    conn, cursor = get_db_connection()
+    try:
+        cursor.execute("UPDATE presentes SET quantidade_reservada = 0;")
+        cursor.execute("SELECT presente, COUNT(*) FROM participante WHERE presente IS NOT NULL GROUP BY presente;")
+        for presente, count in cursor.fetchall():
+            cursor.execute("UPDATE presentes SET quantidade_reservada = %s WHERE nome = %s;", (count, presente))
+        conn.commit()
+        return jsonify(sucesso=True)
+    except Exception as e:
+        conn.rollback()
+        return jsonify(sucesso=False)
+    finally:
+        if cursor: cursor.close()
+        release_db_connection(conn)
+
+
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template('404.html'), 404
@@ -328,4 +403,4 @@ def reconnect_pool():
 application = app
 
 if __name__ == '__main__':
-    app.run(debug=True, port=4800)
+    app.run(host='0.0.0.0',debug=True, port=4800)

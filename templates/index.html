@@ -4,7 +4,7 @@
     <!-- Metadados básicos -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Convite - 15 Anos da Princesa Ana</title>
+    <title>Convite - 15 Anos</title>
 
     <!-- Bootstrap CSS -->
     <link
@@ -76,7 +76,9 @@
               >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#informacoesimportantes">15 Anos</a>
+              <a class="nav-link" href="#informacoesimportantes"
+                >Informações importantes</a
+              >
             </li>
             <li class="nav-item dropdown">
               <a
@@ -117,29 +119,26 @@
         </div>
       </div>
     </nav>
-
-    <section class="hero">
-      <div class="hero__infos">
-        <p class="hero__date">
-          14 . 06 . 2025 - <span id="dias-restantes"></span>
+    <div id="nav-trigger">
+      <section class="hero">
+        <div class="hero__infos">
+          <p class="hero__date">
+            14 . 06 . 2025 - <span id="dias-restantes"></span>
+          </p>
+          <!-- <p class="hero__time">Às 20:00</p> -->
+          <h1 class="hero__title hero-title-responsive">
+            <span class="hero-nome">ANA</span>
+            <span class="hero-traco">—</span>
+            <span class="hero-idade">15</span>
+          </h1>
+          <!-- <p class="hero__save-the-date">Reserve esta data especial!</p> -->
+        </div>
+        <p class="fs-5 mt-4 mb-1 hero__location">
+          Bem-vindos à nossa celebração de 15 anos! Aproveitem cada momento e
+          leiam as orientações no site. 🤍
         </p>
-        <p class="hero__time">Às 20:00</p>
-        <h1 class="hero__title corinthia-title hero-title-responsive">
-          <span class="hero-nome">ANA</span>
-          <span class="hero-traco">—</span>
-          <span class="hero-idade">15</span>
-        </h1>
-        <p class="hero__save-the-date">
-          <strong>Reserve esta data especial!</strong>
-        </p>
-      </div>
-      <p class="fs-5 mt-4 mb-3 hero__location">
-        📍Av. Comandante Petit, 263 - Centro, Parnamirim - RN <br />
-        <strong>Bouganville Hall</strong>
-      </p>
-    </section>
-
-    <div id="nav-trigger"></div>
+      </section>
+    </div>
 
     <div class="container py-5">
       <!-- Cabeçalho -->
@@ -165,19 +164,20 @@
         <section class="info-section section-padding mb-5">
           <h2 class="section-title info-section__title">Bem-vindo!</h2>
           <p class="info-section__text">
-            Este é o convite oficial dos 15 anos da Ana. Aqui você encontra
-            todas as informações do evento e pode confirmar sua presença.
-            <br /><br />
-            <strong style="color: var(--rosa-principal)">
-              Se for levar um presente, escolha na nossa lista e informe qual
-              será.
+            Este é o convite oficial do
+            <strong>meu aniversário de 15 anos</strong>! Aqui você encontra
+            todas as informações da comemoração, pode confirmar sua presença e
+            escolher seu presente.<br /><br />
+            Leia os avisos e mensagens no site para saber sobre traje,
+            presentes, localização e horário.
+            <strong style="color: var(--rosa-principal, #ff69b4)">
+              Escolha um presente na lista e informe qual será.
             </strong>
-            Assim evitamos itens repetidos.
-            <br /><br />
-            <strong style="color: var(--rosa-principal)">
+            Assim evitamos itens repetidos.<br /><br />
+            <strong style="color: var(--rosa-principal, #ff69b4)">
               A compra do presente é por sua conta.
             </strong>
-            Sua presença é o que mais importa!
+            Mas, acima de tudo, sua presença é o que mais importa!
           </p>
         </section>
 
@@ -238,7 +238,7 @@
                   alt="Roupas elegantes em um cabide"
                 />
                 <div class="card-body d-flex flex-column">
-                  <h5 class="card-title text-center">Esporte Fino</h5>
+                  <h5 class="card-title text-center">Dress Code</h5>
                   <p class="card-text flex-grow-1">
                     Traje sugerido: <strong>Esporte Fino</strong>. Vista-se
                     elegante e confortável para aproveitar a festa!
@@ -293,11 +293,99 @@
               Confirmação
             </h3>
           </div>
+          <!-- Aviso geral acima do formulário -->
+          <div class="alert alert-warning" role="alert">
+            <strong>Atenção!</strong> Preencha todos os campos com calma. Se
+            tiver dúvidas, peça ajuda para alguém de confiança ou entre em
+            contato comigo pelo WhatsApp <strong>(84) 98795-5400</strong>.
+          </div>
+          <!-- Adicione este bloco logo acima do formulário de confirmação, dentro da seção de confirmação -->
+          <div class="mb-4 text-center">
+            <button
+              class="btn btn-outline-info"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#passoAPassoConfirmacao"
+              aria-expanded="false"
+              aria-controls="passoAPassoConfirmacao"
+            >
+              Como confirmar presença? Veja o passo a passo
+            </button>
+          </div>
+          <div class="collapse mb-4" id="passoAPassoConfirmacao">
+            <div
+              class="card card-body text-start"
+              style="max-width: 700px; margin: 0 auto"
+            >
+              <h5 class="mb-3 text-primary">
+                <strong
+                  >Passo a passo para confirmar presença e escolher o
+                  presente</strong
+                >
+              </h5>
+              <ol class="mb-2">
+                <li>
+                  <strong>Preencha seu nome completo</strong> conforme aparece
+                  no convite.
+                </li>
+                <li>
+                  <strong>Digite seu e-mail</strong> corretamente. Você receberá
+                  a confirmação por e-mail.
+                </li>
+                <li>
+                  <strong>Escolha se vai comparecer:</strong>
+                  <ul>
+                    <li>
+                      Selecione <b>"Sim, estarei presente!"</b> se for à festa.
+                    </li>
+                    <li>
+                      Selecione <b>"Não poderei comparecer."</b> se não for.
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <strong>Se for comparecer:</strong>
+                  <ul>
+                    <li>Informe a quantidade de pessoas (incluindo você).</li>
+                    <li>
+                      Escolha como deseja presentear:
+                      <ul>
+                        <li>
+                          <b>Escolher um presente:</b> Clique no botão
+                          correspondente, selecione um presente da lista e
+                          confira a imagem e referência.
+                        </li>
+                        <li>
+                          <b>Fazer um Pix:</b> Clique no botão "Fazer um Pix".
+                          Após confirmar, você verá as instruções para
+                          pagamento.
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <strong>Revise seus dados</strong> e clique em
+                  <b>Enviar Confirmação</b>.
+                </li>
+                <li>
+                  <strong>Importante:</strong> Se tiver dúvidas, peça ajuda para
+                  alguém de confiança ou fale comigo pelo WhatsApp
+                  <b>(84) 98795-5400</b>.
+                </li>
+              </ol>
+              <div class="alert alert-info mt-3 mb-0">
+                <strong>Dica:</strong> Após confirmar, verifique sua caixa de
+                entrada e também a pasta de spam/lixo eletrônico para encontrar
+                o e-mail de confirmação.
+              </div>
+            </div>
+          </div>
           <!-- Aviso adicionado -->
           <div class="col-lg-7 mb-4">
             <div class="alert alert-info" role="alert">
               Ao confirmar presença, escolha entre levar um presente ou
-              contribuir via Pix. Dúvidas? Fale com o organizador pelo WhatsApp:
+              contribuir via Pix. Qualquer dúvida, fale comigo pelo WhatsApp:
               <strong>(84) 98795-5400</strong>. Se preferir pagar em dinheiro,
               selecione Pix e siga as instruções após confirmar.
             </div>
@@ -333,11 +421,21 @@
                     aria-label="Seu e-mail"
                     pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
                     title="Por favor, insira um endereço de e-mail válido (ex.: exemplo@email.com)."
+                    autocomplete="email"
+                    style="font-size: 1.1rem"
+                    value="{{ request.form.email or '' }}"
                   />
                   <small class="form-text text-muted">
-                    Informe um e-mail válido para receber os detalhes da festa.
-                    Caso não encontre o e-mail na caixa de entrada, verifique a
-                    pasta de spam.
+                    Informe um e-mail válido para receber os detalhes da
+                    festa.<br />
+                    <strong>Atenção:</strong> Após confirmar, verifique sua
+                    caixa de entrada e também a pasta de spam/lixo
+                    eletrônico.<br />
+                    O e-mail será enviado por
+                    <strong
+                      >{{ mail_username or 'confirmacaoanabeariz15@gmail.com'
+                      }}</strong
+                    >.
                   </small>
                 </div>
 
@@ -380,6 +478,10 @@
                     min="1"
                     aria-label="Quantidade de pessoas"
                   />
+
+                  <small class="form-text text-muted">
+                    Informe a quantidade de pessoas que irá com você na festa.
+                  </small>
                 </div>
 
                 <!-- Botões para escolher tipo de presente -->
@@ -418,8 +520,17 @@
                     seguida, você será redirecionado para a página com as
                     instruções de pagamento.
                   </label>
+                  <small class="form-text text-muted d-block">
+                    <strong>Como funciona?</strong> Ao escolher Pix, você poderá
+                    contribuir com qualquer valor.<br />
+                    <strong>Dica:</strong> Se não souber usar Pix, peça ajuda
+                    para alguém de confiança.<br />
+                    <strong>Importante:</strong> Se preferir pagar em dinheiro,
+                    selecione Pix e siga as instruções após confirmar.
+                  </small>
                 </div>
-                <!-- Escolha de presente -->
+
+                <!-- Seção de seleção de presente -->
                 <div class="mb-3" id="presente-div" style="display: none">
                   <label for="presente" class="form-label d-block mb-2">
                     Selecione o presente com cautela. Após a escolha neste
@@ -430,22 +541,48 @@
                     id="presente"
                     class="form-select"
                     aria-label="Clique para selecionar um presente"
+                    onchange="atualizarImagemPresente(this.value); atualizarReferenciaPresente(this.value)"
                   >
                     <option value="" selected disabled>
                       Clique aqui para escolher
                     </option>
-                    {% for item in disponiveis %}
-                    <option value="{{ item }}">{{ item }}</option>
-                    {% else %}
-                    <option value="" disabled>
-                      Nenhuma sugestão disponível no momento.
+                    {% for item in disponiveis %} {% set info =
+                    presentes_info[item] %}
+                    <option value="{{ item }}">
+                      {{ item }} {% if info.max > 1 %}(restam {{ info.max -
+                      info.reservado }}){% endif %}
                     </option>
                     {% endfor %}
                   </select>
                   <small class="form-text text-muted mt-1 d-block">
-                    Isso nos ajuda a organizar e evitar presentes repetidos. A
-                    compra é por sua conta.
+                    <strong>Dica:</strong> Selecione um presente da lista acima.
+                    Assim que escolher, não será possível trocar depois.<br />
+                    <strong>Como funciona?</strong> Ao selecionar um presente,
+                    ele será reservado para você e não aparecerá mais para
+                    outros convidados.<br />
+                    <strong>Importante:</strong> A compra do presente é por sua
+                    conta. Caso tenha dúvidas, peça ajuda para alguém de
+                    confiança ou entre em contato comigo pelo WhatsApp
+                    <strong>(84) 98795-5400</strong>.
                   </small>
+
+                  <!-- Imagem do presente -->
+                  <div id="imagemPresente" style="display: none">
+                    <img
+                      id="imagemPresenteSelecionado"
+                      style="max-width: 200px; max-height: 200px"
+                      alt="Imagem do presente"
+                      class="imagem-presente"
+                    />
+                  </div>
+
+                  <div
+                    id="referenciaPresente"
+                    class="mt-2"
+                    style="font-style: italic; color: #555; font-size: 0.8rem"
+                  >
+                    <!-- Referência do presente selecionado aparecerá aqui -->
+                  </div>
                 </div>
 
                 <!-- Campo oculto para identificar a forma de presente -->
@@ -487,17 +624,29 @@
                 </div>
                 {% endfor %}
               </div>
-              {% endif %} {% endwith %}
+              {% endif %} {% endwith %} {% if email %}
+              <script>
+                flash(
+                  `Sua presença foi confirmada! Um e-mail foi enviado para ${email}. Verifique sua caixa de entrada e a pasta de spam.`,
+                  "success"
+                );
+              </script>
+              {% endif %}
             </div>
           </div>
         </section>
+
         <section class="location-section section-padding mb-5" id="location">
           <div class="row justify-content-center">
             <div class="col-12 text-center mb-4">
               <h3 class="section-title location-section__title">
-                Localização do Evento
+                Localização da minha festa
               </h3>
             </div>
+            <p class="fs-5 mt-4 mb-3 text-center">
+              📍Av. Comandante Petit, 263 - Centro, Parnamirim - RN <br />
+              <strong>Bouganville Hall</strong>
+            </p>
             <div class="col-lg-10 animate__animated animate__fadeInUp">
               <div class="card p-3 map-card shadow-sm">
                 <div class="map-responsive">
@@ -537,7 +686,10 @@
       </main>
 
       <div class="text-center mt-4 mb-5 animate__animated animate__fadeIn">
-        <p class="final-message">Com amor, esperamos por você 💖</p>
+        <p class="final-message">
+          Com carinho, espero por você para celebrar esse momento especial
+          comigo! 💖
+        </p>
       </div>
 
       <!-- Botão flutuante para confirmar presença -->
@@ -554,12 +706,18 @@
           © 2025 Marcos. Todos os direitos reservados.
         </p>
         <p>
-          <a href="https://www.instagram.com" target="_blank" rel="noopener"
-            >Instagram</a
+          <a
+            href="https://www.linkedin.com/in/marcosvinicius1/"
+            target="_blank"
+            rel="noopener"
+            >Linkedin</a
           >
           |
-          <a href="https://www.facebook.com" target="_blank" rel="noopener"
-            >Facebook</a
+          <a
+            href="https://github.com/MarcosViniicius"
+            target="_blank"
+            rel="noopener"
+            >GitHub</a
           >
           |
           <a href="{{ url_for('confirmados') }}" class="ms-2"
@@ -598,16 +756,6 @@
               Esporte fino é um estilo elegante e confortável, ideal para
               festas. Evite roupas muito casuais.
             </p>
-            <!-- Botão para mostrar exemplo -->
-            <div class="text-center my-4">
-              <button
-                type="button"
-                class="btn btn-custom-outline"
-                id="btnMostrarExemplo"
-              >
-                Ver exemplo
-              </button>
-            </div>
 
             <!-- Modal com a imagem de exemplo -->
             <div
@@ -704,27 +852,53 @@
             ></button>
           </div>
           <div class="modal-body">
-            <div>
-              <p>
-                Veja abaixo as sugestões de presentes. Escolha um e informe no
-                formulário de confirmação.
-              </p>
+            <p>
+              Veja abaixo as sugestões de presentes. Escolha um e informe no
+              formulário de confirmação.
+            </p>
+            <hr />
+            <h5>Sugestões Disponíveis:</h5>
 
-              <hr />
-              <h5>Sugestões Disponíveis:</h5>
-              {% if disponiveis %}
-              <ul class="list-group list-group-flush">
-                {% for item in disponiveis %}
-                <li class="list-group-item">{{ item }}</li>
-                {% endfor %}
-              </ul>
-              {% else %}
-              <p class="text-muted">
-                No momento, não há sugestões disponíveis. Fique à vontade para
-                escolher outro presente.
-              </p>
-              {% endif %}
-            </div>
+            {% if disponiveis %}
+            <ul class="list-group list-group-flush">
+              {% for item in disponiveis %}
+              <li class="list-group-item d-flex align-items-center">
+                {% if item == "Jansport Mini Mochila Misty Rose" or item ==
+                "Zara Tênis Hello Kitty TAM. 36" %}
+                <div class="me-3">
+                  {% if item == "Jansport Mini Mochila Misty Rose" %}
+                  <img
+                    src="../static/img/mochila-half-pint-jansport-TDH67N8-1.png"
+                    alt="Jansport Mini Mochila Misty Rose"
+                    style="max-width: 120px; margin-top: 8px"
+                    loading="lazy"
+                  />
+                  {% elif item == "Zara Tênis Hello Kitty TAM. 36" %}
+                  <img
+                    src="../static/img/tenis_hello_kitty.png"
+                    alt="Zara Tênis Hello Kitty TAM. 36"
+                    style="max-width: 120px; margin-top: 8px"
+                    loading="lazy"
+                  />
+                  {% endif %}
+                </div>
+                {% endif %}
+
+                <div>
+                  <strong>{{ item }}</strong>
+                  <!-- <p class="mb-0">
+                    Descrição do presente ou informações adicionais.
+                  </p> -->
+                </div>
+              </li>
+              {% endfor %}
+            </ul>
+            {% else %}
+            <p class="text-muted">
+              No momento, não há sugestões disponíveis. Fique à vontade para
+              escolher outro presente.
+            </p>
+            {% endif %}
           </div>
           <div class="modal-footer">
             <button
@@ -756,4 +930,3 @@
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
   </body>
 </html>
-`

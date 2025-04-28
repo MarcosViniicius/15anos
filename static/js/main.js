@@ -90,16 +90,19 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function fecharEMover() {
-  const modal = bootstrap.Modal.getInstance(
+  // Fecha o modal de presentes
+  var modal = bootstrap.Modal.getInstance(
     document.getElementById("listapresentesModal")
   );
-  modal.hide();
-
-  setTimeout(() => {
-    document
-      .getElementById("formConfirmacao")
-      .scrollIntoView({ behavior: "smooth" });
-  }, 300); // tempo suficiente para a modal sumir antes de rolar
+  if (modal) modal.hide();
+  // Aguarda o modal fechar antes de rolar
+  setTimeout(function () {
+    // Rola suavemente até o formulário de confirmação
+    var form = document.getElementById("formConfirmacao");
+    if (form) {
+      form.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, 400); // tempo suficiente para o modal fechar
 }
 
 function alternarFormaPresente(opcao) {

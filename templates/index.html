@@ -601,37 +601,140 @@
 
               {% with messages = get_flashed_messages(with_categories=true) %}
               {% if messages %}
-              <div class="mt-4">
-                {% for category, message in messages %} {# Mapeia categorias
-                flash para classes de alerta Bootstrap #} {% set alert_class =
-                'alert-secondary' %} {# Padrão #} {% if category == 'success' %}
-                {% set alert_class = 'alert-success' %} {% elif category ==
-                'error' or category == 'danger' %} {% set alert_class =
-                'alert-danger' %} {% elif category == 'warning' %} {% set
-                alert_class = 'alert-warning' %} {% elif category == 'info' %}
-                {% set alert_class = 'alert-info' %} {% endif %}
+              <div
+                id="floating-alert"
+                style="
+                  position: fixed;
+                  top: 50%;
+                  left: 50%;
+                  transform: translate(-50%, -50%);
+                  z-index: 9999;
+                  min-width: 320px;
+                  max-width: 95vw;
+                  padding: 2.2rem 2.8rem;
+                  font-size: 2rem;
+                  font-weight: 600;
+                  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+                  border-radius: 1.2rem;
+                  text-align: center;
+                  background: linear-gradient(135deg, #fff 80%, #ffe6f3 100%);
+                  border: 2.5px solid #ff69b4;
+                  animation: popup-float 0.5s
+                    cubic-bezier(0.68, -0.55, 0.27, 1.55);
+                  position: fixed;
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                  justify-content: center;
+                "
+              >
+                {% for category, message in messages %} {% set alert_class =
+                'alert-secondary' %} {% if category == 'success' %} {% set
+                alert_class = 'alert-success' %} {% elif category == 'error' or
+                category == 'danger' %} {% set alert_class = 'alert-danger' %}
+                {% elif category == 'warning' %} {% set alert_class =
+                'alert-warning' %} {% elif category == 'info' %} {% set
+                alert_class = 'alert-info' %} {% endif %}
                 <div
-                  class="alert {{ alert_class }} alert-dismissible fade show"
+                  class="alert {{ alert_class }} alert-dismissible fade show mb-0 border-0"
                   role="alert"
+                  style="
+                    background: transparent;
+                    border: none;
+                    font-size: 2rem;
+                    font-weight: 600;
+                    margin: 0;
+                  "
                 >
-                  {{ message }}
+                  <span style="display: block; margin-bottom: 1rem">
+                    {% if category == 'success' %}
+                    <span
+                      style="
+                        font-size: 2.7rem;
+                        color: #28a745;
+                        vertical-align: middle;
+                      "
+                      >&#10004;</span
+                    >
+                    {% elif category == 'error' or category == 'danger' %}
+                    <span
+                      style="
+                        font-size: 2.7rem;
+                        color: #dc3545;
+                        vertical-align: middle;
+                      "
+                      >&#10006;</span
+                    >
+                    {% elif category == 'warning' %}
+                    <span
+                      style="
+                        font-size: 2.7rem;
+                        color: #ffc107;
+                        vertical-align: middle;
+                      "
+                      >&#9888;</span
+                    >
+                    {% elif category == 'info' %}
+                    <span
+                      style="
+                        font-size: 2.7rem;
+                        color: #17a2b8;
+                        vertical-align: middle;
+                      "
+                      >&#8505;</span
+                    >
+                    {% endif %}
+                  </span>
+                  <span
+                    style="display: block; color: #333; letter-spacing: 0.5px"
+                  >
+                    {{ message }}
+                  </span>
                   <button
                     type="button"
                     class="btn-close"
                     data-bs-dismiss="alert"
-                    aria-label="Close"
+                    aria-label="Fechar"
+                    style="
+                      font-size: 2rem;
+                      position: absolute;
+                      top: 1.2rem;
+                      right: 1.8rem;
+                      opacity: 0.7;
+                    "
                   ></button>
                 </div>
                 {% endfor %}
               </div>
-              {% endif %} {% endwith %} {% if email %}
+              <style>
+                @keyframes popup-float {
+                  0% {
+                    opacity: 0;
+                    transform: translate(-50%, -60%) scale(0.92);
+                  }
+                  100% {
+                    opacity: 1;
+                    transform: translate(-50%, -50%) scale(1);
+                  }
+                }
+                @media (max-width: 600px) {
+                  #floating-alert {
+                    font-size: 1.1rem !important;
+                    padding: 1.1rem 0.5rem !important;
+                  }
+                  #floating-alert .btn-close {
+                    top: 0.7rem !important;
+                    right: 1rem !important;
+                  }
+                }
+              </style>
               <script>
-                flash(
-                  `Sua presença foi confirmada! Um e-mail foi enviado para ${email}. Verifique sua caixa de entrada e a pasta de spam.`,
-                  "success"
-                );
+                setTimeout(function () {
+                  var alert = document.getElementById("floating-alert");
+                  if (alert) alert.style.display = "none";
+                }, 7000);
               </script>
-              {% endif %}
+              {% endif %} {% endwith %}
             </div>
           </div>
         </section>

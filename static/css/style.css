@@ -7,15 +7,17 @@
 /* Variáveis de Cor Simplificadas */
 /* ------------------------- */
 :root {
-  --rosa-principal: #d16ba5; /* Rosa mais suave */
-  --rosa-secundario: #f3c6e8; /* Lilás claro */
-  --fundo-pagina: #f9f9f9; /* Fundo neutro */
-  --fundo-card: #ffffff;
-  --texto-escuro: #333333; /* Cinza escuro */
-  --texto-medio: #555555; /* Cinza médio */
-  --texto-claro: #ffffff;
-  --borda-suave: #e0e0e0; /* Borda clara */
-  --transicao-padrao: all 0.2s ease-in-out; /* Transição mais rápida */
+  --rosa-principal: #e75480; /* Rosa elegante */
+  --lilas-principal: #b39ddb; /* Lilás suave */
+  --rosa-claro: #fce4ec; /* Fundo rosa claro */
+  --lilas-claro: #ede7f6; /* Fundo lilás claro */
+  --fundo-pagina: #fffafd; /* Fundo quase branco */
+  --fundo-card: #fff;
+  --texto-escuro: #333;
+  --texto-medio: #555;
+  --texto-claro: #fff;
+  --borda-suave: #f8bbd0; /* Rosa bem claro para bordas */
+  --transicao-padrao: all 0.2s ease-in-out;
   --theme-font-family: "Libre Caslon Text", "Libre Caslon Text Fallback", serif;
   --theme-font-pair-family: "Libre Caslon Text", "Libre Caslon Text Fallback",
     serif;
@@ -53,9 +55,14 @@ body {
   overflow-x: hidden;
 }
 
+/* Fundo da página mais neutro */
 body {
   font-size: 16px;
-  background-color: #f6f3fa;
+  background: linear-gradient(
+    135deg,
+    var(--fundo-pagina) 80%,
+    var(--lilas-claro) 100%
+  );
   color: var(--texto-medio);
   line-height: 1.6;
   margin: 0;
@@ -105,7 +112,7 @@ a {
   transition: var(--transicao-padrao);
 }
 a:hover {
-  color: var(--rosa-secundario);
+  color: var(--lilas-principal);
 }
 
 /* ------------------------- */
@@ -273,11 +280,10 @@ a:hover {
   }
 }
 
-/* Cards */
+/* Cards com leve toque lilás */
 .custom-card {
-  border: 1px solid var(--borda-suave);
-  border-radius: 8px;
-  background-color: #fffafd;
+  border: 1.5px solid var(--borda-suave);
+  background: var(--fundo-card);
   transition: var(--transicao-padrao);
   height: 100%;
   min-height: 410px; /* Altura mínima para padronizar todos os cards */
@@ -317,7 +323,7 @@ a:hover {
   }
 }
 
-/* Botões */
+/* Botões principais em rosa, hover em lilás */
 .btn {
   padding: 0.6rem 1.2rem;
   border-radius: 6px;
@@ -332,10 +338,13 @@ a:hover {
   border: none;
 }
 .btn-custom-primary:hover {
-  background-color: var(--rosa-secundario);
+  background-color: var(--lilas-principal);
+  color: var(--texto-claro);
 }
+
+/* Botões secundários em lilás */
 .btn-custom-secondary {
-  background-color: var(--rosa-secundario);
+  background-color: var(--lilas-claro);
   color: var(--texto-escuro);
   border: none;
 }
@@ -343,6 +352,7 @@ a:hover {
   background-color: var(--rosa-principal);
   color: var(--texto-claro);
 }
+
 .btn-float-confirmar {
   position: fixed;
   right: 24px;
@@ -498,11 +508,11 @@ a:hover {
   }
 }
 
-/* Rodapé */
+/* Rodapé discreto */
 footer {
   margin-top: 4rem;
   padding: 2rem 0 1.5rem 0;
-  border-top: 1px solid var(--borda-suave);
+  border-top: 1px solid var(--lilas-claro);
   color: var(--texto-medio);
   font-size: 0.9rem;
   text-align: center;
@@ -532,4 +542,39 @@ footer {
 .imagem-presente {
   max-width: 200px; /* Ajuste o tamanho máximo desejado */
   max-height: 200px; /* Ajuste o tamanho máximo desejado */
+}
+
+/* Alertas com leve destaque nas cores padrão de cada tipo */
+.alert-info {
+  border-radius: 1.2rem;
+  border: 2px solid #17a2b8;
+  background: linear-gradient(135deg, #e3f7fc 80%, #cbeffd 100%);
+  color: #15576a;
+}
+
+.alert-success {
+  border-radius: 1.2rem;
+  border: 2px solid #28a745;
+  background: linear-gradient(135deg, #e6f9ea 80%, #d4f5df 100%);
+  color: #20613a;
+}
+
+.alert-warning {
+  border-radius: 1.2rem;
+  border: 2px solid #ffc107;
+  background: linear-gradient(135deg, #fffbe6 80%, #fff3cd 100%);
+  color: #856404;
+}
+
+.alert-danger {
+  border-radius: 1.2rem;
+  border: 2px solid #dc3545;
+  background: linear-gradient(135deg, #fdeaea 80%, #f8d7da 100%);
+  color: #842029;
+}
+
+/* Floating alert mantém borda rosa para identidade visual */
+#floating-alert {
+  border: 2px solid var(--rosa-principal) !important;
+  background: #fff !important;
 }

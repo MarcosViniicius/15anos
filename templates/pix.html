@@ -201,14 +201,22 @@
                 onclick="return confirmarRedirecionamento(event)"
                 rel="noopener"
               >
-                {{ numero_whatsapp }}
-              </a>
+                (84) 98795-5400</a
+              >
             </h4>
             <p class="text-muted small mt-2 mb-0">
               <em
-                >Clique no número para abrir o WhatsApp e enviar o
-                comprovante.</em
+                >Clique no número para abrir o WhatsApp e enviar o comprovante
+                ou copie o número de contato clicando no botão abaixo.</em
               >
+              <hr />
+              <button
+                class="btn btn-outline-success btn-sm ms-2"
+                onclick="copiarWhatsappOrganizador()"
+                aria-label="Copiar número do WhatsApp do organizador"
+              >
+                Copiar número do WhatsApp
+              </button>
             </p>
           </div>
         </div>
@@ -252,7 +260,6 @@
       function fallbackCopyTextToClipboard(text) {
         const textArea = document.createElement("textarea");
         textArea.value = text;
-        // Evita rolagem na página
         textArea.style.position = "fixed";
         textArea.style.top = 0;
         textArea.style.left = 0;
@@ -279,6 +286,47 @@
         }
         return true;
       }
+
+      function copiarWhatsappOrganizador() {
+        const numero = "84987955400"; // Número sem formatação
+        const numeroFormatado = "(84) 98795-5400";
+        if (navigator.clipboard && window.isSecureContext) {
+          navigator.clipboard.writeText(numero).then(
+            () => {
+              alert(
+                "Número do WhatsApp de Ozelita Neta copiado: " + numeroFormatado
+              );
+            },
+            () => {
+              fallbackCopyTextToClipboard(numero, numeroFormatado);
+            }
+          );
+        } else {
+          fallbackCopyTextToClipboard(numero, numeroFormatado);
+        }
+        function fallbackCopyTextToClipboard(text, numeroFormatado) {
+          const textArea = document.createElement("textarea");
+          textArea.value = text;
+          textArea.style.position = "fixed";
+          textArea.style.top = 0;
+          textArea.style.left = 0;
+          document.body.appendChild(textArea);
+          textArea.focus();
+          textArea.select();
+          try {
+            document.execCommand("copy");
+            alert(
+              "Número do WhatsApp de Ozelita Neta copiado: " + numeroFormatado
+            );
+          } catch (err) {
+            alert(
+              "Não foi possível copiar o número. Copie manualmente: " +
+                numeroFormatado
+            );
+          }
+          document.body.removeChild(textArea);
+        }
+      }
     </script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
@@ -287,3 +335,4 @@
     ></script>
   </body>
 </html>
+``` 

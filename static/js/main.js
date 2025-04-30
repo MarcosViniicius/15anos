@@ -8,8 +8,18 @@ const presentesInfo = {
     imagem: "../static/img/tenis_hello_kitty.png",
     referencia: "Referência: ZTK-67890",
   },
+  "Cartão presente C&A": {
+    imagem: "../static/img/cia_cartao.webp",
+    referencia:
+      "Link de compra: https://www.cea.com.br/cartao-presente---arcos-3001701-arcos/p",
+  },
   // Adicione aqui outros presentes no futuro:
   // "Nome do Presente": { imagem: "url", referencia: "texto" }
+};
+
+const presentesImagens = {
+  "Papete Branca TAM. 36": "https://i.imgur.com/IxWjkp4.jpeg",
+  // ...outras entradas...
 };
 
 function toggleCamposOpcionais() {
@@ -23,18 +33,12 @@ function toggleCamposOpcionais() {
 
   if (confirmadoSelect) {
     if (confirmadoSelect.value === "sim") {
-      // Mostrar campos relacionados à presença
+      // Mostrar apenas os botões de escolha e quantidade de pessoas
       escolhaDiv.style.display = "block";
       quantidadePessoasDiv.style.display = "block";
-      // Decide qual campo mostrar conforme a escolha de presente/pix
-      const formaPresenteInput = document.getElementById("forma_presente");
-      if (formaPresenteInput && formaPresenteInput.value === "pix") {
-        pixDiv.style.display = "block";
-        presenteDiv.style.display = "none";
-      } else {
-        pixDiv.style.display = "none";
-        presenteDiv.style.display = "block";
-      }
+      // Esconde ambos até clicar em um dos botões
+      presenteDiv.style.display = "none";
+      if (pixDiv) pixDiv.style.display = "none";
     } else if (confirmadoSelect.value === "nao") {
       // Ocultar todos os campos opcionais
       escolhaDiv.style.display = "none";
@@ -66,12 +70,10 @@ document.addEventListener("DOMContentLoaded", () => {
   if (btnPresente)
     btnPresente.addEventListener("click", () => {
       alternarFormaPresente("presente");
-      toggleCamposOpcionais();
     });
   if (btnPix)
     btnPix.addEventListener("click", () => {
       alternarFormaPresente("pix");
-      toggleCamposOpcionais();
     });
 });
 
@@ -184,11 +186,15 @@ window.addEventListener("DOMContentLoaded", function () {
 function atualizarImagemPresente(presente) {
   const imagemDiv = document.getElementById("imagemPresente");
   const imagem = document.getElementById("imagemPresenteSelecionado");
+  const presenteSelect = document.getElementById("presente");
+  if (!imagem || !imagemDiv || !presenteSelect) return;
 
-  if (!imagem || !imagemDiv) return;
+  // Busca a opção selecionada
+  const selectedOption = presenteSelect.options[presenteSelect.selectedIndex];
+  const imgUrl = selectedOption.getAttribute("data-img");
 
-  if (presentesInfo[presente]) {
-    imagem.src = presentesInfo[presente].imagem;
+  if (imgUrl) {
+    imagem.src = imgUrl;
     imagemDiv.style.display = "block";
     imagem.style.maxWidth = "200px";
     imagem.style.maxHeight = "200px";
@@ -221,3 +227,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 });
+
+function atualizarReferenciaPresente(presente) {
+  // ...código existente...
+  var linkCompra = "";
+  if (presentesInfo[presente] && presentesInfo[presente].link_compra) {
+    linkCompra = `<br><b>Recomendação de compra:</b> <a href="${presentesInfo[presente].link_compra}" target="_blank" style="color:#7c43bd; text-decoration:underline;">${presentesInfo[presente].link_compra}</a><br><span style="font-size:0.9em;color:#555;">(A compra pelo site é opcional, serve apenas como indicação para facilitar sua escolha.)</span>`;
+  }
+  document.getElementById("linkCompraPresente").innerHTML = linkCompra;
+}

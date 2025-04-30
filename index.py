@@ -85,18 +85,20 @@ def index():
     try:
         if cursor:
             cursor.execute("""
-                SELECT nome, quantidade_maxima, quantidade_reservada
+                SELECT nome, quantidade_maxima, quantidade_reservada, imagem_url, link_compra
                   FROM presentes
                  WHERE disponivel = TRUE
                    AND (quantidade_reservada < quantidade_maxima)
             """)
             todos_presentes = cursor.fetchall()
             presentes_disponiveis = [row[0] for row in todos_presentes]
-            presentes_info = {row[0]: {'max': row[1], 'reservado': row[2]} for row in todos_presentes}
+            presentes_info = {row[0]: {'max': row[1], 'reservado': row[2], 'imagem_url': row[3], 'link_compra': row[4]} for row in todos_presentes}
             cursor.execute("SELECT id, nome, confirmado, presente, data_confirmacao FROM participante;")
             participantes = cursor.fetchall()
             if participantes:
                 participante_id = participantes[0][0]
+            # Ordena alfabeticamente
+            presentes_disponiveis = sorted(presentes_disponiveis)
         else:
             flash("Não foi possível conectar ao banco de dados. Tente novamente mais tarde.", "error")
     except Exception as e:
@@ -121,17 +123,24 @@ def flash_with_logging(message, category="message"):
 
 def enviar_email_confirmacao(email, nome, confirmado, quantidade_pessoas, presente, forma_presente):
     try:
-        # Links das imagens de presente
-        links_imagens_presentes = {
-            "Jansport Mini Mochila Misty Rose": "https://i.imgur.com/PsDWkUA.png",
-            "Zara Tênis Hello Kitty TAM. 36": "https://i.imgur.com/YKCwtE9.png"
-        }
-
         # Referências para presentes específicos
         referencias_presentes = {
-            "Jansport Mini Mochila Misty Rose": "Referência: JANS-MINI-ROSE",
-            "Zara Tênis Hello Kitty TAM. 36": "Referência: ZARA-HELLOKITTY-36"
+
         }
+
+        # Buscar imagem e link de compra do presente no banco
+        img_url = None
+        link_compra = None
+        if presente:
+            conn, cursor = get_db_connection()
+            if cursor:
+                cursor.execute("SELECT imagem_url, link_compra FROM presentes WHERE nome = %s", (presente,))
+                row = cursor.fetchone()
+                if row:
+                    img_url = row[0]
+                    link_compra = row[1]
+                cursor.close()
+                release_db_connection(conn)
 
         # Detalhes do e-mail
         assunto = "Confirmação de Presença - 15 Anos da Ana"
@@ -143,9 +152,10 @@ def enviar_email_confirmacao(email, nome, confirmado, quantidade_pessoas, presen
         Detalhes da sua confirmação:
         - Presença: {'Sim' if confirmado == 'sim' else 'Não'}
         - Quantidade de pessoas: {quantidade_pessoas or 'N/A'}
-        - Presente: {presente or 'N/A'}
+        {"- Presente: " + (presente or 'N/A') if forma_presente != "pix" else ""}
         - Forma de presente: {forma_presente.capitalize()}
         {"\n" + referencias_presentes.get(presente, "") if presente in referencias_presentes else ""}
+        {f"\nRecomendação de compra: {link_compra}\n(A compra pelo site é opcional, serve apenas como indicação para facilitar sua escolha.)" if link_compra else ""}
 
         Informações da festa:
         - Data: 14 de junho de 2025
@@ -161,28 +171,72 @@ def enviar_email_confirmacao(email, nome, confirmado, quantidade_pessoas, presen
 
         corpo_html = f"""
         <html>
-        <body>
-            <h2>Olá, {nome}!</h2>
-            <p>Obrigado por confirmar sua presença no aniversário de 15 anos da Ana.</p>
-            <p><strong>Detalhes da sua confirmação:</strong></p>
-            <ul>
-                <li><strong>Presença:</strong> {'Sim' if confirmado == 'sim' else 'Não'}</li>
-                <li><strong>Quantidade de pessoas:</strong> {quantidade_pessoas or 'N/A'}</li>
-                <li><strong>Presente:</strong> {presente or 'N/A'}</li>
-                <li><strong>Forma de presente:</strong> {forma_presente.capitalize()}</li>
-            </ul>
-            {"<p><strong>Referência do presente:</strong> " + referencias_presentes.get(presente, "") + "</p>" if presente in referencias_presentes else ""}
-            {"<div style='margin-top: 20px;'><p>Você escolheu pagar via Pix. Clique no botão abaixo para acessar as informações de pagamento:</p><a href='https://15anos.vercel.app/pix' style='display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px;'>Ir para a página de Pix</a></div>" if forma_presente == "pix" else ""}
-            <p><strong>Informações da festa:</strong></p>
-            <ul>
-                <li><strong>Data:</strong> 14 de junho de 2025</li>
-                <li><strong>Horário:</strong> 20:00</li>
-                <li><strong>Local:</strong> Bouganville Hall, Av. Comandante Petit, 263 - Centro, Parnamirim - RN</li>
-                <li><strong>Link para o local no Google Maps:</strong> <a href="https://maps.google.com/?q=Av.+Comandante+Petit,+263+-+Centro,+Parnamirim+-+RN" target="_blank">Clique aqui</a></li>
-            </ul>
-            <p>Estamos ansiosos para celebrar com você!</p>
-            <p>Atenciosamente,<br>Organização do Evento</p>
-            {"<p><strong>Imagem do presente:</strong><br><img src='" + links_imagens_presentes.get(presente, "") + "' alt='{presente}' style='max-width:100%; height:auto;'></p>" if presente in links_imagens_presentes else ""}
+        <body style="font-family: 'Open Sans', Arial, sans-serif; background: #f8f9fa; color: #333; padding: 0; margin: 0;">
+            <div style="max-width: 600px; margin: 30px auto; background: #fff; border-radius: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.10); padding: 32px 28px;">
+                <div style="text-align: center;">
+                    <h1 style="font-family: 'Great Vibes', cursive; color: #ff69b4; font-size: 2.5rem; margin-bottom: 0.5rem;">
+                        Convite Oficial - 15 Anos de Ana Beatriz
+                    </h1>
+                    <h2 style="font-size: 1.3rem; font-weight: 600; margin-bottom: 0.5rem; color: #333;">
+                        Você está convidado para uma noite inesquecível!
+                    </h2>
+                    <p style="font-size: 1.1rem; color: #888; margin-bottom: 0.5rem;">
+                        <b>Data:</b> 14 de junho de 2025<br>
+                        <b>Horário:</b> 20:00<br>
+                        <b>Local:</b> Bouganville Hall<br>
+                        Av. Comandante Petit, 263 - Centro, Parnamirim - RN
+                    </p>
+                    <a href="https://maps.google.com/?q=Av.+Comandante+Petit,+263+-+Centro,+Parnamirim+-+RN" target="_blank"
+                        style="display:inline-block; margin-bottom: 0.7rem; color: #fff; background: #ff69b4; padding: 8px 18px; border-radius: 8px; text-decoration: none; font-weight: 600;">
+                        Ver no Google Maps
+                    </a>
+                    <a href="https://15anos.vercel.app/calendar-link" target="_blank"
+                        style="display:inline-block; margin-left: 0.5rem; margin-bottom: 1.2rem; color: #fff; background: #007bff; padding: 8px 18px; border-radius: 8px; text-decoration: none; font-weight: 600;">
+                        Adicionar à Agenda
+                    </a>
+                </div>
+                <hr style="margin: 1.5rem 0;">
+                <p style="font-size: 1.1rem; text-align: center;">
+                    <strong>Olá, {nome}!</strong><br>
+                    Obrigada por confirmar sua presença no meu aniversário de 15 anos.<br>
+                    <span style="color: #ff69b4;">Sua presença é muito importante para mim!</span>
+                </p>
+                <div style="background: #ffe6f3; border-radius: 10px; padding: 1.2rem 1rem; margin: 1.5rem 0;">
+                    <h3 style="color: #ff69b4; font-size: 1.2rem; margin-bottom: 0.7rem;">Seus dados de confirmação:</h3>
+                    <ul style="list-style: none; padding: 0; font-size: 1.05rem; text-align:left;">
+                        <li><b>Presença:</b> {'Sim' if confirmado == 'sim' else 'Não'}</li>
+                        <li><b>Quantidade de pessoas:</b> {quantidade_pessoas or 'N/A'}</li>
+                        {f"<li><b>Presente:</b> {presente or 'N/A'}</li>" if forma_presente != "pix" else ""}
+                        <li><b>Forma de presente:</b> {forma_presente.capitalize()}</li>
+                    </ul>
+                    {"<p style='margin: 0.7rem 0 0 0;'><b>Referência do presente:</b> " + referencias_presentes.get(presente, "") + "</p>" if presente in referencias_presentes else ""}
+                    {f"<p style='margin: 0.7rem 0 0 0;'><b>Recomendação de compra:</b> <a href='{link_compra}' target='_blank' style='color:#7c43bd; text-decoration:underline;'>{link_compra}</a><br><span style='font-size:0.95em;color:#555;'>(A compra pelo site é opcional, serve apenas como indicação para facilitar sua escolha.)</span></p>" if link_compra else ""}
+                    {"<div style='margin-top: 1.2rem; background: #fff3cd; border-radius: 8px; padding: 0.8rem; color: #856404;'><b>Você escolheu Pix.</b> Clique no botão abaixo para acessar as informações de pagamento <span style='font-weight:bold; color:#d35400;'>(caso não tenha feito anteriormente)</span>:<br><a href='https://15anos.vercel.app/pix' style='display: inline-block; margin-top: 0.7rem; padding: 8px 18px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 6px;'>Ir para a página de Pix</a></div>" if forma_presente == "pix" else ""}
+                    {f"<div style='margin-top: 1.2rem;'><b>Imagem do presente escolhido:</b><br><img src='{img_url}' alt='{presente}' style='max-width:180px; border-radius: 8px; margin-top: 0.5rem;'></div>" if img_url else ""}
+                </div>
+                <div style="margin: 1.5rem 0;">
+                    <h3 style="color: #ff69b4; font-size: 1.2rem;">Informações importantes para o evento:</h3>
+                    <ul style="font-size: 1.05rem; padding-left: 1.2rem; text-align:left;">
+                        <li><b>Confirmação:</b> Confirme sua presença até <b>01/06/2025</b>.</li>
+                        <li><b>Traje:</b> Esporte Fino (evite roupas nas cores <b>rosa</b> e <b>lilás</b> para manter a harmonia da festa).</li>
+                        <li><b>Presentes:</b> Escolha um presente na lista do site ou contribua via Pix. A compra do presente é por sua conta.</li>
+                        <li><b>Ajuda:</b> Se tiver dúvidas, fale com o(a) responsável pela festapelo WhatsApp: <b>(84) 98795-5400</b>.</li>
+                        <li><b>E-mail:</b> Após confirmar, verifique sua caixa de entrada e também o spam/lixo eletrônico para garantir que recebeu todas as informações.</li>
+                        <li><b>Endereço:</b> Av. Comandante Petit, 263 - Centro, Parnamirim - RN (<a href="https://maps.google.com/?q=Av.+Comandante+Petit,+263+-+Centro,+Parnamirim+-+RN" target="_blank">Ver no mapa</a>)</li>
+                        <li><b>Horário:</b> Chegue com antecedência para não perder nenhum momento especial!</li>
+                    </ul>
+                </div>
+                <div style="background: #f8f9fa; border-radius: 10px; padding: 1.1rem 1rem; margin-bottom: 1.5rem;">
+                    <b>Dica:</b> Guarde este e-mail, pois ele contém todas as informações necessárias para a festa e para sua participação.<br>
+                    <b>Se não encontrar este e-mail na caixa de entrada, procure no spam/lixo eletrônico.</b>
+                </div>
+                <div style="text-align: center; margin-top: 2rem;">
+                    <p style="font-size: 1.1rem; color: #888;">
+                        Com carinho,<br>
+                        <span style="color: #ff69b4; font-family: 'Great Vibes', cursive; font-size: 1.5rem;">Ana Beatriz</span>
+                    </p>
+                </div>
+            </div>
         </body>
         </html>
         """
@@ -397,6 +451,7 @@ def reconnect_pool():
     if connection_pool is None or connection_pool.closed:
         # Criar o pool novamente
         connection_pool = psycopg2.pool.SimpleConnectionPool(minconn=1, maxconn=10, user='user', password='password', host='localhost', database='mydb')
+
 
 
 # Renomear para 'application' como esperado pelo Vercel

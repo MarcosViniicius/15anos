@@ -1,3 +1,7 @@
+# ==========================================================
+# Desenvolvido por Marcos Vinicius - github.com/MarcosViniicius
+# ==========================================================
+
 import pytest
 from index import app, get_db_connection, release_db_connection
 

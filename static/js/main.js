@@ -1,3 +1,7 @@
+// ==========================================================
+// Desenvolvido por Marcos Vinicius - github.com/MarcosViniicius
+// ==========================================================
+
 // Mapeamento de presentes para imagem e referência
 const presentesInfo = {
   "Jansport Mini Mochila Misty Rose": {

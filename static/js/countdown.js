@@ -1,3 +1,7 @@
+// ==========================================================
+// Desenvolvido por Marcos Vinicius - github.com/MarcosViniicius
+// ==========================================================
+
 const countdown = () => {
   const countDate = new Date("Jun 14, 2025 20:00:00").getTime();
   const now = new Date().getTime();

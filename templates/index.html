@@ -1,3 +1,8 @@
+<!-- ==========================================================
+     Desenvolvido por Marcos Vinicius - github.com/MarcosViniicius
+     ========================================================== -->
+
+
 <!DOCTYPE html>
 <html lang="pt-br">
   <head>
@@ -466,7 +471,7 @@
                   style="display: none"
                 >
                   <label for="quantidade_pessoas" class="form-label"
-                    >Quantidade de pessoas:</label
+                    >Quantidade de pessoas (incluindo você):</label
                   >
                   <input
                     required
@@ -480,7 +485,7 @@
                   />
 
                   <small class="form-text text-muted">
-                    Informe a quantidade de pessoas que irá com você na festa.
+                    Informe a quantidade de pessoas que irão com você na festa.
                   </small>
                 </div>
 
@@ -542,6 +547,7 @@
                     class="form-select"
                     aria-label="Clique para selecionar um presente"
                     onchange="atualizarImagemPresente(this.value); atualizarReferenciaPresente(this.value)"
+                    {% if disponiveis|length == 0 %}disabled{% endif %}
                   >
                     <option value="" selected disabled>
                       Clique aqui para escolher
@@ -554,6 +560,12 @@
                     </option>
                     {% endfor %}
                   </select>
+                  {% if disponiveis|length == 0 %}
+                  <div class="alert alert-warning text-center my-3">
+                    Nenhum presente disponível no momento.<br>
+                    Por favor, tente novamente mais tarde ou escolha a opção Pix.
+                  </div>
+                  {% endif %}
                   <small class="form-text text-muted mt-1 d-block">
                     <strong>Dica:</strong> Selecione um presente da lista acima.
                     Assim que escolher, não será possível trocar depois.<br />
@@ -975,47 +987,55 @@
             <hr />
             <h5>Sugestões Disponíveis:</h5>
 
-            {% for item in disponiveis %} {% set info = presentes_info[item] %}
-            <li class="list-group-item d-flex align-items-center">
-              {% if info.imagem_url %}
-              <div class="me-3">
-                <img
-                  src="{{ info.imagem_url }}"
-                  alt="{{ item }}"
-                  style="max-width: 120px; margin-top: 8px"
-                  loading="lazy"
-                />
-              </div>
-              {% endif %}
-              <div>
-                <strong>{{ item }}</strong>
-                {% if info.link_compra %}
-                <br />
-                <span style="font-size: 0.95em">
-                  <b>Recomendação de compra:</b>
-                  <a
-                    href="{{ info.link_compra }}"
-                    target="_blank"
-                    style="color: #7c43bd; text-decoration: underline"
-                  >
-                    {{ info.link_compra }}
-                  </a>
-                  <br />
-                  <span style="font-size: 0.9em; color: #555">
-                    (A compra pelo site é opcional, serve apenas como indicação
-                    para facilitar sua escolha.)
-                  </span>
-                </span>
+            {% if disponiveis|length == 0 %}
+            <div class="alert alert-warning text-center my-3">
+              Nenhum presente disponível no momento.<br>
+              Por favor, tente novamente mais tarde ou escolha a opção Pix.
+            </div>
+            {% else %}
+              {% for item in disponiveis %} {% set info = presentes_info[item] %}
+              <li class="list-group-item d-flex align-items-center">
+                {% if info.imagem_url %}
+                <div class="me-3">
+                  <img
+                    src="{{ info.imagem_url }}"
+                    alt="{{ item }}"
+                    style="max-width: 120px; margin-top: 8px"
+                    loading="lazy"
+                  />
+                </div>
                 {% endif %}
-              </div>
-            </li>
-            {% endfor %}
+                <div>
+                  <strong>{{ item }}</strong>
+                  {% if info.link_compra %}
+                  <br />
+                  <span style="font-size: 0.95em">
+                    <b>Recomendação de compra:</b>
+                    <a
+                      href="{{ info.link_compra }}"
+                      target="_blank"
+                      style="color: #7c43bd; text-decoration: underline"
+                    >
+                      {{ info.link_compra }}
+                    </a>
+                    <br />
+                    <span style="font-size: 0.9em; color: #555">
+                      (A compra pelo site é opcional, serve apenas como indicação
+                      para facilitar sua escolha.)
+                    </span>
+                  </span>
+                  {% endif %}
+                </div>
+              </li>
+              {% endfor %}
+            {% endif %}
           </div>
           <div class="modal-footer">
             <button
               type="button"
               class="btn btn-custom-secondary"
               onclick="fecharEMover()"
+              {% if disponiveis|length == 0 %}disabled{% endif %}
             >
               Escolher Presente
             </button>
@@ -1041,4 +1061,3 @@
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
   </body>
 </html>
-`

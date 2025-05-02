@@ -1,3 +1,7 @@
+# ==========================================================
+# Desenvolvido por Marcos Vinicius - github.com/MarcosViniicius
+# ==========================================================
+
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 from dotenv import load_dotenv
 import os

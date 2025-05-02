@@ -83,11 +83,12 @@ def index():
     conn, cursor = get_db_connection()
     participantes = []
     presentes_disponiveis = []
-    participante_id = None
+    presentes_esgotados = []  # Lista para presentes esgotados
     presentes_info = {}
 
     try:
         if cursor:
+            # Consulta para presentes disponíveis
             cursor.execute("""
                 SELECT nome, quantidade_maxima, quantidade_reservada, imagem_url, link_compra
                   FROM presentes
@@ -97,12 +98,28 @@ def index():
             todos_presentes = cursor.fetchall()
             presentes_disponiveis = [row[0] for row in todos_presentes]
             presentes_info = {row[0]: {'max': row[1], 'reservado': row[2], 'imagem_url': row[3], 'link_compra': row[4]} for row in todos_presentes}
+            
+            # Consulta para presentes esgotados
+            cursor.execute("""
+                SELECT nome, quantidade_maxima, quantidade_reservada, imagem_url, link_compra
+                  FROM presentes
+                 WHERE disponivel = TRUE
+                   AND (quantidade_reservada >= quantidade_maxima)
+            """)
+            presentes_esgotados_dados = cursor.fetchall()
+            presentes_esgotados = [row[0] for row in presentes_esgotados_dados]
+            
+            # Adicionar informações dos presentes esgotados ao dicionário de informações
+            for row in presentes_esgotados_dados:
+                presentes_info[row[0]] = {'max': row[1], 'reservado': row[2], 'imagem_url': row[3], 'link_compra': row[4]}
+            
             cursor.execute("SELECT id, nome, confirmado, presente, data_confirmacao FROM participante;")
             participantes = cursor.fetchall()
             if participantes:
                 participante_id = participantes[0][0]
             # Ordena alfabeticamente
             presentes_disponiveis = sorted(presentes_disponiveis)
+            presentes_esgotados = sorted(presentes_esgotados)
         else:
             flash("Não foi possível conectar ao banco de dados. Tente novamente mais tarde.", "error")
     except Exception as e:
@@ -116,6 +133,7 @@ def index():
         'index.html',
         participantes=participantes,
         disponiveis=presentes_disponiveis,
+        esgotados=presentes_esgotados,  # Passar os presentes esgotados para o template
         presentes_info=presentes_info,
         participante_id=participante_id
     )

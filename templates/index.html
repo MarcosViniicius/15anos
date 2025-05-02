@@ -524,19 +524,14 @@
 
                 <!-- Aviso escolha de pix -->
                 <div class="mb-3" id="pix-div" style="display: none">
-                  <label for="pix" class="form-label d-block mb-2">
-                    Para prosseguir com o pagamento, confirme sua presença. Em
-                    seguida, você será redirecionado para a página com as
-                    instruções de pagamento.
-                  </label>
-                  <small class="form-text text-muted d-block">
-                    <strong>Como funciona?</strong> Ao escolher Pix, você poderá
-                    contribuir com qualquer valor.<br />
-                    <strong>Dica:</strong> Se não souber usar Pix, peça ajuda
-                    para alguém de confiança.<br />
-                    <strong>Importante:</strong> Se preferir pagar em dinheiro,
-                    selecione Pix e siga as instruções após confirmar.
-                  </small>
+                    <label for="pix" class="form-label d-block mb-2">
+                    Confirme sua presença para acessar as instruções de Pix.
+                    </label>
+                    <small class="form-text text-muted d-block">
+                    <strong>Como funciona?</strong> Escolha Pix para contribuir com qualquer valor.<br />
+                    <strong>Dica:</strong> Peça ajuda se precisar.<br />
+                    <strong>Importante:</strong> Para pagar em dinheiro, siga as instruções após confirmar.
+                    </small>
                 </div>
 
                 <!-- Seção de seleção de presente -->
@@ -563,6 +558,16 @@
                       info.reservado }}){% endif %}
                     </option>
                     {% endfor %}
+                    
+                    {% if esgotados|length > 0 %}
+                    <optgroup label="Presentes Esgotados (não disponíveis)">
+                      {% for item in esgotados %}
+                      <option value="{{ item }}" disabled style="color: #999; font-style: italic;">
+                        {{ item }} - ESGOTADO
+                      </option>
+                      {% endfor %}
+                    </optgroup>
+                    {% endif %}
                   </select>
                   {% if disponiveis|length == 0 %}
                   <div class="alert alert-warning text-center my-3">
@@ -570,17 +575,11 @@
                     Por favor, tente novamente mais tarde ou escolha a opção Pix.
                   </div>
                   {% endif %}
-                  <small class="form-text text-muted mt-1 d-block">
-                    <strong>Dica:</strong> Selecione um presente da lista acima.
-                    Assim que escolher, não será possível trocar depois.<br />
-                    <strong>Como funciona?</strong> Ao selecionar um presente,
-                    ele será reservado para você e não aparecerá mais para
-                    outros convidados.<br />
-                    <strong>Importante:</strong> A compra do presente é por sua
-                    conta. Caso tenha dúvidas, peça ajuda para alguém de
-                    confiança ou entre em contato com o(a) organizador(a) pelo WhatsApp
-                    <strong>(84) 98795-5400</strong>.
-                  </small>
+                    <small class="form-text text-muted mt-1 d-block">
+                    <strong>Dica:</strong> Escolha um presente da lista acima. Após selecionar, não será possível trocar.<br />
+                    <strong>Como funciona?</strong> O presente será reservado para você e ficará indisponível para outros.<br />
+                    <strong>Importante:</strong> A compra é por sua conta. Em caso de dúvidas, fale com o(a) organizador(a) pelo WhatsApp <strong>(84) 98795-5400</strong>.
+                    </small>
 
                   <!-- Imagem do presente -->
                   <div id="imagemPresente" style="display: none">
@@ -993,26 +992,71 @@
             </p>
             <hr />
             <h5>Sugestões Disponíveis:</h5>
-
-            {% if disponiveis|length == 0 %}
-            <div class="alert alert-warning text-center my-3">
-              Nenhum presente disponível no momento.<br>
-              Por favor, tente novamente mais tarde ou escolha a opção Pix.
+            <div class="list-group">
+              {% if disponiveis|length == 0 %}
+              <div class="alert alert-warning text-center my-3">
+                Nenhum presente disponível no momento.<br>
+                Por favor, tente novamente mais tarde ou escolha a opção Pix.
+              </div>
+              {% else %}
+                {% for item in disponiveis %} {% set info = presentes_info[item] %}
+                <li class="list-group-item d-flex align-items-center">
+                  {% if info.imagem_url %}
+                  <div class="me-3">
+                    <img
+                      src="{{ info.imagem_url }}"
+                      alt="{{ item }}"
+                      style="max-width: 120px; margin-top: 8px"
+                      loading="lazy"
+                    />
+                  </div>
+                  {% endif %}
+                  <div>
+                    <strong>{{ item }}</strong>
+                    {% if info.link_compra %}
+                    <br />
+                    <span style="font-size: 0.95em">
+                      <b>Recomendação de compra:</b>
+                      <a
+                        href="{{ info.link_compra }}"
+                        target="_blank"
+                        style="color: #7c43bd; text-decoration: underline"
+                      >
+                        {{ info.link_compra }}
+                      </a>
+                      <br />
+                      <span style="font-size: 0.9em; color: #555">
+                        (A compra pelo site é opcional, serve apenas como indicação
+                        para facilitar sua escolha.)
+                      </span>
+                    </span>
+                    {% endif %}
+                  </div>
+                </li>
+                {% endfor %}
+              {% endif %}
             </div>
-            {% else %}
-              {% for item in disponiveis %} {% set info = presentes_info[item] %}
-              <li class="list-group-item d-flex align-items-center">
+            
+            <!-- Seção de presentes esgotados -->
+            {% if esgotados|length > 0 %}
+            <h5 class="mt-4">Presentes Esgotados:</h5>
+            <div class="list-group">
+              {% for item in esgotados %} {% set info = presentes_info[item] %}
+              <li class="list-group-item d-flex align-items-center position-relative" style="opacity: 0.65;">
+                <div class="position-absolute" style="top: 0; right: 0; left: 0; bottom: 0; background-color: rgba(0,0,0,0.05); z-index: 1; display: flex; align-items: center; justify-content: center;">
+                  <span class="badge bg-secondary px-3 py-2" style="transform: rotate(-5deg); font-size: 1rem;">ESGOTADO</span>
+                </div>
                 {% if info.imagem_url %}
-                <div class="me-3">
+                <div class="me-3" style="position: relative; z-index: 0;">
                   <img
                     src="{{ info.imagem_url }}"
                     alt="{{ item }}"
-                    style="max-width: 120px; margin-top: 8px"
+                    style="max-width: 120px; margin-top: 8px; filter: grayscale(70%);"
                     loading="lazy"
                   />
                 </div>
                 {% endif %}
-                <div>
+                <div style="position: relative; z-index: 0;">
                   <strong>{{ item }}</strong>
                   {% if info.link_compra %}
                   <br />
@@ -1021,20 +1065,16 @@
                     <a
                       href="{{ info.link_compra }}"
                       target="_blank"
-                      style="color: #7c43bd; text-decoration: underline"
+                      style="color: #777; text-decoration: underline"
                     >
                       {{ info.link_compra }}
                     </a>
-                    <br />
-                    <span style="font-size: 0.9em; color: #555">
-                      (A compra pelo site é opcional, serve apenas como indicação
-                      para facilitar sua escolha.)
-                    </span>
                   </span>
                   {% endif %}
                 </div>
               </li>
               {% endfor %}
+            </div>
             {% endif %}
           </div>
           <div class="modal-footer">

@@ -125,7 +125,7 @@ def flash_with_logging(message, category="message"):
     logger.info(f"Flash message - Categoria: {category}, Mensagem: {message}")
     flash(message, category)
 
-def enviar_email_confirmacao(email, nome, confirmado, quantidade_pessoas, presente, forma_presente):
+def enviar_email_confirmacao(email, nome, confirmado, quantidade_pessoas, presente, forma_presente, mimo_100=False):
     try:
         # Referências para presentes específicos
         referencias_presentes = {
@@ -146,6 +146,20 @@ def enviar_email_confirmacao(email, nome, confirmado, quantidade_pessoas, presen
                 cursor.close()
                 release_db_connection(conn)
 
+        # Informações de Pix para "Mimo de 100 reais" (apenas se mimo_100 for True)
+        info_pix = ""
+        if mimo_100:
+            info_pix = """
+            <div style="background: #fff3cd; border-radius: 8px; padding: 0.8rem; color: #856404; margin-top: 1.2rem;">
+                <b>Você escolheu o presente "Mimo de 100 reais".</b><br>
+                Para contribuir, utilize a chave Pix abaixo:<br>
+                <b>Chave Pix:</b> 84 98621-8388<br>
+                <b>Nome:</b> Marcos Vinicius de Lima<br>
+                <b>Valor sugerido:</b> R$ 100,00<br>
+                <a href='https://15anos.vercel.app/pix' style='display: inline-block; margin-top: 0.7rem; padding: 8px 18px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 6px;'>Ir para a página de Pix</a>
+            </div>
+            """
+
         # Detalhes do e-mail
         assunto = "Confirmação de Presença - 15 Anos da Ana"
         corpo_texto = f"""
@@ -156,11 +170,17 @@ def enviar_email_confirmacao(email, nome, confirmado, quantidade_pessoas, presen
         Detalhes da sua confirmação:
         - Presença: {'Sim' if confirmado == 'sim' else 'Não'}
         - Quantidade de pessoas: {quantidade_pessoas or 'N/A'}
-        {"- Presente: " + (presente or 'N/A') if forma_presente != "pix" else ""}
-        - Forma de presente: {forma_presente.capitalize()}
+        {"- Presente: " + (presente or 'N/A') if forma_presente != "pix" and not mimo_100 else ""}
+        - Forma de presente: {('Pix (Mimo de 100 reais)' if mimo_100 else forma_presente.capitalize())}
         {"\n" + referencias_presentes.get(presente, "") if presente in referencias_presentes else ""}
         {f"\nRecomendação de compra: {link_compra}\n(A compra pelo site é opcional, serve apenas como indicação para facilitar sua escolha.)" if link_compra else ""}
-
+        {"""
+        --- INFORMAÇÕES PARA CONTRIBUIÇÃO VIA PIX ---
+        Chave Pix: 84 98621-8388
+        Nome: Marcos Vinicius de Lima
+        Valor sugerido: R$ 100,00
+        """ if mimo_100 else ""}
+        
         Informações da festa:
         - Data: 14 de junho de 2025
         - Horário: 20:00
@@ -210,22 +230,19 @@ def enviar_email_confirmacao(email, nome, confirmado, quantidade_pessoas, presen
                     <ul style="list-style: none; padding: 0; font-size: 1.05rem; text-align:left;">
                         <li><b>Presença:</b> {'Sim' if confirmado == 'sim' else 'Não'}</li>
                         <li><b>Quantidade de pessoas:</b> {quantidade_pessoas or 'N/A'}</li>
-                        {f"<li><b>Presente:</b> {presente or 'N/A'}</li>" if forma_presente != "pix" else ""}
-                        <li><b>Forma de presente:</b> {forma_presente.capitalize()}</li>
+                        {f"<li><b>Presente:</b> {presente or 'N/A'}</li>" if forma_presente != "pix" and not mimo_100 else ""}
+                        <li><b>Forma de presente:</b> {('Pix (Mimo de 100 reais)' if mimo_100 else forma_presente.capitalize())}</li>
                     </ul>
                     {"<p style='margin: 0.7rem 0 0 0;'><b>Referência do presente:</b> " + referencias_presentes.get(presente, "") + "</p>" if presente in referencias_presentes else ""}
                     {f"<p style='margin: 0.7rem 0 0 0;'><b>Recomendação de compra:</b> <a href='{link_compra}' target='_blank' style='color:#7c43bd; text-decoration:underline;'>{link_compra}</a><br><span style='font-size:0.95em;color:#555;'>(A compra pelo site é opcional, serve apenas como indicação para facilitar sua escolha.)</span></p>" if link_compra else ""}
-                    {"<div style='margin-top: 1.2rem; background: #fff3cd; border-radius: 8px; padding: 0.8rem; color: #856404;'><b>Você escolheu Pix.</b> Clique no botão abaixo para acessar as informações de pagamento <span style='font-weight:bold; color:#d35400;'>(caso não tenha feito anteriormente)</span>:<br><a href='https://15anos.vercel.app/pix' style='display: inline-block; margin-top: 0.7rem; padding: 8px 18px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 6px;'>Ir para a página de Pix</a></div>" if forma_presente == "pix" else ""}
-                    {f"<div style='margin-top: 1.2rem;'><b>Imagem do presente escolhido:</b><br><img src='{img_url}' alt='{presente}' style='max-width:180px; border-radius: 8px; margin-top: 0.5rem;'></div>" if img_url else ""}
+                    {info_pix if mimo_100 else ""}
+                    {f"<div style='margin-top: 1.2rem;'><b>Imagem do presente escolhido:</b><br><img src='{img_url}' alt='{presente}' style='max-width:180px; border-radius: 8px; margin-top: 0.5rem;'></div>" if img_url and not mimo_100 else ""}
                 </div>
                 <div style="margin: 1.5rem 0;">
                     <h3 style="color: #ff69b4; font-size: 1.2rem;">Informações importantes para o evento:</h3>
                     <ul style="font-size: 1.05rem; padding-left: 1.2rem; text-align:left;">
-                        <li><b>Confirmação:</b> Confirme sua presença até <b>01/06/2025</b>.</li>
                         <li><b>Traje:</b> Esporte Fino (evite roupas nas cores <b>rosa</b> e <b>lilás</b> para manter a harmonia da festa).</li>
-                        <li><b>Presentes:</b> Escolha um presente na lista do site ou contribua via Pix. A compra do presente é por sua conta.</li>
-                        <li><b>Ajuda:</b> Se tiver dúvidas, fale com o(a) responsável pela festapelo WhatsApp: <b>(84) 98795-5400</b>.</li>
-                        <li><b>E-mail:</b> Após confirmar, verifique sua caixa de entrada e também o spam/lixo eletrônico para garantir que recebeu todas as informações.</li>
+                        <li><b>Ajuda:</b> Se tiver dúvidas, fale com o(a) responsável pela festa pelo WhatsApp: <b>(84) 98795-5400</b>.</li>
                         <li><b>Endereço:</b> Av. Comandante Petit, 263 - Centro, Parnamirim - RN (<a href="https://maps.google.com/?q=Av.+Comandante+Petit,+263+-+Centro,+Parnamirim+-+RN" target="_blank">Ver no mapa</a>)</li>
                         <li><b>Horário:</b> Chegue com antecedência para não perder nenhum momento especial!</li>
                     </ul>
@@ -287,8 +304,15 @@ def confirmar():
 
     try:
         agora = datetime.now()
-        is_pix = forma_presente == "pix"
-        presente_db = None if is_pix else presente_selecionado
+        # Verifica se é Pix ou "Mimo de 100 reais"
+        mimo_100 = presente_selecionado and presente_selecionado.strip().lower() == "mimo de 100 reais"
+        # Se for mimo_100, registra o presente e pix=True
+        if mimo_100:
+            is_pix = True
+            presente_db = presente_selecionado
+        else:
+            is_pix = forma_presente == "pix"
+            presente_db = None if is_pix else presente_selecionado
 
         if confirmado_status == 'sim':
             # Inserir no banco de dados
@@ -305,8 +329,8 @@ def confirmar():
                 )
                 conn.commit()
 
-            # Enviar e-mail de confirmação
-            enviar_email_confirmacao(email, nome_submetido, confirmado_status, quantidade_pessoas, presente_selecionado, forma_presente)
+            # Enviar e-mail de confirmação (passando mimo_100)
+            enviar_email_confirmacao(email, nome_submetido, confirmado_status, quantidade_pessoas, presente_selecionado, forma_presente, mimo_100)
 
             if is_pix:
                 flash("Presença confirmada! Não se esqueça de enviar o comprovante do Pix para que possamos registrar seu pagamento.", "success")
@@ -455,8 +479,6 @@ def reconnect_pool():
     if connection_pool is None or connection_pool.closed:
         # Criar o pool novamente
         connection_pool = psycopg2.pool.SimpleConnectionPool(minconn=1, maxconn=10, user='user', password='password', host='localhost', database='mydb')
-
-
 
 # Renomear para 'application' como esperado pelo Vercel
 application = app

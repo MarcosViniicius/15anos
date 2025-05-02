@@ -28,57 +28,44 @@ const presentesImagens = {
 
 function toggleCamposOpcionais() {
   const confirmadoSelect = document.getElementById("confirmado");
-  const presenteDiv = document.getElementById("presente-div");
   const escolhaDiv = document.getElementById("escolhaDiv");
-  const quantidadePessoasDiv = document.getElementById(
-    "quantidade-pessoas-div"
-  );
+  const presenteDiv = document.getElementById("presente-div");
   const pixDiv = document.getElementById("pix-div");
+  const quantidadeDiv = document.getElementById("quantidade-pessoas-div");
+  const quantidadeInput = document.getElementById("quantidade_pessoas");
+  const presenteSelect = document.getElementById("presente");
+  const formaPresenteInput = document.getElementById("forma_presente");
 
-  if (confirmadoSelect) {
-    if (confirmadoSelect.value === "sim") {
-      // Mostrar apenas os botões de escolha e quantidade de pessoas
-      escolhaDiv.style.display = "block";
-      quantidadePessoasDiv.style.display = "block";
-      // Esconde ambos até clicar em um dos botões
-      presenteDiv.style.display = "none";
-      if (pixDiv) pixDiv.style.display = "none";
-    } else if (confirmadoSelect.value === "nao") {
-      // Ocultar todos os campos opcionais
-      escolhaDiv.style.display = "none";
-      quantidadePessoasDiv.style.display = "none";
-      presenteDiv.style.display = "none";
-      if (pixDiv) pixDiv.style.display = "none";
-    } else {
-      // Ocultar tudo se nenhuma opção for selecionada
-      escolhaDiv.style.display = "none";
-      quantidadePessoasDiv.style.display = "none";
-      presenteDiv.style.display = "none";
-      if (pixDiv) pixDiv.style.display = "none";
-    }
+  if (!confirmadoSelect) return;
+
+  if (confirmadoSelect.value === "sim") {
+    // mostra apenas quantidade e escolha de forma, mas esconde lista
+    quantidadeDiv.style.display = "block";
+    quantidadeInput.required = true;
+    escolhaDiv.style.display = "block";
+
+    // mantém ambas ocultas até o usuário clicar em "Escolher Presente" ou "Pix"
+    presenteDiv.style.display = "none";
+    pixDiv.style.display = "none";
+    presenteSelect.required = false;
+  } else {
+    // caso “não”, oculta tudo e remove required
+    quantidadeDiv.style.display = "none";
+    quantidadeInput.required = false;
+    escolhaDiv.style.display = "none";
+    presenteDiv.style.display = "none";
+    pixDiv.style.display = "none";
+    presenteSelect.required = false;
   }
 }
 
+// liga ao evento change do select e inicializa
 document.addEventListener("DOMContentLoaded", () => {
   const confirmadoSelect = document.getElementById("confirmado");
   if (confirmadoSelect) {
     confirmadoSelect.addEventListener("change", toggleCamposOpcionais);
+    toggleCamposOpcionais();
   }
-
-  // Executa ao carregar para garantir o estado inicial correto
-  toggleCamposOpcionais();
-
-  // Também atualiza ao trocar a forma de presente
-  const btnPresente = document.getElementById("btn-presente");
-  const btnPix = document.getElementById("btn-pix");
-  if (btnPresente)
-    btnPresente.addEventListener("click", () => {
-      alternarFormaPresente("presente");
-    });
-  if (btnPix)
-    btnPix.addEventListener("click", () => {
-      alternarFormaPresente("pix");
-    });
 });
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -240,3 +227,13 @@ function atualizarReferenciaPresente(presente) {
   }
   document.getElementById("linkCompraPresente").innerHTML = linkCompra;
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+  var closeBtn = document.querySelector("#floating-alert .btn-close");
+  if (closeBtn) {
+    closeBtn.addEventListener("click", function () {
+      var alert = document.getElementById("floating-alert");
+      if (alert) alert.style.display = "none";
+    });
+  }
+});

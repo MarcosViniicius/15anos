@@ -301,8 +301,8 @@
           <!-- Aviso geral acima do formulário -->
           <div class="alert alert-warning" role="alert">
             <strong>Atenção!</strong> Preencha todos os campos com calma. Se
-            tiver dúvidas, peça ajuda para alguém de confiança ou entre em
-            contato comigo pelo WhatsApp <strong>(84) 98795-5400</strong>.
+            tiver dúvidas, peça ajuda para alguém de confiança ou entre em contato com
+            o(a) organizador(a) pelo WhatsApp <strong>(84) 98795-5400</strong>.
           </div>
           <!-- Adicione este bloco logo acima do formulário de confirmação, dentro da seção de confirmação -->
           <div class="mb-4 text-center">
@@ -375,7 +375,7 @@
                 </li>
                 <li>
                   <strong>Importante:</strong> Se tiver dúvidas, peça ajuda para
-                  alguém de confiança ou fale comigo pelo WhatsApp
+                  alguém de confiança ou fale com o(a) organizador(a) pelo WhatsApp
                   <b>(84) 98795-5400</b>.
                 </li>
               </ol>
@@ -499,6 +499,7 @@
                     role="group"
                     aria-label="Escolha de presente"
                   >
+                  
                     <button
                       type="button"
                       class="btn btn-outline-primary"
@@ -513,9 +514,12 @@
                       id="btn-pix"
                       onclick="alternarFormaPresente('pix')"
                     >
-                      Fazer um Pix
+                      Fazer um Pix personalizado
                     </button>
                   </div>
+                  <small class="form-text text-muted d-block">
+                    <strong>Se desejar presentear com dois itens diferentes, preencha o formulário novamente com todos os dados e selecione o novo presente.</strong>
+                  </small>
                 </div>
 
                 <!-- Aviso escolha de pix -->
@@ -574,7 +578,7 @@
                     outros convidados.<br />
                     <strong>Importante:</strong> A compra do presente é por sua
                     conta. Caso tenha dúvidas, peça ajuda para alguém de
-                    confiança ou entre em contato comigo pelo WhatsApp
+                    confiança ou entre em contato com o(a) organizador(a) pelo WhatsApp
                     <strong>(84) 98795-5400</strong>.
                   </small>
 
@@ -610,6 +614,9 @@
                   Enviar Confirmação
                 </button>
               </form>
+
+
+              
 
               {% if messages and messages|length > 0 and messages[0][1].strip()
               %}
@@ -1061,3 +1068,4 @@
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
   </body>
 </html>
+``` 

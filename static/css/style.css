@@ -156,7 +156,8 @@ a:hover {
   position: relative;
   min-height: 100vh;
   height: 100vh;
-  background-image: url("https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80");
+  background-image: url("https://i.imgur.com/sv3zUwD.jpeg"); /* Imagem local */
+
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -171,11 +172,12 @@ a:hover {
   top: 0;
 }
 
+/* Ajustar o overlay para combinar melhor com a imagem */
 .hero::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(40, 0, 40, 0.45); /* overlay escuro para contraste */
+  background: rgba(31, 27, 31, 0.3); /* Overlay mais leve para a nova imagem */
   z-index: 1;
 }
 
@@ -187,7 +189,7 @@ a:hover {
 
 /* Espaço maior no topo para o conteúdo da hero */
 .hero__infos {
-  margin-top: 10rem;
+  margin-top: 23rem;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -200,7 +202,7 @@ a:hover {
 
 @media (max-width: 600px) {
   .hero__infos {
-    margin-top: 10rem;
+    margin-top: 20rem;
   }
 }
 

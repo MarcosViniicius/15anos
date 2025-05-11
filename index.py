@@ -147,7 +147,7 @@ def enviar_email_confirmacao(email, nome, confirmado, quantidade_pessoas, presen
     try:
         # Referências para presentes específicos
         referencias_presentes = {
-
+            # ...existing references...
         }
 
         # Buscar imagem e link de compra do presente no banco
@@ -164,52 +164,89 @@ def enviar_email_confirmacao(email, nome, confirmado, quantidade_pessoas, presen
                 cursor.close()
                 release_db_connection(conn)
 
-        # Informações de Pix para "Mimo de 100 reais" (apenas se mimo_100 for True)
+        # Informações de Pix para qualquer opção de PIX (mimo_100 ou forma_presente="pix")
         info_pix = ""
         if mimo_100:
             info_pix = """
             <div style="background: #fff3cd; border-radius: 8px; padding: 0.8rem; color: #856404; margin-top: 1.2rem;">
-                <b>Você escolheu o presente "Mimo de 100 reais".</b><br>
+                <b>Você escolheu contribuir via PIX.</b><br>
                 Para contribuir, utilize a chave Pix abaixo:<br>
                 <b>Chave Pix:</b> 84 98621-8388<br>
-                <b>Nome:</b> Marcos Vinicius de Lima<br>
+                <b>Nome:</b> Ana Beatriz Nascimento de Lucena<br>
                 <b>Valor sugerido:</b> R$ 100,00<br>
                 <a href='https://15anos.vercel.app/pix' style='display: inline-block; margin-top: 0.7rem; padding: 8px 18px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 6px;'>Ir para a página de Pix</a>
             </div>
             """
+        
+        if forma_presente == "pix":
+            info_pix = """<div style="background: #fff3cd; border-radius: 8px; padding: 0.8rem; color: #856404; margin-top: 1.2rem;">
+                <b>Você escolheu contribuir via PIX.</b><br>
+                Para contribuir, utilize a chave Pix abaixo:<br>
+                <b>Chave Pix:</b> 84 98621-8388<br>
+                <b>Nome:</b> Ana Beatriz Nascimento de Lucena<br>
+                <a href='https://15anos.vercel.app/pix' style='display: inline-block; margin-top: 0.7rem; padding: 8px 18px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 6px;'>Ir para a página de Pix</a>
+            </div>"""
+
+            if mimo_100:
+                info_pix = info_pix.replace("Você escolheu contribuir via PIX.", "Você escolheu o presente \"Mimo de 100 reais\".")
 
         # Detalhes do e-mail
         assunto = "Confirmação de Presença - 15 Anos da Ana"
-        corpo_texto = f"""
-        Olá, {nome}!
         
-        Obrigado por confirmar sua presença no aniversário de 15 anos da Ana.
+        # Corpo do email em texto para opções que não são PIX
+        if forma_presente != "pix" and not mimo_100:
+            corpo_texto = f"""
+            Olá, {nome}!
+            
+            Obrigado por confirmar sua presença no aniversário de 15 anos da Ana.
 
-        Detalhes da sua confirmação:
-        - Presença: {'Sim' if confirmado == 'sim' else 'Não'}
-        - Quantidade de pessoas: {quantidade_pessoas or 'N/A'}
-        {"- Presente: " + (presente or 'N/A') if forma_presente != "pix" and not mimo_100 else ""}
-        - Forma de presente: {('Pix (Mimo de 100 reais)' if mimo_100 else forma_presente.capitalize())}
-        {"\n" + referencias_presentes.get(presente, "") if presente in referencias_presentes else ""}
-        {f"\nRecomendação de compra: {link_compra}\n(A compra pelo site é opcional, serve apenas como indicação para facilitar sua escolha.)" if link_compra else ""}
-        {"""
-        --- INFORMAÇÕES PARA CONTRIBUIÇÃO VIA PIX ---
-        Chave Pix: 84 98621-8388
-        Nome: Marcos Vinicius de Lima
-        Valor sugerido: R$ 100,00
-        """ if mimo_100 else ""}
-        
-        Informações da festa:
-        - Data: 14 de junho de 2025
-        - Horário: 20:00
-        - Local: Bouganville Hall, Av. Comandante Petit, 263 - Centro, Parnamirim - RN
-        - Link para o local no Google Maps: https://maps.google.com/?q=Av.+Comandante+Petit,+263+-+Centro,+Parnamirim+-+RN
+            Detalhes da sua confirmação:
+            - Presença: {'Sim' if confirmado == 'sim' else 'Não'}
+            - Quantidade de pessoas: {quantidade_pessoas or 'N/A'}
+            - Presente: {presente or 'N/A'}
+            - Forma de presente: {forma_presente.capitalize()}
+            {"\n" + referencias_presentes.get(presente, "") if presente in referencias_presentes else ""}
+            {f"\nRecomendação de compra: {link_compra}\n(A compra pelo site é opcional, serve apenas como indicação para facilitar sua escolha.)" if link_compra else ""}
+            
+            Informações da festa:
+            - Data: 14 de junho de 2025
+            - Horário: 20:00
+            - Local: Bouganville Hall, Av. Comandante Petit, 263 - Centro, Parnamirim - RN
+            - Link para o local no Google Maps: https://maps.google.com/?q=Av.+Comandante+Petit,+263+-+Centro,+Parnamirim+-+RN
 
-        Estamos ansiosos para celebrar com você!
+            Estamos ansiosos para celebrar com você!
 
-        Atenciosamente,
-        Organização do Evento
-        """
+            Atenciosamente,
+            Organização do Evento
+            """
+        else:
+            # Corpo do email para opções de PIX ou Mimo de 100
+            corpo_texto = f"""
+            Olá, {nome}!
+            
+            Obrigado por confirmar sua presença no aniversário de 15 anos da Ana.
+
+            Detalhes da sua confirmação:
+            - Presença: {'Sim' if confirmado == 'sim' else 'Não'}
+            - Quantidade de pessoas: {quantidade_pessoas or 'N/A'}
+            - Forma de presente: {('Pix (Mimo de 100 reais)' if mimo_100 else forma_presente.capitalize())}
+
+            --- INFORMAÇÕES PARA CONTRIBUIÇÃO VIA PIX ---
+            Chave Pix: 84 98621-8388
+            Nome: Ana Beatriz Nascimento de Lucena
+            Valor sugerido: R$ 100,00
+            
+            Informações da festa:
+            - Data: 14 de junho de 2025
+            - Horário: 20:00
+            - Local: Bouganville Hall, Av. Comandante Petit, 263 - Centro, Parnamirim - RN
+            - Link para o local no Google Maps: https://maps.google.com/?q=Av.+Comandante+Petit,+263+-+Centro,+Parnamirim+-+RN
+
+            Estamos ansiosos para celebrar com você!
+
+            Atenciosamente,
+            Organização do Evento
+            """
 
         corpo_html = f"""
         <html>
@@ -250,11 +287,14 @@ def enviar_email_confirmacao(email, nome, confirmado, quantidade_pessoas, presen
                         <li><b>Quantidade de pessoas:</b> {quantidade_pessoas or 'N/A'}</li>
                         {f"<li><b>Presente:</b> {presente or 'N/A'}</li>" if forma_presente != "pix" and not mimo_100 else ""}
                         <li><b>Forma de presente:</b> {('Pix (Mimo de 100 reais)' if mimo_100 else forma_presente.capitalize())}</li>
+
                     </ul>
                     {"<p style='margin: 0.7rem 0 0 0;'><b>Referência do presente:</b> " + referencias_presentes.get(presente, "") + "</p>" if presente in referencias_presentes else ""}
-                    {f"<p style='margin: 0.7rem 0 0 0;'><b>Recomendação de compra:</b> <a href='{link_compra}' target='_blank' style='color:#7c43bd; text-decoration:underline;'>{link_compra}</a><br><span style='font-size:0.95em;color:#555;'>(A compra pelo site é opcional, serve apenas como indicação para facilitar sua escolha.)</span></p>" if link_compra else ""}
-                    {info_pix if mimo_100 else ""}
-                    {f"<div style='margin-top: 1.2rem;'><b>Imagem do presente escolhido:</b><br><img src='{img_url}' alt='{presente}' style='max-width:180px; border-radius: 8px; margin-top: 0.5rem;'></div>" if img_url and not mimo_100 else ""}
+                    {f"<p style='margin: 0.7rem 0 0 0;'><b>Recomendação de compra:</b> <a href='{link_compra}' target='_blank' style='color:#7c43bd; text-decoration:underline;'>{link_compra}</a><br><span style='font-size:0.95em;color:#555;'>(A compra pelo site é opcional, serve apenas como indicação para facilitar sua escolha.)</span></p>" if link_compra and forma_presente != "pix" and not mimo_100 else ""}
+                    {info_pix if forma_presente == "pix" or mimo_100 else ""}
+                    {f"<div style='margin-top: 1.2rem;'><b>Imagem do presente escolhido:</b><br><img src='{img_url}' alt='{presente}' style='max-width:180px; border-radius: 8px; margin-top: 0.5rem;'></div>" if img_url and forma_presente != "pix" and not mimo_100 else ""}
+                    
+                
                 </div>
                 <div style="margin: 1.5rem 0;">
                     <h3 style="color: #ff69b4; font-size: 1.2rem;">Informações importantes para o evento:</h3>

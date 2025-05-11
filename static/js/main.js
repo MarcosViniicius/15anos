@@ -48,14 +48,32 @@ function toggleCamposOpcionais() {
     presenteDiv.style.display = "none";
     pixDiv.style.display = "none";
     presenteSelect.required = false;
+
+    // Resetar o valor do campo forma_presente para forçar uma nova escolha
+    formaPresenteInput.value = "";
+
+    // Resetar os estilos dos botões
+    const btnPresente = document.getElementById("btn-presente");
+    const btnPix = document.getElementById("btn-pix");
+
+    if (btnPresente) {
+      btnPresente.classList.remove("active", "btn-primary");
+      btnPresente.classList.add("btn-outline-primary");
+    }
+
+    if (btnPix) {
+      btnPix.classList.remove("active", "btn-success");
+      btnPix.classList.add("btn-outline-success");
+    }
   } else {
-    // caso “não”, oculta tudo e remove required
+    // caso "não", oculta tudo e remove required
     quantidadeDiv.style.display = "none";
     quantidadeInput.required = false;
     escolhaDiv.style.display = "none";
     presenteDiv.style.display = "none";
     pixDiv.style.display = "none";
     presenteSelect.required = false;
+    formaPresenteInput.value = ""; // Limpar o campo quando não for comparecer
   }
 }
 
@@ -111,22 +129,24 @@ function alternarFormaPresente(opcao) {
 
   // Resetar estilos dos botões
   btnPresente.classList.remove("active", "btn-primary");
+  btnPresente.classList.add("btn-outline-primary");
   btnPix.classList.remove("active", "btn-success");
+  btnPix.classList.add("btn-outline-success");
 
   if (opcao === "presente") {
     presenteDiv.style.display = "block";
     pixSelect.style.display = "none";
     btnPresente.classList.add("active", "btn-primary");
-    btnPix.classList.add("btn-outline-success");
-    formaPresenteInput.value = "presente";
+    btnPresente.classList.remove("btn-outline-primary");
+    formaPresenteInput.value = "presente"; // Garantir que o valor esteja definido
     presenteSelect.setAttribute("required", "required");
     submitButton.textContent = "Confirmar Presença e Presente";
   } else if (opcao === "pix") {
     presenteDiv.style.display = "none";
     pixSelect.style.display = "block";
     btnPix.classList.add("active", "btn-success");
-    btnPresente.classList.add("btn-outline-primary");
-    formaPresenteInput.value = "pix";
+    btnPix.classList.remove("btn-outline-success");
+    formaPresenteInput.value = "pix"; // Garantir que o valor esteja definido
     presenteSelect.removeAttribute("required");
     submitButton.textContent = "Confirmar Presença e Prosseguir para Pagamento";
     // Limpa seleção e oculta imagem/referência
@@ -236,4 +256,36 @@ document.addEventListener("DOMContentLoaded", function () {
       if (alert) alert.style.display = "none";
     });
   }
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+  const form = document.querySelector("form[action]");
+  if (!form) return;
+
+  form.addEventListener("submit", function (event) {
+    const confirmadoSelect = document.getElementById("confirmado");
+    const formaPresenteInput = document.getElementById("forma_presente");
+    const presenteSelect = document.getElementById("presente");
+
+    // Se confirmou presença, verificar se selecionou forma de presente
+    if (confirmadoSelect && confirmadoSelect.value === "sim") {
+      // Verificar se uma forma de presente foi selecionada
+      if (!formaPresenteInput.value || formaPresenteInput.value === "") {
+        event.preventDefault();
+        alert(
+          "Por favor, selecione como deseja presentear (Escolher um presente ou Fazer um Pix)"
+        );
+        return false;
+      }
+
+      // Se escolheu presente físico, verificar se selecionou um presente específico
+      if (formaPresenteInput.value === "presente") {
+        if (!presenteSelect.value || presenteSelect.value === "") {
+          event.preventDefault();
+          alert("Por favor, selecione um presente da lista disponível");
+          return false;
+        }
+      }
+    }
+  });
 });
